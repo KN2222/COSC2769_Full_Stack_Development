@@ -19,7 +19,6 @@ function App() {
           Learn React
         </a>
         <strong>Testing bootstrap</strong>
-
         <div class="btn-group" role="group" aria-label="Basic example">
           <button type="button" class="btn btn-primary">
             Left
