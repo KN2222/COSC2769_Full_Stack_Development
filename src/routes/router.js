@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import { routePaths } from "./routePaths";
 import { useCategoryTree } from "../api/getCategoryTree";
 import { useEffect, useState } from "react";
+import { HomeNav } from "../layout/HomeNav";
 
 const PublicRouter = () => {
   const categoryTree = useCategoryTree();
@@ -14,7 +15,6 @@ const PublicRouter = () => {
     }
   }, [categoryTree]);
 
-
   const mapToCategoryRoutes = (categoryTree) => {
     let categories = [];
     const traverse = (node) => {
@@ -22,7 +22,7 @@ const PublicRouter = () => {
         categories.push({
           name: key,
           id: node[key]._id,
-          subCategories: node[key].subCategories
+          subCategories: node[key].subCategories,
         });
         traverse(node[key].subCategories);
       }
@@ -37,17 +37,19 @@ const PublicRouter = () => {
         <Route key={index} path={route.path} element={route.element} />
       ))}
 
-      {categoryRoutes &&
-        categoryRoutes.map((category, index) => {
-          const { name, id } = category;
-          return (
-            <Route
-              key={index}
-              path={`/category/${name}`}
-              element={<h1>{name + ' ' + id}</h1>}
-            />
-          );
-        })}
+      <Route path="/" element={<HomeNav />}>
+        {categoryRoutes &&
+          categoryRoutes.map((category, index) => {
+            const { name, id } = category;
+            return (
+              <Route
+                key={index}
+                path={`/category/${name}`}
+                element={<h1>{name + " " + id}</h1>}
+              />
+            );
+          })}
+      </Route>
     </Routes>
   );
 };
