@@ -7,7 +7,7 @@ const isObjectEmpty = (obj) => {
   return Object.keys(obj).length === 0;
 };
 
-export const CategoryNav = () => {
+export const HomeNav = () => {
   const categoryTree = useCategoryTree();
   const [dropdownMainOpen, setDropdownMainOpen] = useState({});
   const [dropdownSubOpen, setDropdownSubOpen] = useState({});
