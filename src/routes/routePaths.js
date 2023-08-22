@@ -1,9 +1,7 @@
+import { ProtectedRoute } from "../components/ProtectedRoute";
 
 export const routePaths = {
   public: [
-    // {
-    //   path: "/", element: <div>This is home page</div>
-    // },
     {
       path: "/category",
       element: <div>This is category page</div>,
@@ -18,35 +16,40 @@ export const routePaths = {
       element: <div>This is register page</div>,
     },
   ],
-  private: [
+  privateAdmin: [
     {
       path: "/admin",
-      element: <div>This is admin page</div>,
+      element: <ProtectedRoute/>,
+      children: [
+        {
+          path: "/admin/profile",
+          element: <div>This is admin profile page</div>,
+        },
+        {
+          path: "/admin/category",
+          element: <div>This is admin category page</div>,
+        },
+        {
+          path: "/admin/category/:id",
+          element: <div>This is admin category detail page</div>,
+        },
+        {
+          path: "/admin/seller",
+          element: <div>This is admin seller page</div>,
+        },
+        {
+          path: "/admin/seller/:id",
+          element: <div>This is admin seller detail page</div>,
+        },
+      ],
     },
-    {
-      path: "/admin/profile",
-      element: <div>This is admin profile page</div>,
-    },
-    {
-      path: "/admin/category",
-      element: <div>This is admin category page</div>,
-    },
-    {
-      path: "/admin/category/:id",
-      element: <div>This is admin category detail page</div>,
-    },
-    {
-      path: "/admin/seller",
-      element: <div>This is admin seller page</div>,
-    },
-    {
-      path: "/admin/seller/:id",
-      element: <div>This is admin seller detail page</div>,
-    },
+  ],
 
+  privateSeller: [
     {
-      path: "/customer/profile",
-      element: <div>This is store profile page</div>,
+      path: "/seller",
+      element: <ProtectedRoute/>,
+      children: []
     },
   ],
 };

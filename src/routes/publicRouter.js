@@ -13,6 +13,7 @@ const PublicRouter = () => {
       console.log("categoryTree", categoryTree);
       setCategoryRoutes(mapToCategoryRoutes(categoryTree));
     }
+    return () => {};
   }, [categoryTree]);
 
   const mapToCategoryRoutes = (categoryTree) => {
@@ -36,7 +37,6 @@ const PublicRouter = () => {
       {routePaths.public.map((route, index) => (
         <Route key={index} path={route.path} element={route.element} />
       ))}
-
       <Route path="/" element={<HomeNav />}>
         {categoryRoutes &&
           categoryRoutes.map((category, index) => {
@@ -49,7 +49,7 @@ const PublicRouter = () => {
               />
             );
           })}
-      </Route>
+      </Route>      
     </Routes>
   );
 };

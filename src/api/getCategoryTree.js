@@ -7,7 +7,7 @@ export const useCategoryTree = () => {
   useEffect(() => {
     const fetchCategoryTree = async () => {
       try {
-        const response = await APIService.get("/store/category");
+        const response = await APIService.get("/customer/category");
         console.log("response", response);
         const categories = response.data.hierarchicalCategoryTree;
         setCategoryTree(categories);
