@@ -15,3 +15,8 @@ code {
 .show {
   margin: 0px !important;
 }
+
+
+.card-stats  {
+  height: 100% !important;
+}

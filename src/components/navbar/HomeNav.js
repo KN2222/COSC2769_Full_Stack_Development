@@ -1,5 +1,5 @@
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { useCategoryTree } from "../api/getCategoryTree";
+import { useCategoryTree } from "../../api/getCategoryTree";
 import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import { useState } from "react";
 

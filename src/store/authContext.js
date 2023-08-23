@@ -27,6 +27,7 @@ export const AuthProvider = ({ children }) => {
       console.log("cookies.sb", cookies.sb);
       const token = cookies.sb;
       APIService.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      console.log("APIService.defaults.headers.common", APIService.defaults.headers.common);
       setAccessToken(token);
     } else {
       delete APIService.defaults.headers.common["Authorization"];

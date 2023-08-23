@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { APIService } from "../axios/client";
 
+// custom hook --> all for API 
+
 export const useCategoryTree = () => {
   const [categoryTree, setCategoryTree] = useState(null);
 

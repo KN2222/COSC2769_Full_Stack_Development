@@ -1,4 +1,7 @@
 import { ProtectedRoute } from "../components/ProtectedRoute";
+import { AdminNavbar } from "../components/navbar/AdminNav";
+import { AdminLayout } from "../layout/admin.layout";
+import { AdminHomePage } from "../pages/admin/home";
 
 export const routePaths = {
   public: [
@@ -16,14 +19,15 @@ export const routePaths = {
       element: <div>This is register page</div>,
     },
   ],
+
   privateAdmin: [
     {
       path: "/admin",
-      element: <ProtectedRoute/>,
+      element: <AdminLayout />,
       children: [
         {
-          path: "/admin/profile",
-          element: <div>This is admin profile page</div>,
+          path: "/admin/home",
+          element: <AdminHomePage/>
         },
         {
           path: "/admin/category",
@@ -34,11 +38,11 @@ export const routePaths = {
           element: <div>This is admin category detail page</div>,
         },
         {
-          path: "/admin/seller",
+          path: "/admin/cv",
           element: <div>This is admin seller page</div>,
         },
         {
-          path: "/admin/seller/:id",
+          path: "/admin/cv/:id",
           element: <div>This is admin seller detail page</div>,
         },
       ],
@@ -48,8 +52,8 @@ export const routePaths = {
   privateSeller: [
     {
       path: "/seller",
-      element: <ProtectedRoute/>,
-      children: []
+      element: <ProtectedRoute />,
+      children: [],
     },
   ],
 };

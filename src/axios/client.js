@@ -7,11 +7,12 @@ export const APIService = axios.create({
   },
 });
 
-export const setUpInterceptors = (instance, token) => {
+export const setUpInterceptors = (instance) => {
   instance.interceptors.request.use(
     (config) => {
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+      if (instance.defaults.headers.common["Authorization"]) {
+        console.log(instance.defaults.headers.common["Authorization"]);
+        config.headers["Authorization"] = instance.defaults.headers.common["Authorization"];
       }
       return config;
     },
