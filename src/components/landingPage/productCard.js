@@ -51,29 +51,6 @@ export default function ProductCard() {
           ))}
         </div>
       )}
-      <div className="row row-cols-1 row-cols-md-3 g-4">
-        {visibleProducts.map((product) => (
-          <div key={product.id} className="col">
-            <div className="card h-100">
-              <img
-                src={product.image}
-                alt={product.title}
-                className="card-img-top"
-                style={{ objectFit: "cover", height: "200px" }}
-              />
-              <div className="card-body">
-                <h5 className="card-title text-truncate">{product.title}</h5>
-                <p className="card-text h-2">{`${product.description.slice(
-                  0,
-                  75
-                )}...`}</p>
-                <p className="card-text">Price: ${product.price}</p>
-                <button className="btn btn-primary ">Add to Cart</button>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
       <div className="mt-3">
         <nav aria-label="Page navigation ">
           <ul className="pagination">

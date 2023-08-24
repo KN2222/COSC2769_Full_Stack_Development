@@ -3,6 +3,7 @@ import { AdminLayout } from "../layout/admin.layout";
 import { AdminHomePage } from "../pages/admin/home";
 import Home from "../pages/customer/home";
 import { CustomerLayout } from "../layout/customer.layout";
+import { AdminCategoryPage } from "../pages/admin/category";
 
 export const routePaths = {
   public: [
@@ -42,7 +43,7 @@ export const routePaths = {
         },
         {
           path: "/admin/category",
-          element: <div>This is admin category page</div>,
+          element: <AdminCategoryPage/>
         },
         {
           path: "/admin/category/:id",
