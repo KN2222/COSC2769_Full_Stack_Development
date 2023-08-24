@@ -1,44 +1,45 @@
-import { ProtectedRoute } from "../components/ProtectedRoute";
-
+import { ProtectedRoute } from '../components/ProtectedRoute';
+import Login from '../layout/auth/Login';
+import SignUp from '../layout/auth/SignUp';
 export const routePaths = {
   public: [
     {
-      path: "/category",
+      path: '/category',
       element: <div>This is category page</div>,
     },
 
     {
-      path: "/login",
-      element: <div>This is login page</div>,
+      path: '/login',
+      element: <Login />,
     },
     {
-      path: "/signup",
-      element: <div>This is register page</div>,
+      path: '/signup',
+      element: <SignUp />,
     },
   ],
   privateAdmin: [
     {
-      path: "/admin",
-      element: <ProtectedRoute/>,
+      path: '/admin',
+      element: <ProtectedRoute />,
       children: [
         {
-          path: "/admin/profile",
+          path: '/admin/profile',
           element: <div>This is admin profile page</div>,
         },
         {
-          path: "/admin/category",
+          path: '/admin/category',
           element: <div>This is admin category page</div>,
         },
         {
-          path: "/admin/category/:id",
+          path: '/admin/category/:id',
           element: <div>This is admin category detail page</div>,
         },
         {
-          path: "/admin/seller",
+          path: '/admin/seller',
           element: <div>This is admin seller page</div>,
         },
         {
-          path: "/admin/seller/:id",
+          path: '/admin/seller/:id',
           element: <div>This is admin seller detail page</div>,
         },
       ],
@@ -47,9 +48,9 @@ export const routePaths = {
 
   privateSeller: [
     {
-      path: "/seller",
-      element: <ProtectedRoute/>,
-      children: []
+      path: '/seller',
+      element: <ProtectedRoute />,
+      children: [],
     },
   ],
 };
