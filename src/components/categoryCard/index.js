@@ -1,11 +1,13 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Card, ListGroup, Button, Stack } from "react-bootstrap";
 import { PencilSquare } from "react-bootstrap-icons";
 import { useModal } from "../../hooks/modal";
 import { CategoryModal } from "../modal/CategoryModal";
+import { useModalContext } from "../../store/modalContext";
 
 export const CategoryCard = ({ category }) => {
   const { showModal, openModal, closeModal } = useModal();
+  const { openModal: openModalGlobal } = useModalContext();
 
   const handleClick = (categoryId) => {
     // select Card category have the id is categoryId
@@ -44,7 +46,10 @@ export const CategoryCard = ({ category }) => {
             <Button
               variant="light"
               className="rounded-end ms-auto"
-              onClick={openModal}
+              onClick={() => {
+                openModalGlobal();
+                openModal();
+              }}
             >
               <PencilSquare size={15} />
             </Button>
@@ -91,8 +96,7 @@ export const CategoryCard = ({ category }) => {
           </div>
         </Card.Body>
       </Card>
-      <CategoryModal show={showModal} onHide={closeModal}
-        category={category} />
+      <CategoryModal show={showModal} onHide={closeModal} category={category} />
     </>
   );
 };

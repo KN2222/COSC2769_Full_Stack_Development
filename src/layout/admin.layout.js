@@ -15,7 +15,7 @@ export const AdminLayout = () => {
   }, [navigate, location]);
 
   return (
-    <div>
+    <div className="vw-100">
       <AdminNavbar />
       <Container className="mb-5">
         <Card bg={"dark"} text={"light"}>

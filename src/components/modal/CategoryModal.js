@@ -2,15 +2,40 @@ import React, { useEffect, useState } from "react";
 import { Modal, Button, ListGroup } from "react-bootstrap";
 import { PlusCircleFill, TrashFill } from "react-bootstrap-icons";
 import Form from "react-bootstrap/Form";
+import { useCreateSubCategory } from "../../api/createSubCategory";
+import { useUpdateCategory } from "../../api/updateCategory";
+import { useModalContext } from "../../store/modalContext";
+import { useGetAllCategory } from "../../api/getAllCategory";
 
 export const CategoryModal = (props) => {
+  const { closeModal } = useModalContext();
+  const { createSubCategory } = useCreateSubCategory();
+  const { updateCategory } = useUpdateCategory();
   const { category } = props;
+  const [categoryName, setCategoryName] = useState(category.name);
   const [subCategoriesNames, setSubCategoriesName] = useState(
     category.subCategoriesNames
   );
   const [subCategories, setSubCategories] = useState(category.subCategories);
+  const [isAddNewSubCategory, setIsAddNewSubCategory] = useState(false);
+  const [newSubCategories, setNewSubCategories] = useState([]);
+  const [validated, setValidated] = useState(false);
+  const [extraValues, setExtraValues] = useState({});
 
-  // using useEffect to reset to default value when turn off modal
+  useEffect(() => {
+    console.log("newSubCategories", newSubCategories);
+    if (newSubCategories.length > 0) {
+      setSubCategoriesName((prevState) => [
+        ...prevState,
+        newSubCategories[newSubCategories.length - 1],
+      ]);
+    }
+  }, [newSubCategories]);
+
+  useEffect(() => {
+    console.log("extraValues", extraValues);
+  }, [extraValues]);
+
   useEffect(() => {
     if (!props.show) {
       setSubCategoriesName(category.subCategoriesNames);
@@ -27,6 +52,44 @@ export const CategoryModal = (props) => {
       (subCategoryName, subCategoryIndex) => subCategoryIndex !== index
     );
     setSubCategoriesName(updatedSubCategoryNames);
+  };
+
+  const handleAddNewSubCategory = () => {
+    setIsAddNewSubCategory(true);
+  };
+
+  const handleNewSubCategoryEnter = (e) => {
+    if (e.key === "Enter") {
+      if (e.target.value) {
+        setNewSubCategories((prevState) => [...prevState, e.target.value]);
+      }
+      setIsAddNewSubCategory(false);
+    }
+  };
+
+  const handleUpdateCategory = (e) => {
+    const form = e.currentTarget;
+    if (form.checkValidity() === false) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
+    updateCategory(category._id, {
+      name: categoryName,
+      ...extraValues,
+    });
+
+    if (newSubCategories.length > 0) {
+      newSubCategories.forEach((subCategoryName) => {
+        createSubCategory({
+          name: subCategoryName,
+          parentId: category._id,
+        });
+      });
+    }
+    setValidated(true);
+    closeModal();
+    props.onHide();
   };
 
   const extraAttributes = Object.keys(category).filter(
@@ -46,6 +109,7 @@ export const CategoryModal = (props) => {
       {...props}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
+      className="w-100"
       centered
     >
       <Modal.Header closeButton>
@@ -54,17 +118,36 @@ export const CategoryModal = (props) => {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form>
+        <Form noValidate validated={validated}>
           <Form.Group className="mb-3" controlId="formBasicName">
             <Form.Label>Name</Form.Label>
-            <Form.Control type="text" defaultValue={category.name} />
+            <Form.Control
+              type="text"
+              defaultValue={category.name}
+              required
+              onChange={(e) => {
+                setCategoryName(e.target.value);
+              }}
+            />
+            <Form.Control.Feedback type="invalid">
+              Please provide a Category Name.
+            </Form.Control.Feedback>
           </Form.Group>
 
           {extraAttributes.map((attribute, index) => {
             return (
               <Form.Group className="mb-3" controlId="formBasicName">
                 <Form.Label>{attribute}</Form.Label>
-                <Form.Control type="text" defaultValue={category[attribute]} />
+                <Form.Control
+                  type="text"
+                  defaultValue={category[attribute]}
+                  onChange={(e) => {
+                    setExtraValues((prevState) => ({
+                      ...prevState,
+                      [attribute]: e.target.value,
+                    }));
+                  }}
+                />
               </Form.Group>
             );
           })}
@@ -89,14 +172,29 @@ export const CategoryModal = (props) => {
                   </Button>
                 </ListGroup.Item>
               ))}
+
               <ListGroup.Item className="text-center">
-                <Button variant="light" className="rounded-end">
+                <Button
+                  variant="light"
+                  className="rounded-end"
+                  onClick={handleAddNewSubCategory}
+                >
                   <PlusCircleFill
                     size={15}
                     style={{
                       color: "green",
                     }}
                   />
+                  {isAddNewSubCategory && (
+                    <Form.Control
+                      type="text"
+                      required
+                      autoFocus
+                      className="m-1"
+                      placeholder="New Subcategory"
+                      onKeyDown={handleNewSubCategoryEnter}
+                    />
+                  )}
                 </Button>
               </ListGroup.Item>
             </ListGroup>
@@ -121,7 +219,7 @@ export const CategoryModal = (props) => {
         </Form>
       </Modal.Body>
       <Modal.Footer className="d-flex justify-content-between">
-        <Button type="submit" variant="primary">
+        <Button type="submit" variant="primary" onClick={handleUpdateCategory}>
           Save
         </Button>
         <Button onClick={props.onHide}>Close</Button>

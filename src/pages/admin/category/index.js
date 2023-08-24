@@ -6,14 +6,23 @@ import { useGetCategoryById } from "../../../api/getCategoryById";
 import { SkeletonCategoryCard } from "../../../components/loading/SkeletonCategoryCard";
 import { CategoryModal } from "../../../components/modal/CategoryModal";
 import { useModal } from "../../../hooks/modal";
+import { useModalContext } from "../../../store/modalContext";
 
 export const AdminCategoryPage = () => {
-  const { categories: data } = useGetAllCategory();
+  const {
+    categories: data,
+    refreshCategories,
+    isLoading,
+  } = useGetAllCategory();
   const [categories, setCategories] = useState([]);
-  const [isLoading, setLoading] = useState(true);
-  const { showModal, openModal, closeModal } = useModal();
-
+  const { showModal, openModal, closeModal } = useModalContext();
   const { fetchCategoryById } = useGetCategoryById();
+
+  useEffect(() => {
+    if (!showModal) {
+      refreshCategories();
+    }
+  }, [showModal]);
 
   useEffect(() => {
     const updateCategoriesWithSubcategories = async () => {
@@ -42,18 +51,12 @@ export const AdminCategoryPage = () => {
           };
         })
       );
-      setLoading(false);
       setCategories(updatedCategories);
     };
-
     if (data) {
       updateCategoriesWithSubcategories();
     }
   }, [fetchCategoryById, data]);
-
-  useEffect(() => {
-    console.log("categories", categories);
-  }, [categories]);
 
   return (
     <Container>

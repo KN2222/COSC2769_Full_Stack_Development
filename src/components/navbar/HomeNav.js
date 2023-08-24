@@ -80,7 +80,7 @@ export const HomeNav = () => {
 
   return (
     <>
-      <Navbar expand="lg" className="bg-body-tertiary m-0 pb-0">
+      <Navbar expand="lg" className="bg-body-tertiary m-0 pb-0 sticky-top">
         <Container>
           <Navbar.Brand as={Link} to="/">
             Home
