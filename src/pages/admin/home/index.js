@@ -1,7 +1,6 @@
 import { Col, Container, Row } from "react-bootstrap";
 import { SellerStatsCard } from "../../../components/stats/SellerStatsCard";
 import { CategoryStatsCard } from "../../../components/stats/CategoryStatsCard";
-import { useGetAllCategory } from "../../../api/getAllCategory";
 
 export const AdminHomePage = () => {
   return (

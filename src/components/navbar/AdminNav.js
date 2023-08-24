@@ -9,7 +9,7 @@ export const AdminNavbar = () => {
     <>
       <Navbar expand="lg" className="bg-body-tertiary fixed-top">
         <Container>
-          <Navbar.Brand as={Link} to="/admin">
+          <Navbar.Brand as={Link} to="/admin/home">
             Home
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />

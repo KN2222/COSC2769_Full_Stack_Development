@@ -19,7 +19,6 @@ export const AdminLayout = () => {
           </Card.Body>
         </Card>
       </Container>
-      <Navigate to="/admin/home" />
       <Outlet />
       <Footer/>
     </div>
