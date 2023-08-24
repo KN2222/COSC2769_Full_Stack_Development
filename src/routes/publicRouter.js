@@ -35,21 +35,24 @@ const PublicRouter = () => {
   return (
     <Routes>
       {routePaths.public.map((route, index) => (
-        <Route key={index} path={route.path} element={route.element} />
+        <Route key={index} path={route.path} element={route.element}>
+          {route.children.map((child, index) => (
+            <Route key={index} path={child.path} element={child.element} />
+          ))}
+        </Route>
       ))}
-      <Route path="/" element={<HomeNav />}>
-        {categoryRoutes &&
-          categoryRoutes.map((category, index) => {
-            const { name, id } = category;
-            return (
-              <Route
-                key={index}
-                path={`/category/${name}`}
-                element={<h1>{name + " " + id}</h1>}
-              />
-            );
-          })}
-      </Route>
+
+      {categoryRoutes &&
+        categoryRoutes.map((category, index) => {
+          const { name, id } = category;
+          return (
+            <Route
+              key={index}
+              path={`/category/${name}`}
+              element={<h1>{name + " " + id}</h1>}
+            />
+          );
+        })}
     </Routes>
   );
 };

@@ -117,7 +117,6 @@ export const HomeNav = () => {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      <Outlet />
     </>
   );
 };

@@ -1,5 +1,5 @@
 import { Container, Nav, Navbar } from "react-bootstrap";
-import { ArrowRight, PeopleFill, PersonCircle } from "react-bootstrap-icons";
+import { PersonCircle } from "react-bootstrap-icons";
 import { Link } from "react-router-dom";
 
 const mockAdminId = '123';
@@ -21,13 +21,10 @@ export const AdminNavbar = () => {
               <Nav.Link as={Link} to={`/admin/cv`}>
                 Seller CV
               </Nav.Link>
-              {/* <Nav.Link href="/#">
-                <PersonCircle/>
-              </Nav.Link> */}
+
             </Nav>
             <Nav className="ms-auto">
               {" "}
-              {/* This class positions items to the right */}
               <Nav.Link as={Link} to={`/admin/${mockAdminId}`}>
                 <PersonCircle />
               </Nav.Link>

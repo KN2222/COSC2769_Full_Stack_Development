@@ -1,22 +1,33 @@
 import { ProtectedRoute } from "../components/ProtectedRoute";
-import { AdminNavbar } from "../components/navbar/AdminNav";
 import { AdminLayout } from "../layout/admin.layout";
 import { AdminHomePage } from "../pages/admin/home";
+import Home from "../pages/customer/home";
+import { CustomerLayout } from "../layout/customer.layout";
 
 export const routePaths = {
   public: [
     {
-      path: "/category",
-      element: <div>This is category page</div>,
-    },
+      path: "/",
+      element: <CustomerLayout/>,
+      children: [
+        {
+          path: "/category",
+          element: <div>This is category page</div>,
+        },
 
-    {
-      path: "/login",
-      element: <div>This is login page</div>,
-    },
-    {
-      path: "/signup",
-      element: <div>This is register page</div>,
+        {
+          path: "/login",
+          element: <div>This is login page</div>,
+        },
+        {
+          path: "/signup",
+          element: <div>This is register page</div>,
+        },
+        {
+          path: "/",
+          element: <Home />,
+        },
+      ],
     },
   ],
 
@@ -27,7 +38,7 @@ export const routePaths = {
       children: [
         {
           path: "/admin/home",
-          element: <AdminHomePage/>
+          element: <AdminHomePage />,
         },
         {
           path: "/admin/category",
