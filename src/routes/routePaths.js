@@ -1,4 +1,6 @@
 import { ProtectedRoute } from "../components/ProtectedRoute";
+import Home from "../pages/customer/home";
+import { loadProducts } from "../components/landingPage/productCard";
 
 export const routePaths = {
   public: [
@@ -15,11 +17,15 @@ export const routePaths = {
       path: "/signup",
       element: <div>This is register page</div>,
     },
+    {
+      path: "/",
+      element: <Home />,
+    },
   ],
   privateAdmin: [
     {
       path: "/admin",
-      element: <ProtectedRoute/>,
+      element: <ProtectedRoute />,
       children: [
         {
           path: "/admin/profile",
@@ -48,8 +54,8 @@ export const routePaths = {
   privateSeller: [
     {
       path: "/seller",
-      element: <ProtectedRoute/>,
-      children: []
+      element: <ProtectedRoute />,
+      children: [],
     },
   ],
 };
