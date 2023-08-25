@@ -1,27 +1,51 @@
-import { ProtectedRoute } from '../components/ProtectedRoute';
+import { ProtectedRoute } from "../components/ProtectedRoute";
+import { AdminLayout } from "../layout/admin.layout";
+import { AdminHomePage } from "../pages/admin/home";
+import Home from "../pages/customer/home";
+import { CustomerLayout } from "../layout/customer.layout";
+import { AdminCategoryPage } from "../pages/admin/category";
 import Login from '../layout/auth/Login';
 import SignUp from '../layout/auth/SignUp';
+
 export const routePaths = {
   public: [
     {
-      path: '/category',
-      element: <div>This is category page</div>,
-    },
+      path: "/",
+      element: <CustomerLayout/>,
+      children: [
+        {
+          path: "/category",
+          element: <div>This is category page</div>,
+        },
 
-    {
-      path: '/login',
-      element: <Login />,
-    },
-    {
-      path: '/signup',
-      element: <SignUp />,
+        {
+          path: "/login",
+          element: <Login />,
+        },
+        {
+          path: "/signup",
+          element: <SignUp />,
+        },
+        {
+          path: "/",
+          element: <Home />,
+        },
+      ],
     },
   ],
   privateAdmin: [
     {
-      path: '/admin',
-      element: <ProtectedRoute />,
+      path: "/admin",
+      element: <AdminLayout />,
       children: [
+        {
+          path: "/admin/home",
+          element: <AdminHomePage />,
+        },
+        {
+          path: "/admin/category",
+          element: <AdminCategoryPage/>,
+        },
         {
           path: '/admin/profile',
           element: <div>This is admin profile page</div>,
@@ -35,11 +59,11 @@ export const routePaths = {
           element: <div>This is admin category detail page</div>,
         },
         {
-          path: '/admin/seller',
+          path: "/admin/cv",
           element: <div>This is admin seller page</div>,
         },
         {
-          path: '/admin/seller/:id',
+          path: "/admin/cv/:id",
           element: <div>This is admin seller detail page</div>,
         },
       ],
@@ -48,7 +72,7 @@ export const routePaths = {
 
   privateSeller: [
     {
-      path: '/seller',
+      path: "/seller",
       element: <ProtectedRoute />,
       children: [],
     },

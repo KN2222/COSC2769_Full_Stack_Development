@@ -1,5 +1,5 @@
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { useCategoryTree } from "../api/getCategoryTree";
+import { useCategoryTree } from "../../api/getCategoryTree";
 import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import { useState } from "react";
 
@@ -80,7 +80,7 @@ export const HomeNav = () => {
 
   return (
     <>
-      <Navbar expand="lg" className="bg-body-tertiary m-0 pb-0">
+      <Navbar expand="lg" className="bg-body-tertiary m-0 pb-0 sticky-top">
         <Container>
           <Navbar.Brand as={Link} to="/">
             Home
@@ -117,7 +117,6 @@ export const HomeNav = () => {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      <Outlet />
     </>
   );
 };
