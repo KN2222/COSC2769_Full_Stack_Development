@@ -4,6 +4,8 @@ import { AdminHomePage } from "../pages/admin/home";
 import Home from "../pages/customer/home";
 import { CustomerLayout } from "../layout/customer.layout";
 import { AdminCategoryPage } from "../pages/admin/category";
+import Login from '../layout/auth/Login';
+import SignUp from '../layout/auth/SignUp';
 
 export const routePaths = {
   public: [
@@ -18,11 +20,11 @@ export const routePaths = {
 
         {
           path: "/login",
-          element: <div>This is login page</div>,
+          element: <Login />,
         },
         {
           path: "/signup",
-          element: <div>This is register page</div>,
+          element: <SignUp />,
         },
         {
           path: "/",
@@ -31,7 +33,6 @@ export const routePaths = {
       ],
     },
   ],
-
   privateAdmin: [
     {
       path: "/admin",
@@ -43,10 +44,18 @@ export const routePaths = {
         },
         {
           path: "/admin/category",
-          element: <AdminCategoryPage/>
+          element: <AdminCategoryPage/>,
         },
         {
-          path: "/admin/category/:id",
+          path: '/admin/profile',
+          element: <div>This is admin profile page</div>,
+        },
+        {
+          path: '/admin/category',
+          element: <div>This is admin category page</div>,
+        },
+        {
+          path: '/admin/category/:id',
           element: <div>This is admin category detail page</div>,
         },
         {
