@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Button, ListGroup } from "react-bootstrap";
+import {
+  Modal,
+  Button,
+  ListGroup,
+  FormControl,
+  FormLabel,
+} from "react-bootstrap";
 import { PlusCircleFill, TrashFill } from "react-bootstrap-icons";
 import Form from "react-bootstrap/Form";
 import { useCreateSubCategory } from "../../api/createSubCategory";
@@ -18,7 +24,9 @@ export const CategoryModal = (props) => {
   );
   const [subCategories, setSubCategories] = useState(category.subCategories);
   const [isAddNewSubCategory, setIsAddNewSubCategory] = useState(false);
+  const [isAddNewAttribute, setIsAddNewAttribute] = useState(false);
   const [newSubCategories, setNewSubCategories] = useState([]);
+  const [newAttributes, setNewAttributes] = useState([]); // [{name: "newAttribute", value: "newAttributeValue"}
   const [validated, setValidated] = useState(false);
   const [extraValues, setExtraValues] = useState({});
 
@@ -58,12 +66,27 @@ export const CategoryModal = (props) => {
     setIsAddNewSubCategory(true);
   };
 
+  const handleAddNewAttribute = () => {
+    setIsAddNewAttribute(true);
+  };
+
   const handleNewSubCategoryEnter = (e) => {
     if (e.key === "Enter") {
-      if (e.target.value) {
+      console.log("e.target.value", e.target.value);
+      if (e.target.value && e.target.value.length > 0) {
         setNewSubCategories((prevState) => [...prevState, e.target.value]);
       }
       setIsAddNewSubCategory(false);
+    }
+  };
+
+  const handleNewAttributeEnter = (e) => {
+    if (e.key === "Enter") {
+      console.log("e.target.value", e.target.value);
+      if (e.target.value && e.target.value.length > 0) {
+        setNewAttributes((prevState) => [...prevState, e.target.value]);
+      }
+      setIsAddNewAttribute(false);
     }
   };
 
@@ -88,6 +111,8 @@ export const CategoryModal = (props) => {
       });
     }
     setValidated(true);
+    setNewSubCategories([]);
+
     closeModal();
     props.onHide();
   };
@@ -151,6 +176,44 @@ export const CategoryModal = (props) => {
               </Form.Group>
             );
           })}
+
+          {newAttributes.map((attribute, index) => {
+            return (
+              <Form.Group className="mb-3" controlId="formBasicName">
+                <Form.Label>{attribute}</Form.Label>
+                <Form.Control type="text" />
+              </Form.Group>
+            );
+          })}
+
+          <Form.Group className="mb-3 text-center">
+            <ListGroup className="d-flex align-items-center">
+              <ListGroup.Item className="">
+                <Button
+                  variant="light"
+                  className="rounded-end"
+                  onClick={handleAddNewAttribute}
+                >
+                  <PlusCircleFill
+                    size={15}
+                    style={{
+                      color: "green",
+                    }}
+                  />
+                </Button>
+                {isAddNewAttribute && (
+                  <>
+                    <FormControl
+                      className="m-1"
+                      type="text"
+                      placeholder="Add new attribute key"
+                      onKeyDown={handleNewAttributeEnter}
+                    />
+                  </>
+                )}
+              </ListGroup.Item>
+            </ListGroup>
+          </Form.Group>
 
           <Form.Label>Sub Categories:</Form.Label>
           <Form.Group className="mb-3">

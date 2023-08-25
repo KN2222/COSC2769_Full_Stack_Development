@@ -4,8 +4,6 @@ import { CategoryCard } from "../../../components/categoryCard";
 import { useGetAllCategory } from "../../../api/getAllCategory";
 import { useGetCategoryById } from "../../../api/getCategoryById";
 import { SkeletonCategoryCard } from "../../../components/loading/SkeletonCategoryCard";
-import { CategoryModal } from "../../../components/modal/CategoryModal";
-import { useModal } from "../../../hooks/modal";
 import { useModalContext } from "../../../store/modalContext";
 
 export const AdminCategoryPage = () => {
@@ -15,14 +13,14 @@ export const AdminCategoryPage = () => {
     isLoading,
   } = useGetAllCategory();
   const [categories, setCategories] = useState([]);
-  const { showModal, openModal, closeModal } = useModalContext();
+  const { showModal } = useModalContext();
   const { fetchCategoryById } = useGetCategoryById();
 
   useEffect(() => {
     if (!showModal) {
       refreshCategories();
     }
-  }, [showModal]);
+  }, [showModal, refreshCategories]);
 
   useEffect(() => {
     const updateCategoriesWithSubcategories = async () => {
@@ -41,7 +39,7 @@ export const AdminCategoryPage = () => {
             return {
               ...otherProperties,
               subCategories,
-              subCategoriesNames: subCategoryNames, // Corrected field name
+              subCategoriesNames: subCategoryNames, 
             };
           }
           return {

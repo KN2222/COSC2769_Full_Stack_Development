@@ -29,13 +29,10 @@ export const useGetAllCategory = () => {
     }
   }, [refreshSignal, fetchAllCategory]);
 
-  // Define a function to trigger a refresh
-  const refreshCategories = () => {
-    // Update the refresh signal
+  const refreshCategories = useCallback(() => {
     console.log("refreshCategories");
     setRefreshSignal((prevSignal) => prevSignal + 1);
-  };
+  }, []);
 
-  // Return the categories, count, and the refresh function
-  return { categories, count, refreshCategories, isLoading };
+  return { categories, count, fetchAllCategory,  refreshCategories, isLoading };
 };
