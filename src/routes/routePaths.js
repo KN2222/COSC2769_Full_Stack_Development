@@ -6,6 +6,7 @@ import { CustomerLayout } from "../layout/customer.layout";
 import { AdminCategoryPage } from "../pages/admin/category";
 import Login from '../layout/auth/Login';
 import SignUp from '../layout/auth/SignUp';
+import { AdminProfile } from "../pages/admin/profile";
 
 export const routePaths = {
   public: [
@@ -48,7 +49,7 @@ export const routePaths = {
         },
         {
           path: '/admin/profile',
-          element: <div>This is admin profile page</div>,
+          element: <AdminProfile/>,
         },
         {
           path: '/admin/category',
