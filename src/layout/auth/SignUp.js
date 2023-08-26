@@ -1,12 +1,20 @@
 // Login Page
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const SignUp = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [avatar, setAvatar] = useState(null);
+  const [role, setRole] = useState('user'); // Default role is 'user'
+
+  const [modalMessage, setModalMessage] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(true);
+
+  useEffect(() => {
+    console.log(name, email, password, role);
+  }, [name, email, password, role]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,12 +23,11 @@ const SignUp = () => {
     formData.append('name', name);
     formData.append('email', email);
     formData.append('password', password);
-    formData.append('avatar', avatar);
-    formData.append('role', 'user');
+    formData.append('role', role); // Use the selected role
 
     try {
       const response = await axios.post(
-        'http://localhost:8000/auth',
+        'http://localhost:8000/auth/signup',
         formData,
         {
           headers: {
@@ -30,11 +37,35 @@ const SignUp = () => {
       );
 
       // Handle success
-      console.log('Registration successful:', response.data);
+      setModalMessage(response.data.message);
+      setIsSuccess(true);
+      setShowModal(true);
     } catch (error) {
       // Handle error
-      console.error('Registration error:', error);
+      if (error.response && error.response.data) {
+        const errorMessageFromBackend = error.response.data.message;
+        if (error.response.data.errors) {
+          // Display individual field validation errors
+          setModalMessage(Object.values(error.response.data.errors).join('\n'));
+        } else if (errorMessageFromBackend === 'Email already exists') {
+          setModalMessage(
+            'Email already exists. Please use a different email.'
+          );
+        } else {
+          setModalMessage(errorMessageFromBackend || 'An error occurred');
+        }
+      } else {
+        setModalMessage('An error occurred');
+      }
+      setIsSuccess(false);
+      setShowModal(true);
     }
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setModalMessage('');
+    setIsSuccess(true);
   };
 
   return (
@@ -89,18 +120,41 @@ const SignUp = () => {
           />
         </div>
         <div className='mb-3'>
-          <label
-            htmlFor='avatar'
-            className='form-label'
-          >
-            Avatar
-          </label>
-          <input
-            type='file'
-            className='form-control'
-            id='avatar'
-            onChange={(e) => setAvatar(e.target.files[0])}
-          />
+          <label className='form-label'>Role</label>
+          <div className='form-check'>
+            <input
+              className='form-check-input'
+              type='radio'
+              name='role'
+              id='userRole'
+              value='user'
+              checked={role === 'user'}
+              onChange={() => setRole('user')}
+            />
+            <label
+              className='form-check-label'
+              htmlFor='userRole'
+            >
+              User
+            </label>
+          </div>
+          <div className='form-check'>
+            <input
+              className='form-check-input'
+              type='radio'
+              name='role'
+              id='sellerRole'
+              value='seller'
+              checked={role === 'seller'}
+              onChange={() => setRole('seller')}
+            />
+            <label
+              className='form-check-label'
+              htmlFor='sellerRole'
+            >
+              Seller
+            </label>
+          </div>
         </div>
         <button
           type='submit'
@@ -109,7 +163,50 @@ const SignUp = () => {
           Register
         </button>
       </form>
+
+      <div
+        className={`modal fade ${showModal ? 'show' : ''}`}
+        style={{ display: showModal ? 'block' : 'none' }}
+        tabIndex='-1'
+        role='dialog'
+      >
+        <div
+          className='modal-dialog'
+          role='document'
+        >
+          <div className='modal-content'>
+            <div className='modal-header'>
+              <h5 className='modal-title'>{isSuccess ? 'Success' : 'Error'}</h5>
+              <button
+                type='button'
+                className='close'
+                data-dismiss='modal'
+                aria-label='Close'
+                onClick={closeModal}
+              >
+                <span aria-hidden='true'>&times;</span>
+              </button>
+            </div>
+            <div className='modal-body'>{modalMessage}</div>
+            <div className='modal-footer'>
+              <button
+                type='button'
+                className='btn btn-secondary'
+                data-dismiss='modal'
+                onClick={closeModal}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className={`modal-backdrop fade ${showModal ? 'show' : ''}`}
+        style={{ display: showModal ? 'block' : 'none' }}
+      ></div>
     </div>
   );
 };
+
 export default SignUp;

@@ -1,36 +1,48 @@
-import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { APIService } from "../axios/client";
-import { useCookies } from "react-cookie";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import { APIService } from '../axios/client';
+import { useCookies } from 'react-cookie';
 
 export const AuthContext = React.createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [cookies, setCookie, removeCookie] = useCookies(["sb"]);
+  const [cookies, setCookie, removeCookie] = useCookies(['sb']);
 
-  const [accessToken, setAccessToken] = useState('HI');
+  const [accessToken, setAccessToken] = useState(null); // Initialize to null
 
   useEffect(() => {
-    console.log("accessToken", accessToken);
+    console.log('accessToken', accessToken);
   }, [accessToken]);
 
   const setToken = useCallback(
     (token) => {
-      setCookie("sb", token, { path: "/" });
+      setCookie('sb', token, { path: '/' });
       setAccessToken(token);
     },
     [setCookie]
   );
 
-
   useEffect(() => {
-    if (cookies.sb) {
-      console.log("cookies.sb", cookies.sb);
+    const storedToken = localStorage.getItem('accessToken'); // Get token from localStorage
+    if (storedToken) {
+      console.log('Stored token from localStorage', storedToken);
+      APIService.defaults.headers.common[
+        'Authorization'
+      ] = `Bearer ${storedToken}`;
+      setAccessToken(storedToken);
+    } else if (cookies.sb) {
+      console.log('cookies.sb', cookies.sb);
       const token = cookies.sb;
-      APIService.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      APIService.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       setAccessToken(token);
     } else {
-      delete APIService.defaults.headers.common["Authorization"];
-      removeCookie("sb");
+      delete APIService.defaults.headers.common['Authorization'];
+      removeCookie('sb');
       setAccessToken(null);
     }
   }, [cookies, removeCookie]);
@@ -43,7 +55,6 @@ export const AuthProvider = ({ children }) => {
     [accessToken, setToken]
   );
 
-  
   return <AuthContext.Provider value={sb}>{children}</AuthContext.Provider>;
 };
 
