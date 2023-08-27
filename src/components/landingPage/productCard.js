@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { SkeletonProductCard } from "../loading/SkeletonProductCard";
 import { Card, Button } from "react-bootstrap";
 
+
 export default function ProductCard() {
   const { data: products, loading } = useGetProducts();
   const productsPerPage = 9; // 3x3 grid = 9 products per page
@@ -28,9 +29,11 @@ export default function ProductCard() {
       ) : (
         <div className="row row-cols-1 row-cols-md-3 g-4">
           {visibleProducts.map((product) => (
-        
-              <div key={product.id} className="col">
-                <Link to={`/details/${product.id}`}> 
+            <div key={product.id} className="col">
+              <Link
+                style={{ textDecoration: "none" }}
+                to={`/details/${product.id}`}
+              >
                 <Card className="h-100">
                   <Card.Img
                     variant="top"
@@ -49,9 +52,8 @@ export default function ProductCard() {
                     <Button variant="primary">Add to Cart</Button>
                   </Card.Body>
                 </Card>
-                </Link>
-              </div>
-   
+              </Link>
+            </div>
           ))}
         </div>
       )}
