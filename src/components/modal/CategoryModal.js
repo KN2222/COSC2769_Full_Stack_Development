@@ -1,17 +1,19 @@
-import React, { useEffect, useState } from "react";
-import {
-  Modal,
-  Button,
-  ListGroup,
-  FormControl,
-  FormLabel,
-} from "react-bootstrap";
+import React, { useEffect, useReducer, useState } from "react";
+import { Modal, Button, ListGroup, FormControl } from "react-bootstrap";
 import { PlusCircleFill, TrashFill } from "react-bootstrap-icons";
 import Form from "react-bootstrap/Form";
 import { useCreateSubCategory } from "../../api/createSubCategory";
 import { useUpdateCategory } from "../../api/updateCategory";
 import { useModalContext } from "../../store/modalContext";
-import { useGetAllCategory } from "../../api/getAllCategory";
+
+const attributeTypeReducer = (state, action) => {
+  if (action.type === "number") {
+    return { ...state, type: "number" };
+  } else if (action.type === "string") {
+    return { ...state, type: "string" };
+  }
+  throw Error("Invalid action type");
+};
 
 export const CategoryModal = (props) => {
   const { closeModal } = useModalContext();
@@ -26,9 +28,17 @@ export const CategoryModal = (props) => {
   const [isAddNewSubCategory, setIsAddNewSubCategory] = useState(false);
   const [isAddNewAttribute, setIsAddNewAttribute] = useState(false);
   const [newSubCategories, setNewSubCategories] = useState([]);
-  const [newAttributes, setNewAttributes] = useState([]); // [{name: "newAttribute", value: "newAttributeValue"}
+  const [newAttributes, setNewAttributes] = useState([]);
   const [validated, setValidated] = useState(false);
   const [extraValues, setExtraValues] = useState({});
+  const [attributeType, dispatchAttributeType] = useReducer(
+    attributeTypeReducer,
+    { type: "none" }
+  );
+
+  useEffect(() => {
+    console.log("extraValues", extraValues);
+  }, [extraValues]);
 
   useEffect(() => {
     console.log("newSubCategories", newSubCategories);
@@ -39,10 +49,6 @@ export const CategoryModal = (props) => {
       ]);
     }
   }, [newSubCategories]);
-
-  useEffect(() => {
-    console.log("extraValues", extraValues);
-  }, [extraValues]);
 
   useEffect(() => {
     if (!props.show) {
@@ -83,10 +89,19 @@ export const CategoryModal = (props) => {
   const handleNewAttributeEnter = (e) => {
     if (e.key === "Enter") {
       console.log("e.target.value", e.target.value);
-      if (e.target.value && e.target.value.length > 0) {
-        setNewAttributes((prevState) => [...prevState, e.target.value]);
+      if (
+        e.target.value &&
+        e.target.value.length > 0 &&
+        attributeType.type !== "none"
+      ) {
+        setNewAttributes((prevState) => [
+          ...prevState,
+          {
+            name: e.target.value,
+            type: attributeType.type,
+          },
+        ]);
       }
-      setIsAddNewAttribute(false);
     }
   };
 
@@ -96,6 +111,19 @@ export const CategoryModal = (props) => {
       e.preventDefault();
       e.stopPropagation();
     }
+
+    const transformedNewAttributes = newAttributes.reduce(
+      (result, currentObject) => {
+        for (const property in currentObject) {
+          if (property !== "type") {
+            result[property] = currentObject[property];
+          }
+        }
+        return result;
+      },
+      {}
+    );
+    console.log("transformedNewAttributes", transformedNewAttributes);
 
     updateCategory(category._id, {
       name: categoryName,
@@ -178,17 +206,42 @@ export const CategoryModal = (props) => {
           })}
 
           {newAttributes.map((attribute, index) => {
-            return (
-              <Form.Group className="mb-3" controlId="formBasicName">
-                <Form.Label>{attribute}</Form.Label>
-                <Form.Control type="text" />
-              </Form.Group>
-            );
+            if (attribute.type === "string") {
+              return (
+                <Form.Group className="mb-3">
+                  <Form.Label>{attribute.name}</Form.Label>
+                  <Form.Control
+                    type="text"
+                    onChange={(e) => {
+                      setExtraValues((prevState) => ({
+                        ...prevState,
+                        [attribute.name]: e.target.value,
+                      }));
+                    }}
+                  />
+                </Form.Group>
+              );
+            } else {
+              return (
+                <Form.Group className="mb-3">
+                  <Form.Label>{attribute.name}</Form.Label>
+                  <Form.Control
+                    type="number"
+                    onChange={(e) => {
+                      setExtraValues((prevState) => ({
+                        ...prevState,
+                        [attribute.name]: e.target.value,
+                      }));
+                    }}
+                  />
+                </Form.Group>
+              );
+            }
           })}
 
-          <Form.Group className="mb-3 text-center">
+          <Form.Group className="mb-3 ">
             <ListGroup className="d-flex align-items-center">
-              <ListGroup.Item className="">
+              <ListGroup.Item className="text-center">
                 <Button
                   variant="light"
                   className="rounded-end"
@@ -203,10 +256,28 @@ export const CategoryModal = (props) => {
                 </Button>
                 {isAddNewAttribute && (
                   <>
+                    <Form.Check
+                      type="radio"
+                      name="group-1"
+                      id="inline-radio-1"
+                      label="Number"
+                      className="text-start"
+                      onClick={() => dispatchAttributeType({ type: "number" })}
+                    />
+                    <Form.Check
+                      type="radio"
+                      name="group-1"
+                      id="inline-radio-2"
+                      label="String"
+                      className="text-start"
+                      onClick={() => dispatchAttributeType({ type: "string" })}
+                    />
                     <FormControl
                       className="m-1"
                       type="text"
                       placeholder="Add new attribute key"
+                      isInvalid={attributeType.type === "none"}
+                      isValid={attributeType.type !== "none"}
                       onKeyDown={handleNewAttributeEnter}
                     />
                   </>

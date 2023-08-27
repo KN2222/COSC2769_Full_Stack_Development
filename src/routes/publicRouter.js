@@ -2,10 +2,9 @@ import { Routes, Route } from "react-router-dom";
 import { routePaths } from "./routePaths";
 import { useCategoryTree } from "../api/getCategoryTree";
 import { useEffect, useState } from "react";
-import { HomeNav } from "../components/navbar/HomeNav";
 
 const PublicRouter = () => {
-  const categoryTree = useCategoryTree();
+  const { categoryTree } = useCategoryTree();
   const [categoryRoutes, setCategoryRoutes] = useState(null);
 
   useEffect(() => {
