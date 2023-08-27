@@ -34,5 +34,5 @@ export const useGetAllCategory = () => {
     setRefreshSignal((prevSignal) => prevSignal + 1);
   }, []);
 
-  return { categories, count, fetchAllCategory,  refreshCategories, isLoading };
+  return { categories, count, fetchAllCategory, refreshCategories, isLoading };
 };
