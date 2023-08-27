@@ -32,7 +32,7 @@ export default function ProductCard() {
             <div key={product.id} className="col">
               <Link
                 style={{ textDecoration: "none" }}
-                to={`/details/${product.id}`}
+                to={`/product/${product.id}`}
               >
                 <Card className="h-100">
                   <Card.Img

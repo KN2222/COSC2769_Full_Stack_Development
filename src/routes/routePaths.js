@@ -2,11 +2,11 @@ import { ProtectedRoute } from "../components/ProtectedRoute";
 import { AdminLayout } from "../layout/admin.layout";
 import { AdminHomePage } from "../pages/admin/home";
 import Home from "../pages/customer/home";
-import Details from "../pages/customer/details";
 import { CustomerLayout } from "../layout/customer.layout";
 import { AdminCategoryPage } from "../pages/admin/category";
 import Login from "../layout/auth/Login";
 import SignUp from "../layout/auth/SignUp";
+import ProductDetail from "../components/productDetail/ProductDetail";
 
 export const routePaths = {
   public: [
@@ -32,8 +32,8 @@ export const routePaths = {
           element: <Home />,
         },
         {
-          path: "/details/:productID",
-          element: <Details />,
+          path: "/product/:productID",
+          element: <ProductDetail />,
 
         },
       ],

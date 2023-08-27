@@ -1,7 +1,6 @@
 import ProductDetail from "../../../components/productDetail/ProductDetail";
-import { SkeletonProductDetail } from "../../../components/loading/SkeletonProductDetail";
 
-export default function Details() {
+export default function ProductDetails() {
   return (
     <div>
       <ProductDetail />
@@ -9,3 +8,4 @@ export default function Details() {
     </div>
   );
 }
+  
