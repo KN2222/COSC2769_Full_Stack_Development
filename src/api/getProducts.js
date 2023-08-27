@@ -1,23 +1,29 @@
 import { useState, useEffect } from "react";
 import { APIService } from "../axios/client";
 
-export const useGetProducts = () => {
+export const useGetProducts = (productId = null) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchData = async () => {
       try {
-        const response = await APIService.get("https://fakestoreapi.com/products");
-        setData(response.data);
+        let response;
+        if (productId) {
+          response = await APIService.get(`https://fakestoreapi.com/products/${productId}`);
+          setData([response.data]); // Wrap the single product data in an array
+        } else {
+          response = await APIService.get("https://fakestoreapi.com/products");
+          setData(response.data);
+        }
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
         setLoading(false);
       }
     };
-    fetchProducts();
-  }, []);
+    fetchData();
+  }, [productId]);
 
   return { data, loading };
 };

@@ -2,16 +2,17 @@ import { ProtectedRoute } from "../components/ProtectedRoute";
 import { AdminLayout } from "../layout/admin.layout";
 import { AdminHomePage } from "../pages/admin/home";
 import Home from "../pages/customer/home";
+import Details from "../pages/customer/details";
 import { CustomerLayout } from "../layout/customer.layout";
 import { AdminCategoryPage } from "../pages/admin/category";
-import Login from '../layout/auth/Login';
-import SignUp from '../layout/auth/SignUp';
+import Login from "../layout/auth/Login";
+import SignUp from "../layout/auth/SignUp";
 
 export const routePaths = {
   public: [
     {
       path: "/",
-      element: <CustomerLayout/>,
+      element: <CustomerLayout />,
       children: [
         {
           path: "/category",
@@ -30,6 +31,11 @@ export const routePaths = {
           path: "/",
           element: <Home />,
         },
+        {
+          path: "/details/:productID",
+          element: <Details />,
+
+        },
       ],
     },
   ],
@@ -44,18 +50,18 @@ export const routePaths = {
         },
         {
           path: "/admin/category",
-          element: <AdminCategoryPage/>,
+          element: <AdminCategoryPage />,
         },
         {
-          path: '/admin/profile',
+          path: "/admin/profile",
           element: <div>This is admin profile page</div>,
         },
         {
-          path: '/admin/category',
+          path: "/admin/category",
           element: <div>This is admin category page</div>,
         },
         {
-          path: '/admin/category/:id',
+          path: "/admin/category/:id",
           element: <div>This is admin category detail page</div>,
         },
         {
