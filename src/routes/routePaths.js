@@ -1,6 +1,7 @@
 import { ProtectedRoute } from "../components/ProtectedRoute";
 import { AdminLayout } from "../layout/admin.layout";
 import { AdminHomePage } from "../pages/admin/home";
+import { AdminSellerPage } from "../pages/admin/seller";
 import Home from "../pages/customer/home";
 import { CustomerLayout } from "../layout/customer.layout";
 
@@ -39,6 +40,10 @@ export const routePaths = {
         {
           path: "/admin/home",
           element: <AdminHomePage />,
+        },
+        {
+          path: "/admin/seller",
+          element: <AdminSellerPage />,
         },
         {
           path: "/admin/category",

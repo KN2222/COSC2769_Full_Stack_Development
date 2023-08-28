@@ -8,8 +8,6 @@ export const SellerStatsCard = () => {
   const handleRefreshSeller = () => {
     fetchAllSeller();
   }
-
-
   return (
     <Row className="h-100">
       <Col>

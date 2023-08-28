@@ -20,3 +20,8 @@ code {
 .card-stats  {
   height: 100% !important;
 }
+
+.bg-primary-hover:hover {
+  background-color: #97aecb !important;; 
+  color: white; 
+}
