@@ -8,6 +8,7 @@ import { AdminCategoryPage } from "../pages/admin/category";
 import Login from "../layout/auth/Login";
 import SignUp from "../layout/auth/SignUp";
 import ProductDetail from "../components/productDetail/ProductDetail";
+import { AdminProfile } from "../pages/admin/profile";
 
 export const routePaths = {
   public: [
@@ -58,8 +59,8 @@ export const routePaths = {
           element: <AdminCategoryPage />,
         },
         {
-          path: "/admin/profile",
-          element: <div>This is admin profile page</div>,
+          path: '/admin/profile',
+          element: <AdminProfile/>,
         },
         {
           path: "/admin/category",
