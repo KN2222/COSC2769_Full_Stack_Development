@@ -1,4 +1,3 @@
-// Login Page
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
@@ -19,23 +18,13 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const formData = new FormData();
-    formData.append('name', name);
-    formData.append('email', email);
-    formData.append('password', password);
-    formData.append('role', role); // Use the selected role
-
     try {
-      const response = await axios.post(
-        'http://localhost:8000/auth/signup',
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        }
-      );
-
+      const response = await axios.post('http://localhost:8000/auth/signup', {
+        name: name,
+        email: email,
+        password: password,
+        role: role,
+      });
       // Handle success
       setModalMessage(response.data.message);
       setIsSuccess(true);
@@ -43,10 +32,11 @@ const SignUp = () => {
     } catch (error) {
       // Handle error
       if (error.response && error.response.data) {
-        const errorMessageFromBackend = error.response.data.message;
-        if (error.response.data.errors) {
-          // Display individual field validation errors
-          setModalMessage(Object.values(error.response.data.errors).join('\n'));
+        console.log(error.response.data);
+        const errorMessageFromBackend = error.response.data.error;
+        if (error.response.data.error) {
+          // Display individual field validation error
+          setModalMessage(Object.values(error.response.data.error));
         } else if (errorMessageFromBackend === 'Email already exists') {
           setModalMessage(
             'Email already exists. Please use a different email.'
@@ -126,16 +116,16 @@ const SignUp = () => {
               className='form-check-input'
               type='radio'
               name='role'
-              id='userRole'
-              value='user'
-              checked={role === 'user'}
-              onChange={() => setRole('user')}
+              id='customerRole'
+              value='customer'
+              checked={role === 'customer'}
+              onChange={() => setRole('customer')}
             />
             <label
               className='form-check-label'
               htmlFor='userRole'
             >
-              User
+              Customer
             </label>
           </div>
           <div className='form-check'>
@@ -163,7 +153,6 @@ const SignUp = () => {
           Register
         </button>
       </form>
-
       <div
         className={`modal fade ${showModal ? 'show' : ''}`}
         style={{ display: showModal ? 'block' : 'none' }}
@@ -199,7 +188,7 @@ const SignUp = () => {
               </button>
             </div>
           </div>
-        </div>
+        </div>{' '}
       </div>
       <div
         className={`modal-backdrop fade ${showModal ? 'show' : ''}`}

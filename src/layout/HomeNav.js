@@ -1,7 +1,9 @@
-import { Link, Outlet, useNavigate } from "react-router-dom";
-import { useCategoryTree } from "../api/getCategoryTree";
-import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
-import { useState } from "react";
+import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { useCategoryTree } from '../api/getCategoryTree';
+import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
+import { useState } from 'react';
+import { useContext } from 'react';
+import { AuthContext } from '../store/authContext';
 
 const isObjectEmpty = (obj) => {
   return Object.keys(obj).length === 0;
@@ -41,19 +43,22 @@ export const HomeNav = () => {
     }));
   };
 
+  const { accessToken } = useContext(AuthContext);
+  const isAuthenticated = !!accessToken;
+
   const renderSubcategories = (subCategories) => {
     return Object.entries(subCategories).map(([categoryName, category]) => {
       return !isObjectEmpty(category.subCategories) ? (
         <NavDropdown
-          id="basic-nav-dropdown"
+          id='basic-nav-dropdown'
           key={category._id}
           title={categoryName}
-          className="p-0"
+          className='p-0'
           show={dropdownSubOpen[category._id]}
           onMouseEnter={() => handleMouseSubEnter(category._id)}
           onMouseLeave={() => handleMouseSubLeave(category._id)}
-          autoClose={"outside"}
-          drop="end"
+          autoClose={'outside'}
+          drop='end'
           onClick={(e) => {
             e.stopPropagation();
             navigate(`/category/${categoryName}`);
@@ -80,25 +85,37 @@ export const HomeNav = () => {
 
   return (
     <>
-      <Navbar expand="lg" className="bg-body-tertiary m-0 pb-0">
+      <Navbar
+        expand='lg'
+        className='bg-body-tertiary m-0 pb-0'
+      >
         <Container>
-          <Navbar.Brand as={Link} to="/">
+          <Navbar.Brand
+            as={Link}
+            to='/'
+          >
             Home
           </Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
+          <Navbar.Toggle aria-controls='basic-navbar-nav' />
+          <Navbar.Collapse id='basic-navbar-nav'>
             {Object.entries(categoryTree).map(
               ([categoryName, category], index) => {
-                console.log("category", category);
+                console.log('category', category);
                 return (
-                  <Nav key={index} className="">
+                  <Nav
+                    key={index}
+                    className=''
+                  >
                     {isObjectEmpty(category.subCategories) ? (
-                      <Nav.Link as={Link} to={`/category/${categoryName}`}>
+                      <Nav.Link
+                        as={Link}
+                        to={`/category/${categoryName}`}
+                      >
                         {categoryName}
                       </Nav.Link>
                     ) : (
                       <NavDropdown
-                        id="collasible-nav-dropdown"
+                        id='collasible-nav-dropdown'
                         title={categoryName}
                         onClick={(e) => {
                           navigate(`/category/${categoryName}`);
@@ -113,6 +130,31 @@ export const HomeNav = () => {
                   </Nav>
                 );
               }
+            )}
+            {isAuthenticated ? (
+              <Nav>
+                <Nav.Link
+                  as={Link}
+                  to='/profile'
+                >
+                  Hello
+                </Nav.Link>
+              </Nav>
+            ) : (
+              <Nav>
+                <Nav.Link
+                  as={Link}
+                  to='/login'
+                >
+                  Login
+                </Nav.Link>
+                <Nav.Link
+                  as={Link}
+                  to='/signup'
+                >
+                  Sign Up
+                </Nav.Link>
+              </Nav>
             )}
           </Navbar.Collapse>
         </Container>

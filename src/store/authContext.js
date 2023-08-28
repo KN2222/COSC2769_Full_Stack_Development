@@ -7,35 +7,35 @@ import React, {
 } from 'react';
 import { APIService } from '../axios/client';
 import { useCookies } from 'react-cookie';
+import jwt_decode from 'jwt-decode'; // Import jwt_decode library for decoding tokens
 
 export const AuthContext = React.createContext();
 
 export const AuthProvider = ({ children }) => {
   const [cookies, setCookie, removeCookie] = useCookies(['sb']);
+  const [accessToken, setAccessToken] = useState(null); // Set initial value to null
 
-  const [accessToken, setAccessToken] = useState(null); // Initialize to null
+  // Decode the token and save the decoded object into local storage
 
   useEffect(() => {
     console.log('accessToken', accessToken);
+    console.log(localStorage.decodedToken);
   }, [accessToken]);
 
   const setToken = useCallback(
     (token) => {
       setCookie('sb', token, { path: '/' });
       setAccessToken(token);
+
+      // Decode the token and save the decoded object into local storage
+      const decodedToken = jwt_decode(token);
+      localStorage.setItem('decodedToken', JSON.stringify(decodedToken));
     },
     [setCookie]
   );
 
   useEffect(() => {
-    const storedToken = localStorage.getItem('accessToken'); // Get token from localStorage
-    if (storedToken) {
-      console.log('Stored token from localStorage', storedToken);
-      APIService.defaults.headers.common[
-        'Authorization'
-      ] = `Bearer ${storedToken}`;
-      setAccessToken(storedToken);
-    } else if (cookies.sb) {
+    if (cookies.sb) {
       console.log('cookies.sb', cookies.sb);
       const token = cookies.sb;
       APIService.defaults.headers.common['Authorization'] = `Bearer ${token}`;

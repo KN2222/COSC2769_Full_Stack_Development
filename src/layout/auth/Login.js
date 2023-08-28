@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useCookies } from 'react-cookie';
+import { useAuth } from '../../store/authContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -8,13 +11,25 @@ const Login = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const [showModal, setShowModal] = useState(false);
 
+  const { accessToken } = useAuth(); // Use the accessToken from AuthContext
+  const navigate = useNavigate();
+  const [, setCookie] = useCookies(['accessToken']);
+
+  useEffect(() => {
+    // Check if there's an existing access token in local storage
+    const decodedToken = localStorage.getItem('decodedToken');
+    if (accessToken || decodedToken) {
+      navigate('/'); // Redirect to the home page or a different route
+    }
+  }, [accessToken, navigate]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       const response = await axios.post('http://localhost:8000/auth/login', {
-        email,
-        password,
+        email: email,
+        password: password,
       });
 
       // Handle successful login
@@ -23,9 +38,10 @@ const Login = () => {
       setShowModal(true);
 
       // Save the accessToken to local storage
-      localStorage.setItem('accessToken', response.data.accessToken);
+      setCookie('sb', response.data.accessToken, { path: '/' });
     } catch (error) {
       // Handle login error
+      console.log(error);
       if (error.response && error.response.data) {
         setErrorMessage(error.response.data.message || 'An error occurred');
       } else {
