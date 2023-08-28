@@ -31,6 +31,7 @@ export const useGetAllSeller = () => {
     const approveSeller = async (sellerId) => {
         try {
           await APIService.post(`/admin/approve-seller/${sellerId}`);
+          console.log("Call approve seller");
           refreshSellers();
         } catch (error) {
           console.error("Error approving seller:", error);

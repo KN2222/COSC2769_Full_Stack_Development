@@ -14,15 +14,17 @@ export const AdminProfile = () => {
     }
 
   return (
-    <div>
-        <input type="file" onChange={(e)=>setFile(e.target.files[0])} />
-        <button type="button" onClick={upload}>Upload</button>
+    <div >
+        {/* <input type="file" onChange={(e)=>setFile(e.target.files[0])} />
+        <Button variant="primary" onClick={upload}>Upload</Button> */}
         
-        {/* <Form.Group controlId="formFile" className="mb-3">
-        <Form.Label>Default file input example</Form.Label>
+        <Form.Group controlId="formFile" className="mb-3">
+        <Form.Label><h4>Upload your avatar here:</h4></Form.Label>
         <Form.Control type="file" onChange={(e)=>setFile(e.target.files[0])} />
         </Form.Group>
-        <Button type="submit" onClick={upload}>Sign in</Button> */}
+        <div className="d-flex justify-content-center">
+          <Button type="submit" onClick={upload}>Upload</Button>
+        </div>
     </div>
   )
 };
