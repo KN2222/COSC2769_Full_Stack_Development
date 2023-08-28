@@ -27,3 +27,7 @@ code {
   -webkit-line-clamp: 3;
   overflow: hidden;
 }
+
+.toast-container {
+  position: fixed !important;
+}

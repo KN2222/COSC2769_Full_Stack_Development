@@ -34,9 +34,13 @@ export const routePaths = {
         {
           path: "/product/:productID",
           element: <ProductDetail />,
-
         },
       ],
+    },
+    {
+      path: "*",
+      element: <></>,
+      children: [],
     },
   ],
   privateAdmin: [
