@@ -1,17 +1,21 @@
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCategoryTree } from "../../api/getCategoryTree";
 import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const isObjectEmpty = (obj) => {
   return Object.keys(obj).length === 0;
 };
 
 export const HomeNav = () => {
-  const categoryTree = useCategoryTree();
+  const { categoryTree } = useCategoryTree();
   const [dropdownMainOpen, setDropdownMainOpen] = useState({});
   const [dropdownSubOpen, setDropdownSubOpen] = useState({});
   const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log("categoryTree", categoryTree);
+  }, [categoryTree]);
 
   const handleMouseMainEnter = (categoryId) => {
     setDropdownMainOpen((prevState) => ({
@@ -80,7 +84,7 @@ export const HomeNav = () => {
 
   return (
     <>
-      <Navbar expand="lg" className="bg-body-tertiary m-0 pb-0">
+      <Navbar expand="lg" className="bg-body-tertiary m-0 pb-0 sticky-top">
         <Container>
           <Navbar.Brand as={Link} to="/">
             Home

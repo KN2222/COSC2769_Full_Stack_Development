@@ -4,10 +4,10 @@ import { Footer } from "../components/footer";
 
 export const CustomerLayout = () => {
   return (
-    <>
+    <div className="vw-100">
       <HomeNav />
       <Outlet />
       <Footer />
-    </>
+    </div>
   );
-};
+}

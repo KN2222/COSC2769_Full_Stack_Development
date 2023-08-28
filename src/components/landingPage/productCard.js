@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { useGetProducts } from "../../api/getProducts";
+import { Link } from "react-router-dom";
 import { SkeletonProductCard } from "../loading/SkeletonProductCard";
 import { Card, Button } from "react-bootstrap";
+
 
 export default function ProductCard() {
   const { data: products, loading } = useGetProducts();
@@ -28,52 +30,33 @@ export default function ProductCard() {
         <div className="row row-cols-1 row-cols-md-3 g-4">
           {visibleProducts.map((product) => (
             <div key={product.id} className="col">
-              <Card className="h-100">
-                <Card.Img
-                  variant="top"
-                  src={product.image}
-                  alt={product.title}
-                  style={{ objectFit: "cover", height: "200px" }}
-                />
-                <Card.Body>
-                  <Card.Title className="text-truncate">
-                    {product.title}
-                  </Card.Title>
-                  <Card.Text>{`${product.description.slice(
-                    0,
-                    75
-                  )}...`}</Card.Text>
-                  <Card.Text>Price: ${product.price}</Card.Text>
-                  <Button variant="primary">Add to Cart</Button>
-                </Card.Body>
-              </Card>
+              <Link
+                style={{ textDecoration: "none" }}
+                to={`/product/${product.id}`}
+              >
+                <Card className="h-100">
+                  <Card.Img
+                    variant="top"
+                    src={product.image}
+                    alt={product.title}
+                    style={{ objectFit: "cover", height: "200px" }}
+                  />
+                  <Card.Body>
+                    <Card.Title className="text-truncate">
+                      {product.title}
+                    </Card.Title>
+                    <div className="multi-line-truncate">
+                      <Card.Text>{product.description}</Card.Text>
+                    </div>
+                    <Card.Text>Price: ${product.price}</Card.Text>
+                    <Button variant="primary">Add to Cart</Button>
+                  </Card.Body>
+                </Card>
+              </Link>
             </div>
           ))}
         </div>
       )}
-      <div className="row row-cols-1 row-cols-md-3 g-4">
-        {visibleProducts.map((product) => (
-          <div key={product.id} className="col">
-            <div className="card h-100">
-              <img
-                src={product.image}
-                alt={product.title}
-                className="card-img-top"
-                style={{ objectFit: "cover", height: "200px" }}
-              />
-              <div className="card-body">
-                <h5 className="card-title text-truncate">{product.title}</h5>
-                <p className="card-text h-2">{`${product.description.slice(
-                  0,
-                  75
-                )}...`}</p>
-                <p className="card-text">Price: ${product.price}</p>
-                <button className="btn btn-primary ">Add to Cart</button>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
       <div className="mt-3">
         <nav aria-label="Page navigation ">
           <ul className="pagination">

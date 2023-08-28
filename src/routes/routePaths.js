@@ -4,12 +4,16 @@ import { AdminHomePage } from "../pages/admin/home";
 import { AdminSellerPage } from "../pages/admin/seller";
 import Home from "../pages/customer/home";
 import { CustomerLayout } from "../layout/customer.layout";
+import { AdminCategoryPage } from "../pages/admin/category";
+import Login from "../layout/auth/Login";
+import SignUp from "../layout/auth/SignUp";
+import ProductDetail from "../components/productDetail/ProductDetail";
 
 export const routePaths = {
   public: [
     {
       path: "/",
-      element: <CustomerLayout/>,
+      element: <CustomerLayout />,
       children: [
         {
           path: "/category",
@@ -18,20 +22,24 @@ export const routePaths = {
 
         {
           path: "/login",
-          element: <div>This is login page</div>,
+          element: <Login />,
         },
         {
           path: "/signup",
-          element: <div>This is register page</div>,
+          element: <SignUp />,
         },
         {
           path: "/",
           element: <Home />,
         },
+        {
+          path: "/product/:productID",
+          element: <ProductDetail />,
+
+        },
       ],
     },
   ],
-
   privateAdmin: [
     {
       path: "/admin",
@@ -44,6 +52,14 @@ export const routePaths = {
         {
           path: "/admin/seller",
           element: <AdminSellerPage />,
+        },
+        {
+          path: "/admin/category",
+          element: <AdminCategoryPage />,
+        },
+        {
+          path: "/admin/profile",
+          element: <div>This is admin profile page</div>,
         },
         {
           path: "/admin/category",

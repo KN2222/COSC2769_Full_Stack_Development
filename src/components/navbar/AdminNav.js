@@ -2,12 +2,12 @@ import { Container, Nav, Navbar } from "react-bootstrap";
 import { PersonCircle } from "react-bootstrap-icons";
 import { Link } from "react-router-dom";
 
-const mockAdminId = '123';
+const mockAdminId = "123";
 
 export const AdminNavbar = () => {
   return (
     <>
-      <Navbar expand="lg" className="bg-body-tertiary fixed-top">
+      <Navbar expand="lg" className="bg-body-tertiary sticky-top">
         <Container>
           <Navbar.Brand as={Link} to="/admin/home">
             Home
@@ -21,7 +21,6 @@ export const AdminNavbar = () => {
               <Nav.Link as={Link} to={`/admin/cv`}>
                 Seller CV
               </Nav.Link>
-
             </Nav>
             <Nav className="ms-auto">
               {" "}
