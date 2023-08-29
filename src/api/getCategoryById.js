@@ -1,7 +1,9 @@
 import { useCallback, useEffect } from "react";
 import { APIService } from "../axios/client";
+import { useToastContext } from "../store/toastContext";
 
 export const useGetCategoryById = () => {
+  const { showToast } = useToastContext();
   const fetchCategoryById = useCallback(async (id) => {
     try {
       if (id) {
@@ -9,9 +11,9 @@ export const useGetCategoryById = () => {
         return response.data.category;
       }
     } catch (error) {
-      console.error("Error fetching category by id:", error);
+      showToast(error.response.status, error.response.data.message);
     }
-  }, []);
+  }, [showToast]);
 
   useEffect(() => {
     fetchCategoryById();

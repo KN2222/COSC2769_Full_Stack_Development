@@ -1,79 +1,68 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Stack, Button } from "react-bootstrap";
 import { CategoryCard } from "../../../components/categoryCard";
-import { useGetAllCategory } from "../../../api/getAllCategory";
-import { useGetCategoryById } from "../../../api/getCategoryById";
 import { SkeletonCategoryCard } from "../../../components/loading/SkeletonCategoryCard";
 import { useModalContext } from "../../../store/modalContext";
+import { useGetAllCategory } from "../../../api/getAllCategory";
+import { useModal } from "../../../hooks/modal";
+import { CategoryCreateModal } from "../../../components/modal/CategoryCreateModal";
+
+const Categories = ({ categories }) => {
+  return (
+    <>
+      {categories.map((category, index) => (
+        <Col key={index}>
+          <CategoryCard category={category} />
+        </Col>
+      ))}
+    </>
+  );
+};
 
 export const AdminCategoryPage = () => {
+  const { categories, isLoading } = useGetAllCategory();
+  const { openModal: openModalGlobal } = useModalContext();
   const {
-    categories: data,
-    refreshCategories,
-    isLoading,
-  } = useGetAllCategory();
-  const [categories, setCategories] = useState([]);
-  const { showModal } = useModalContext();
-  const { fetchCategoryById } = useGetCategoryById();
+    showModal: showCreateModal,
+    openModal: openCreateModal,
+    closeModal: closeCreateModal,
+  } = useModal();
 
   useEffect(() => {
-    if (!showModal) {
-      refreshCategories();
-    }
-  }, [showModal, refreshCategories]);
-
-  useEffect(() => {
-    const updateCategoriesWithSubcategories = async () => {
-      const updatedCategories = await Promise.all(
-        data.map(async (category) => {
-          const { subCategories, ...otherProperties } = category;
-          if (subCategories.length > 0) {
-            const subCategoryNames = await Promise.all(
-              subCategories.map(async (subCategoryId) => {
-                const subCategoryDetails = await fetchCategoryById(
-                  subCategoryId
-                );
-                return subCategoryDetails.name;
-              })
-            );
-            return {
-              ...otherProperties,
-              subCategories,
-              subCategoriesNames: subCategoryNames, 
-            };
-          }
-          return {
-            ...otherProperties,
-            subCategories,
-            subCategoriesNames: [],
-          };
-        })
-      );
-      setCategories(updatedCategories);
-    };
-    if (data) {
-      updateCategoriesWithSubcategories();
-    }
-  }, [fetchCategoryById, data]);
+    console.log("categories", categories);
+  }, [categories]);
 
   return (
-    <Container>
-      <Row className="row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-3">
-        {isLoading &&
-          [...Array(12)].map((item, index) => (
-            <Col key={index}>
-              <SkeletonCategoryCard key={index} />
-            </Col>
-          ))}
+    <>
+      <Container>
+        <Stack direction="horizontal" className="mb-2 ">
+          <Button
+            variant="primary"
+            size="md"
+            className="ms-auto"
+            onClick={() => {
+              openModalGlobal();
+              openCreateModal();
+            }}
+          >
+            Add Category
+          </Button>
+        </Stack>
+        <Row className="row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-3">
+          {isLoading &&
+            [...Array(12)].map((_, index) => (
+              <Col key={index}>
+                <SkeletonCategoryCard />
+              </Col>
+            ))}
 
-        {categories.map((category, index) => {
-          return (
-            <Col key={index}>
-              <CategoryCard category={category} />
-            </Col>
-          );
-        })}
-      </Row>
-    </Container>
+          {categories.length > 0 && <Categories categories={categories} />}
+        </Row>
+      </Container>
+      <CategoryCreateModal
+        show={showCreateModal}
+        onHide={closeCreateModal}
+      />
+    </>
   );
 };

@@ -20,10 +20,19 @@ code {
 .card-stats {
   height: 100% !important;
 }
+
+.bg-primary-hover:hover {
+  background-color: #97aecb !important;; 
+  color: white; 
+}
 .multi-line-truncate {
   width: 100%;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
   overflow: hidden;
+}
+
+.toast-container {
+  position: fixed !important;
 }

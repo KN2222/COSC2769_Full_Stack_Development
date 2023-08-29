@@ -52,6 +52,8 @@ const PublicRouter = () => {
             />
           );
         })}
+
+      
     </Routes>
   );
 };

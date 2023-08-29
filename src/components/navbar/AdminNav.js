@@ -18,13 +18,13 @@ export const AdminNavbar = () => {
               <Nav.Link as={Link} to={`/admin/category`}>
                 Category
               </Nav.Link>
-              <Nav.Link as={Link} to={`/admin/cv`}>
+              <Nav.Link as={Link} to={`/admin/seller`}>
                 Seller CV
               </Nav.Link>
             </Nav>
             <Nav className="ms-auto">
               {" "}
-              <Nav.Link as={Link} to={`/admin/${mockAdminId}`}>
+              <Nav.Link as={Link} to={`/admin/profile`}>
                 <PersonCircle />
               </Nav.Link>
             </Nav>

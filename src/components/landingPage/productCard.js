@@ -111,12 +111,12 @@ export default function ProductCard() {
           )}
         </div>
       )}
-      <div className="mt-3">
-        <nav aria-label="Page navigation ">
-          <ul className="pagination">
-            <li className={`page-item ${activePage === 1 ? "disabled" : ""}`}>
+      <div className='mt-3'>
+        <nav aria-label='Page navigation '>
+          <ul className='pagination'>
+            <li className={`page-item ${activePage === 1 ? 'disabled' : ''}`}>
               <button
-                className="page-link"
+                className='page-link'
                 onClick={() => handlePageChange(activePage - 1)}
               >
                 Previous
@@ -126,11 +126,11 @@ export default function ProductCard() {
               <li
                 key={index}
                 className={`page-item ${
-                  activePage === index + 1 ? "active" : ""
+                  activePage === index + 1 ? 'active' : ''
                 }`}
               >
                 <button
-                  className="page-link"
+                  className='page-link'
                   onClick={() => handlePageChange(index + 1)}
                 >
                   {index + 1}
@@ -139,11 +139,11 @@ export default function ProductCard() {
             ))}
             <li
               className={`page-item ${
-                activePage === totalPages ? "disabled" : ""
+                activePage === totalPages ? 'disabled' : ''
               }`}
             >
               <button
-                className="page-link"
+                className='page-link'
                 onClick={() => handlePageChange(activePage + 1)}
               >
                 Next

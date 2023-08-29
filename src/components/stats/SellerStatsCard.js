@@ -1,8 +1,13 @@
 import React from "react";
 import { Card, Col, Row } from "react-bootstrap";
 import { ArrowClockwise, PeopleFill } from "react-bootstrap-icons";
+import { useGetAllSeller } from "../../api/getAllSeller";
 
 export const SellerStatsCard = () => {
+  const {count, fetchAllSeller} = useGetAllSeller();
+  const handleRefreshSeller = () => {
+    fetchAllSeller();
+  }
   return (
     <Row className="h-100">
       <Col>
@@ -17,7 +22,7 @@ export const SellerStatsCard = () => {
               <Col xs="7">
                 <div className="numbers">
                   <p className="card-category">Total Sellers</p>
-                  <Card.Title as="h4">20</Card.Title>
+                  <Card.Title as="h4">{count}</Card.Title>
                 </div>
               </Col>
             </Row>
@@ -26,7 +31,7 @@ export const SellerStatsCard = () => {
             <hr></hr>
             <button
               className="border-0 px-2 py-1 rounded-2"
-              // onClick={handleRefreshCategory}
+              onClick={handleRefreshSeller}
             >
               <ArrowClockwise
                 style={{

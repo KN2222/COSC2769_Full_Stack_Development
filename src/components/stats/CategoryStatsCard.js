@@ -4,9 +4,9 @@ import { ArrowClockwise, Boxes } from "react-bootstrap-icons";
 import { useGetAllCategory } from "../../api/getAllCategory";
 
 export const CategoryStatsCard = () => {
-  const { count, fetchAllCategory } = useGetAllCategory();
+  const { count, setRefresh } = useGetAllCategory();
   const handleRefreshCategory = () => {
-    fetchAllCategory();
+    setRefresh(true);
   };
 
   return (

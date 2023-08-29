@@ -1,4 +1,5 @@
-import ProductCard from "../../../components/landingPage/ProductCard"
+import ProductCard from '../../../components/landingPage/productCard';
+
 export default function Home() {
   return (
     <div>

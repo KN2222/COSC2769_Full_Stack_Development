@@ -1,69 +1,168 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useCookies } from 'react-cookie';
+import { useAuth } from '../../store/authContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [showModal, setShowModal] = useState(false);
 
-  const handleLogin = async (e) => {
+  const { accessToken } = useAuth(); // Use the accessToken from AuthContext
+  const navigate = useNavigate();
+  const [, setCookie] = useCookies(['accessToken']);
+
+  useEffect(() => {
+    // Check if there's an existing access token in local storage
+    const decodedToken = localStorage.getItem('decodedToken');
+    if (accessToken || decodedToken) {
+      navigate('/'); // Redirect to the home page or a different route
+    }
+  }, [accessToken, navigate]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       const response = await axios.post('http://localhost:8000/auth/login', {
-        email,
-        password,
+        email: email,
+        password: password,
       });
 
-      // Handle successful login, e.g., store user data in state or context
-      console.log('Login successful:', response.data);
+      // Handle successful login
+      setSuccessMessage(response.data.message);
+      setErrorMessage('');
+      setShowModal(true);
+
+      // Save the accessToken to local storage
+      setCookie('sb', response.data.accessToken, { path: '/' });
     } catch (error) {
-      // Handle login error, e.g., show an error message
-      console.error('Login error:', error);
+      // Handle login error
+      console.log(error);
+      if (error.response && error.response.data) {
+        setErrorMessage(error.response.data.message || 'An error occurred');
+      } else {
+        setErrorMessage('An error occurred');
+      }
+      setSuccessMessage('');
+      setShowModal(true);
     }
   };
 
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
   return (
-    <div className='container mt-5'>
-      <form onSubmit={handleLogin}>
-        <div className='mb-3'>
-          <label
-            htmlFor='email'
-            className='form-label'
+    <div>
+      <div className='container mt-5'>
+        {/* Login Form */}
+        <form onSubmit={handleSubmit}>
+          <div className='mb-3'>
+            <label
+              htmlFor='email'
+              className='form-label'
+            >
+              Email
+            </label>
+            <input
+              type='email'
+              className='form-control'
+              id='email'
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className='mb-3'>
+            <label
+              htmlFor='password'
+              className='form-label'
+            >
+              Password
+            </label>
+            <input
+              type='password'
+              className='form-control'
+              id='password'
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <button
+            type='submit'
+            className='btn btn-primary'
           >
-            Email
-          </label>
-          <input
-            type='email'
-            className='form-control'
-            id='email'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div className='mb-3'>
-          <label
-            htmlFor='password'
-            className='form-label'
-          >
-            Password
-          </label>
-          <input
-            type='password'
-            className='form-control'
-            id='password'
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button
-          type='submit'
-          className='btn btn-primary'
+            Login
+          </button>
+        </form>
+
+        {/* Success/Error Modal */}
+        <div
+          className={`modal fade ${showModal ? 'show' : ''}`}
+          style={{ display: showModal ? 'block' : 'none' }}
+          tabIndex='-1'
+          role='dialog'
         >
-          Login
-        </button>
-      </form>
+          <div
+            className='modal-dialog'
+            role='document'
+          >
+            <div className='modal-content'>
+              <div className='modal-header'>
+                <h5 className='modal-title'>
+                  {successMessage ? 'Success' : 'Error'}
+                </h5>
+                <button
+                  type='button'
+                  className='close'
+                  data-dismiss='modal'
+                  aria-label='Close'
+                  onClick={closeModal}
+                >
+                  <span aria-hidden='true'>&times;</span>
+                </button>
+              </div>
+              <div className='modal-body'>{successMessage || errorMessage}</div>
+              {successMessage ? (
+                <>
+                  <div className='modal-footer'>
+                    <button
+                      type='button'
+                      className='btn btn-secondary'
+                      data-dismiss='modal'
+                      onClick={() => navigate('/')}
+                    >
+                      Close
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className='modal-footer'>
+                    <button
+                      type='button'
+                      className='btn btn-secondary'
+                      data-dismiss='modal'
+                      onClick={closeModal}
+                    >
+                      Close
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+        <div
+          className={`modal-backdrop fade ${showModal ? 'show' : ''}`}
+          style={{ display: showModal ? 'block' : 'none' }}
+        ></div>
+      </div>
     </div>
   );
 };
