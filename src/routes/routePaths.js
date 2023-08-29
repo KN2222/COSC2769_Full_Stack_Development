@@ -1,45 +1,81 @@
-import { ProtectedRoute } from '../components/ProtectedRoute';
-import Login from '../layout/auth/Login';
-import SignUp from '../layout/auth/SignUp';
+import { ProtectedRoute } from "../components/ProtectedRoute";
+import { AdminLayout } from "../layout/admin.layout";
+import { AdminHomePage } from "../pages/admin/home";
+import { AdminSellerPage } from "../pages/admin/seller";
+import Home from "../pages/customer/home";
+import { CustomerLayout } from "../layout/customer.layout";
+import { AdminCategoryPage } from "../pages/admin/category";
+import Login from "../layout/auth/Login";
+import SignUp from "../layout/auth/SignUp";
+import ProductDetail from "../components/productDetail/ProductDetail";
+import { AdminProfile } from "../pages/admin/profile";
+
 export const routePaths = {
   public: [
     {
-      path: '/category',
-      element: <div>This is category page</div>,
-    },
+      path: "/",
+      element: <CustomerLayout />,
+      children: [
+        {
+          path: "/category",
+          element: <div>This is category page</div>,
+        },
 
-    {
-      path: '/login',
-      element: <Login />,
-    },
-    {
-      path: '/signup',
-      element: <SignUp />,
+        {
+          path: "/login",
+          element: <Login />,
+        },
+        {
+          path: "/signup",
+          element: <SignUp />,
+        },
+        {
+          path: "/",
+          element: <Home />,
+        },
+        {
+          path: "/product/:productID",
+          element: <ProductDetail />,
+
+        },
+      ],
     },
   ],
   privateAdmin: [
     {
-      path: '/admin',
-      element: <ProtectedRoute />,
+      path: "/admin",
+      element: <AdminLayout />,
       children: [
         {
-          path: '/admin/profile',
-          element: <div>This is admin profile page</div>,
+          path: "/admin/home",
+          element: <AdminHomePage />,
         },
         {
-          path: '/admin/category',
+          path: "/admin/seller",
+          element: <AdminSellerPage />,
+        },
+        {
+          path: "/admin/category",
+          element: <AdminCategoryPage />,
+        },
+        {
+          path: '/admin/profile',
+          element: <AdminProfile/>,
+        },
+        {
+          path: "/admin/category",
           element: <div>This is admin category page</div>,
         },
         {
-          path: '/admin/category/:id',
+          path: "/admin/category/:id",
           element: <div>This is admin category detail page</div>,
         },
         {
-          path: '/admin/seller',
+          path: "/admin/cv",
           element: <div>This is admin seller page</div>,
         },
         {
-          path: '/admin/seller/:id',
+          path: "/admin/cv/:id",
           element: <div>This is admin seller detail page</div>,
         },
       ],
@@ -48,7 +84,7 @@ export const routePaths = {
 
   privateSeller: [
     {
-      path: '/seller',
+      path: "/seller",
       element: <ProtectedRoute />,
       children: [],
     },

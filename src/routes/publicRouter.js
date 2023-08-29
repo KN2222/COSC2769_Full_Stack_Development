@@ -2,10 +2,9 @@ import { Routes, Route } from "react-router-dom";
 import { routePaths } from "./routePaths";
 import { useCategoryTree } from "../api/getCategoryTree";
 import { useEffect, useState } from "react";
-import { HomeNav } from "../layout/HomeNav";
 
 const PublicRouter = () => {
-  const categoryTree = useCategoryTree();
+  const { categoryTree } = useCategoryTree();
   const [categoryRoutes, setCategoryRoutes] = useState(null);
 
   useEffect(() => {
@@ -35,21 +34,24 @@ const PublicRouter = () => {
   return (
     <Routes>
       {routePaths.public.map((route, index) => (
-        <Route key={index} path={route.path} element={route.element} />
+        <Route key={index} path={route.path} element={route.element}>
+          {route.children.map((child, index) => (
+            <Route key={index} path={child.path} element={child.element} />
+          ))}
+        </Route>
       ))}
-      <Route path="/" element={<HomeNav />}>
-        {categoryRoutes &&
-          categoryRoutes.map((category, index) => {
-            const { name, id } = category;
-            return (
-              <Route
-                key={index}
-                path={`/category/${name}`}
-                element={<h1>{name + " " + id}</h1>}
-              />
-            );
-          })}
-      </Route>      
+
+      {categoryRoutes &&
+        categoryRoutes.map((category, index) => {
+          const { name, id } = category;
+          return (
+            <Route
+              key={index}
+              path={`/category/${name}`}
+              element={<h1>{name + " " + id}</h1>}
+            />
+          );
+        })}
     </Routes>
   );
 };

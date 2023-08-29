@@ -12,6 +12,6 @@ export const ProtectedRoute = () => {
 
   if (!accessToken) {
     return <Navigate to= "/"/>;
-  }
+  } 
   return <Outlet/>;
-}
+} 
