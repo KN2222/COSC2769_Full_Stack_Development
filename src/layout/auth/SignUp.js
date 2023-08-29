@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { HomeNav } from '../../components/navbar/HomeNav';
 const SignUp = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -60,7 +59,6 @@ const SignUp = () => {
 
   return (
     <div>
-      <HomeNav />
       <div className='container mt-5'>
         <form onSubmit={handleSubmit}>
           <div className='mb-3'>
