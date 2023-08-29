@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { HomeNav } from '../HomeNav';
-
+import { HomeNav } from '../../components/navbar/HomeNav';
 const SignUp = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');

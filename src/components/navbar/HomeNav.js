@@ -1,9 +1,12 @@
-import { Link, Outlet, useNavigate, useEffect } from 'react-router-dom';
-import { useCategoryTree } from '../api/getCategoryTree';
-import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
+import { Link, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useCategoryTree } from '../../api/getCategoryTree';
+import { Navbar, Nav, Container, NavDropdown, Button } from 'react-bootstrap';
+import Col from 'react-bootstrap/Col';
+
 import { useState } from 'react';
 import { useContext } from 'react';
-import { AuthContext } from '../store/authContext';
+import { AuthContext } from '../../store/authContext';
 
 const isObjectEmpty = (obj) => {
   return Object.keys(obj).length === 0;
@@ -102,64 +105,89 @@ export const HomeNav = () => {
           </Navbar.Brand>
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse id='basic-navbar-nav'>
-            {Object.entries(categoryTree).map(
-              ([categoryName, category], index) => {
-                console.log('category', category);
-                return (
-                  <Nav
-                    key={index}
-                    className=''
+            <Col sm={8}>
+              {Object.entries(categoryTree).map(
+                ([categoryName, category], index) => {
+                  console.log('category', category);
+                  return (
+                    <Nav
+                      key={index}
+                      className=''
+                    >
+                      {isObjectEmpty(category.subCategories) ? (
+                        <Nav.Link
+                          as={Link}
+                          to={`/category/${categoryName}`}
+                        >
+                          {categoryName}
+                        </Nav.Link>
+                      ) : (
+                        <NavDropdown
+                          id='collasible-nav-dropdown'
+                          title={categoryName}
+                          onClick={(e) => {
+                            navigate(`/category/${categoryName}`);
+                          }}
+                          show={dropdownMainOpen[category._id]}
+                          onMouseEnter={() =>
+                            handleMouseMainEnter(category._id)
+                          }
+                          onMouseLeave={() =>
+                            handleMouseMainLeave(category._id)
+                          }
+                        >
+                          {renderSubcategories(category.subCategories)}
+                        </NavDropdown>
+                      )}
+                    </Nav>
+                  );
+                }
+              )}
+            </Col>
+            <Col sm={4}>
+              {isAuthenticated ? (
+                <Nav>
+                  <Nav.Link
+                    as={Link}
+                    to='/profile'
                   >
-                    {isObjectEmpty(category.subCategories) ? (
-                      <Nav.Link
-                        as={Link}
-                        to={`/category/${categoryName}`}
+                    Hello
+                  </Nav.Link>
+                </Nav>
+              ) : (
+                <Nav>
+                  <Nav.Link
+                    as={Link}
+                    to='/checkout'
+                  >
+                    <Button variant='outline-dark'>
+                      <svg
+                        xmlns='http://www.w3.org/2000/svg'
+                        width='16'
+                        height='16'
+                        fill='currentColor'
+                        className='bi bi-cart-fill'
+                        viewBox='0 0 16 16'
                       >
-                        {categoryName}
-                      </Nav.Link>
-                    ) : (
-                      <NavDropdown
-                        id='collasible-nav-dropdown'
-                        title={categoryName}
-                        onClick={(e) => {
-                          navigate(`/category/${categoryName}`);
-                        }}
-                        show={dropdownMainOpen[category._id]}
-                        onMouseEnter={() => handleMouseMainEnter(category._id)}
-                        onMouseLeave={() => handleMouseMainLeave(category._id)}
-                      >
-                        {renderSubcategories(category.subCategories)}
-                      </NavDropdown>
-                    )}
-                  </Nav>
-                );
-              }
-            )}
-            {isAuthenticated ? (
-              <Nav>
-                <Nav.Link
-                  as={Link}
-                  to='/profile'
-                >
-                  Hello
-                </Nav.Link>
-              </Nav>
-            ) : (
-              <Nav>
-                <Nav.Link
-                  as={Link}
-                  to='/login'
-                >
-                  Login
-                </Nav.Link>
-                <Nav.Link
-                  as={Link}
-                  to='/signup'
-                >
-                  Sign Up
-                </Nav.Link>
-              </Nav>
-            )}
+                        <path d='M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z' />
+                      </svg>
+                    </Button>
+                  </Nav.Link>
+                  <Nav.Link
+                    as={Link}
+                    to='/login'
+                  >
+                    <Button>Login</Button>
+                  </Nav.Link>
+                  <Nav.Link
+                    as={Link}
+                    to='/signup'
+                  >
+                    <Button variant='outline-primary'>Sign Up</Button>
+                  </Nav.Link>
+                </Nav>
+              )}
+            </Col>
           </Navbar.Collapse>
         </Container>
       </Navbar>
