@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import { useAuth } from '../../store/authContext';
-import { HomeNav } from '../../components/navbar/HomeNav';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -59,7 +58,6 @@ const Login = () => {
 
   return (
     <div>
-      <HomeNav />
       <div className='container mt-5'>
         {/* Login Form */}
         <form onSubmit={handleSubmit}>

@@ -10,7 +10,7 @@ import SignUp from '../layout/auth/SignUp';
 import ProductDetail from '../components/productDetail/ProductDetail';
 import { AdminProfile } from '../pages/admin/profile';
 import CheckOut from '../pages/customer/checkout';
-
+import Profile from '../pages/customer/profile';
 export const routePaths = {
   public: [
     {
@@ -33,6 +33,10 @@ export const routePaths = {
         {
           path: '/checkout',
           element: <CheckOut />,
+        },
+        {
+          path: '/profile',
+          element: <Profile />,
         },
         {
           path: '/',
