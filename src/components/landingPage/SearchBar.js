@@ -8,7 +8,7 @@ export default function SearchBar({ onSearch }) {
   };
 
   return (
-    <div className="mb-3">
+    <div className="mb-2">
       <input
         type="text"
         className="form-control"
