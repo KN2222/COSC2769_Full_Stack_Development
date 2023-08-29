@@ -48,6 +48,11 @@ export const routePaths = {
         },
       ],
     },
+    {
+      path: "*",
+      element: <></>,
+      children: [],
+    },
   ],
   privateAdmin: [
     {

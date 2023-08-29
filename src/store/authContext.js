@@ -13,8 +13,7 @@ export const AuthContext = React.createContext();
 
 export const AuthProvider = ({ children }) => {
   const [cookies, setCookie, removeCookie] = useCookies(['sb']);
-  const [accessToken, setAccessToken] = useState(null); // Set initial value to null
-
+  const [accessToken, setAccessToken] = useState("default"); 
   // Decode the token and save the decoded object into local storage
 
   useEffect(() => {

@@ -1,17 +1,27 @@
 import React, { useRef, useState } from "react";
 import { Card, ListGroup, Button, Stack } from "react-bootstrap";
-import { PencilSquare } from "react-bootstrap-icons";
+import { PencilSquare, TrashFill } from "react-bootstrap-icons";
 import { useModal } from "../../hooks/modal";
-import { CategoryModal } from "../modal/CategoryModal";
 import { useModalContext } from "../../store/modalContext";
+import { CategoryUpdateModal } from "../modal/CategoryUpdateModal";
+import { CategoryDeleteModal } from "../modal/CategoryDeleteModal";
 
 export const CategoryCard = ({ category }) => {
-  const { showModal, openModal, closeModal } = useModal();
+  const {
+    showModal: showModalUpdate,
+    openModal: openModalUpdate,
+    closeModal: closeModalUpdate,
+  } = useModal();
+
+  const {
+    showModal: showModalDelete,
+    openModal: openModalDelete,
+    closeModal: closeModalDelete,
+  } = useModal();
+
   const { openModal: openModalGlobal } = useModalContext();
 
   const handleClick = (categoryId) => {
-    // select Card category have the id is categoryId
-    console.log("categoryId", categoryId);
     const card = document.getElementById(categoryId);
     console.log("card", card);
     if (card) {
@@ -35,23 +45,37 @@ export const CategoryCard = ({ category }) => {
       key !== "_id" &&
       key !== "__v" &&
       key !== "parentId" &&
-      key !== "subCategoriesNames"
+      key !== "subCategoryNames"
   );
 
   return (
     <>
       <Card border="dark" className="h-100 " id={category._id}>
         <Card.Body>
-          <Stack>
+          <Stack
+            direction="horizontal"
+            className="d-flex-row justify-content-end"
+          >
             <Button
               variant="light"
-              className="rounded-end ms-auto"
+              className="rounded-end"
               onClick={() => {
                 openModalGlobal();
-                openModal();
+                openModalUpdate();
               }}
             >
               <PencilSquare size={15} />
+            </Button>
+            <div className="vr" />
+            <Button
+              variant="light"
+              className="rounded-end"
+              onClick={() => {
+                openModalGlobal();
+                openModalDelete();
+              }}
+            >
+              <TrashFill size={15} />
             </Button>
           </Stack>
 
@@ -67,8 +91,8 @@ export const CategoryCard = ({ category }) => {
               );
             })}
           </ListGroup>
-          <Card.Text>
-            <h6>Modify By:</h6>
+          <Card.Text as={"h6"} className="py-2">
+            Modify By
           </Card.Text>
           <ListGroup horizontal className=" flex-wrap">
             {category.admins.map((admin, index) => {
@@ -78,11 +102,11 @@ export const CategoryCard = ({ category }) => {
         </Card.Body>
 
         <Card.Body>
-          <Card.Text>
-            <h6>Subcategories:</h6>
+          <Card.Text as={"h6"} className="py-2">
+            Subcategories:
           </Card.Text>
           <div className="d-flex flex-wrap gap-1">
-            {category.subCategoriesNames.map((subCategory, index) => {
+            {category.subCategoryNames.map((subCategory, index) => {
               return (
                 <Button
                   key={index}
@@ -96,7 +120,16 @@ export const CategoryCard = ({ category }) => {
           </div>
         </Card.Body>
       </Card>
-      <CategoryModal show={showModal} onHide={closeModal} category={category} />
+      <CategoryUpdateModal
+        show={showModalUpdate}
+        onHide={closeModalUpdate}
+        category={category}
+      />
+      <CategoryDeleteModal
+        show={showModalDelete}
+        onHide={closeModalDelete}
+        category={category}
+      />
     </>
   );
 };

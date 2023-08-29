@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
-import { APIService } from '../axios/client';
+import { useState, useEffect } from "react";
+import { APIService } from "../axios/client";
+import { useToastContext } from "../store/toastContext";
 
 export const useGetProducts = (productId = null) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { showToast } = useToastContext();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,12 +23,13 @@ export const useGetProducts = (productId = null) => {
         }
         setLoading(false);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
+        showToast(error.response.status, error.response.data.message);
         setLoading(false);
       }
     };
     fetchData();
-  }, [productId]);
+  }, [productId, showToast]);
 
   return { data, loading };
 };

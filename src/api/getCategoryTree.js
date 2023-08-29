@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { APIService } from "../axios/client";
+import { useToastContext } from "../store/toastContext";
 
 export const useCategoryTree = () => {
   const [categoryTree, setCategoryTree] = useState({});
+  const { showToast } = useToastContext();
 
   const fetchCategoryTree = useCallback(async () => {
     try {
@@ -10,9 +12,9 @@ export const useCategoryTree = () => {
       console.log("response", response.data.hierarchicalCategoryTree);
       setCategoryTree(response.data.hierarchicalCategoryTree);
     } catch (error) {
-      console.error("Error fetching category tree:", error);
+      showToast(error.response.status, error.response.data.message);
     }
-  }, []);
+  }, [showToast]);
 
   useEffect(() => {
     console.log("categoryTree", categoryTree);

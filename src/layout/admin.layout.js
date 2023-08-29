@@ -17,7 +17,7 @@ export const AdminLayout = () => {
   return (
     <div className="vw-100">
       <AdminNavbar />
-      <Container className="mb-5">
+      <Container className="mb-2">
         <Card bg={"dark"} text={"light"}>
           <Card.Img
             variant="top"

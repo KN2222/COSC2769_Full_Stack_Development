@@ -1,38 +1,41 @@
 import { useCallback, useEffect, useState } from "react";
 import { APIService } from "../axios/client";
+import { useToastContext } from "../store/toastContext";
+import { useModalContext } from "../store/modalContext";
 
 export const useGetAllCategory = () => {
-  const [categories, setCategories] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [refresh, setRefresh] = useState(false);
   const [count, setCount] = useState(0);
-  const [refreshSignal, setRefreshSignal] = useState(0);
   const [isLoading, setLoading] = useState(true);
-
-  const fetchAllCategory = useCallback(async () => {
-    try {
-      const response = await APIService.get("/admin/category");
-      console.log("response", response);
-      setCategories(response.data.categories);
-      setCount(response.data.count);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching category tree:", error);
-    }
-  }, []);
+  const { showToast } = useToastContext();
+  const { showModal } = useModalContext();
 
   useEffect(() => {
-    fetchAllCategory();
-  }, [fetchAllCategory, refreshSignal]);
-
-  useEffect(() => {
-    if (refreshSignal > 0) {
+    const fetchAllCategory = async () => {
+      try {
+        const response = await APIService.get("/admin/category");
+        console.log("response", response);
+        setCategories([...response.data.categories]);
+        setCount(response.data.count);
+        setLoading(false);
+        setRefresh(false);
+      } catch (error) {
+        console.error("Error fetching category tree:", error);
+        showToast(error.response.status, error.response.data.message);
+      }
+    };
+    if (!showModal) {
+      console.log("in here");
       fetchAllCategory();
     }
-  }, [refreshSignal, fetchAllCategory]);
+  }, [showModal, showToast, refresh]);
 
-  const refreshCategories = useCallback(() => {
-    console.log("refreshCategories");
-    setRefreshSignal((prevSignal) => prevSignal + 1);
-  }, []);
-
-  return { categories, count, fetchAllCategory, refreshCategories, isLoading };
+  return {
+    categories,
+    count,
+    isLoading,
+    setCategories,
+    setRefresh,
+  };
 };

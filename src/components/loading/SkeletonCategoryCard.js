@@ -20,13 +20,13 @@ export const SkeletonCategoryCard = () => {
           </Placeholder>
         </Placeholder>
         <Placeholder as={Card.Text} animation="glow">
-          <Placeholder as="h6" animation="glow" />
+          <Placeholder  animation="glow" />
         </Placeholder>
       </Placeholder>
 
       <Placeholder as={Card.Body} animation="glow">
         <Placeholder as={Card.Text} animation="glow">
-          <Placeholder as="h6" animation="glow" />
+          <Placeholder  animation="glow" />
         </Placeholder>
         <div className="d-flex flex-wrap gap-1">
           <Placeholder.Button
