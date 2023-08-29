@@ -24,7 +24,7 @@ export const AdminNavbar = () => {
             </Nav>
             <Nav className="ms-auto">
               {" "}
-              <Nav.Link as={Link} to={`/admin/${mockAdminId}`}>
+              <Nav.Link as={Link} to={`/admin/profile`}>
                 <PersonCircle />
               </Nav.Link>
             </Nav>

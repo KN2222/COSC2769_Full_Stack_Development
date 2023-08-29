@@ -12,10 +12,13 @@ export const useGetProducts = (productId = null) => {
       try {
         let response;
         if (productId) {
-          response = await APIService.get(`https://fakestoreapi.com/products/${productId}`);
+          console.log('productId', productId);
+          response = await APIService.get(
+            `https://fakestoreapi.com/products/${productId}`
+          );
           setData([response.data]); // Wrap the single product data in an array
         } else {
-          response = await APIService.get("https://fakestoreapi.com/products");
+          response = await APIService.get('https://fakestoreapi.com/products');
           setData(response.data);
         }
         setLoading(false);
