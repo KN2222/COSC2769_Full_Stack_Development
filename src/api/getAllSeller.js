@@ -1,16 +1,18 @@
 import { useCallback, useEffect, useState } from "react";
 import { APIService } from "../axios/client";
+import { useToastContext } from "../store/toastContext";
+
 
 export const useGetAllSeller = () => {
     const [sellers, setSellers] = useState([]);
     const [count, setCount] = useState(0);
-    const [refreshSignal, setRefreshSignal] = useState(0);
+    // const [refreshSignal, setRefreshSignal] = useState(0);
     const [isLoading, setLoading] = useState(true);
+    const { showToast } = useToastContext();
 
     const fetchAllSeller = useCallback(async () => {
         try {
-            const response = await APIService.get("/admin/seller");
-            console.log("seller Data", response.data.sellers);
+            const response = await APIService.get("/admin/seller");            
             setSellers(response.data.sellers); 
             setCount(response.data.count);
             setLoading(false);
@@ -21,37 +23,30 @@ export const useGetAllSeller = () => {
 
     const rejectSeller = async (sellerId) => {
         try {
-          await APIService.post(`/admin/reject-seller/${sellerId}`);
-          refreshSellers();
+            const response = await APIService.post(`/admin/reject-seller/${sellerId}`);
+            console.log(response.status);
+            showToast(response.status, response.data.message );
+            fetchAllSeller();
         } catch (error) {
-          console.error("Error rejecting seller:", error);
+            showToast(error.data.status, error.data.message)
         }
     };
 
     const approveSeller = async (sellerId) => {
         try {
-          await APIService.post(`/admin/approve-seller/${sellerId}`);
-          console.log("Call approve seller");
-          refreshSellers();
+            const response = await APIService.post(`/admin/approve-seller/${sellerId}`);
+            showToast(response.status, response.data.message );
+            fetchAllSeller();
         } catch (error) {
-          console.error("Error approving seller:", error);
+            showToast(error.status, error.data.message)
         }
     };
 
     useEffect(() => {
+        console.log("is Fetching");
         fetchAllSeller();
-    }, [fetchAllSeller, refreshSignal]);
+    }, [fetchAllSeller, showToast]);
 
-    useEffect(() => {
-        if (refreshSignal > 0) {
-            fetchAllSeller();
-        }
-    }, [refreshSignal, fetchAllSeller]);
 
-    const refreshSellers = useCallback(() => {
-        console.log("refreshSellers");
-        setRefreshSignal((prevSignal) => prevSignal + 1);
-    }, []);
-
-    return { sellers, count, fetchAllSeller, rejectSeller, approveSeller, refreshSellers, isLoading };
+    return { sellers, count, fetchAllSeller, rejectSeller, approveSeller, isLoading };
 }
