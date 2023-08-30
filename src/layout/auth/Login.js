@@ -11,17 +11,19 @@ const Login = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const [showModal, setShowModal] = useState(false);
 
-  const { accessToken } = useAuth(); // Use the accessToken from AuthContext
+  const { isUserAuthenticated } = useAuth();
+
+  const isAuthenticated = isUserAuthenticated();
+
   const navigate = useNavigate();
   const [, setCookie] = useCookies(['accessToken']);
 
   useEffect(() => {
     // Check if there's an existing access token in local storage
-    const decodedToken = localStorage.getItem('decodedToken');
-    if (accessToken || decodedToken) {
+    if (isAuthenticated) {
       navigate('/'); // Redirect to the home page or a different route
     }
-  }, [accessToken, navigate]);
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

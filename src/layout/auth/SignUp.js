@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useAuth } from '../../store/authContext';
 const SignUp = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -9,6 +11,19 @@ const SignUp = () => {
   const [modalMessage, setModalMessage] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [isSuccess, setIsSuccess] = useState(true);
+
+  const navigate = useNavigate();
+
+  const { isUserAuthenticated } = useAuth();
+
+  const isAuthenticated = isUserAuthenticated();
+
+  useEffect(() => {
+    // Check if there's an existing access token in local storage
+    if (isAuthenticated) {
+      navigate('/'); // Redirect to the home page or a different route
+    }
+  }, [isAuthenticated, navigate]);
 
   useEffect(() => {
     console.log(name, email, password, role);
