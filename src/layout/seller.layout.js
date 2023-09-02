@@ -9,10 +9,12 @@ export const SellerLayout = () => {
   const { status } = useGetSellerByID();
 
   useEffect(() => {
-    if (location.pathname.includes("/seller") || (status === "Pending" || status === "Rejected")) {
+    if (location.pathname.includes("/seller") && (status === "Pending" || status === "Rejected")) {
       navigate("/seller/status");
+      console.log("status", status);
+      console.log("location", location.pathname);
     }
-  }, [status]);
+  }, [status, location.pathname]);
 
   return (
     <div className="vw-100">
