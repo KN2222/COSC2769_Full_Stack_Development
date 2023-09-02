@@ -14,7 +14,8 @@ export const PrivateRouter = () => {
           </Route>
         ))}
       </Route>
-
+      
+      <Route path="/seller" element={<ProtectedRoute />}>
       {routePaths.privateSeller.map((route, index) => (
         <Route key={index} path={route.path} element={route.element}>
           {route.children.map((child, index) => (
@@ -22,6 +23,8 @@ export const PrivateRouter = () => {
           ))}
         </Route>
       ))}
+      </Route>
+
     </Routes>
   );
 };
