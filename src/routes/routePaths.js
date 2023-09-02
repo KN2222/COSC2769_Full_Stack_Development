@@ -1,4 +1,3 @@
-import { ProtectedRoute } from '../components/ProtectedRoute';
 import { AdminLayout } from '../layout/admin.layout';
 import { AdminHomePage } from '../pages/admin/home';
 import { AdminSellerPage } from '../pages/admin/seller';
@@ -11,6 +10,9 @@ import ProductDetail from '../components/productDetail/ProductDetail';
 import { AdminProfile } from '../pages/admin/profile';
 import CheckOut from '../pages/customer/checkout';
 import Profile from '../pages/customer/profile';
+import Status from '../pages/seller/status';
+import { SellerLayout } from '../layout/seller.layout';
+
 export const routePaths = {
   public: [
     {
@@ -98,8 +100,20 @@ export const routePaths = {
   privateSeller: [
     {
       path: '/seller',
-      element: <ProtectedRoute />,
-      children: [],
+      element: <SellerLayout />,
+      children: [
+        { 
+          path: '/seller/status', 
+          element: <Status />
+        },
+        { 
+          path: '/seller/home', 
+          element: <div>This is seller home page</div>
+        },        { 
+          path: '/seller/profile', 
+          element: <div>This is seller profile page</div>
+        }
+      ],
     },
   ],
 };
