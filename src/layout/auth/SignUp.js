@@ -2,18 +2,27 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../../store/authContext';
+
 const SignUp = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [role, setRole] = useState('user'); // Default role is 'user'
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    phone: '',
+    businessName: null,
+    address: '',
+    role: 'customer', // Default role is 'user'
+  });
+
+  useEffect(() => {
+    console.log(formData);
+  }, [formData]);
 
   const [modalMessage, setModalMessage] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [isSuccess, setIsSuccess] = useState(true);
 
   const navigate = useNavigate();
-
   const { isUserAuthenticated } = useAuth();
 
   const isAuthenticated = isUserAuthenticated();
@@ -25,35 +34,41 @@ const SignUp = () => {
     }
   }, [isAuthenticated, navigate]);
 
-  useEffect(() => {
-    console.log(name, email, password, role);
-  }, [name, email, password, role]);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:8000/auth/signup', {
-        name: name,
-        email: email,
-        password: password,
-        role: role,
-      });
+      const response = await axios.post(
+        'http://localhost:8000/auth/signup',
+        formData
+      );
+      console.log(formData);
       // Handle success
       setModalMessage(response.data.message);
       setIsSuccess(true);
       setShowModal(true);
     } catch (error) {
       // Handle error
+      console.log(error);
       if (error.response && error.response.data) {
         console.log(error.response.data);
         const errorMessageFromBackend = error.response.data.error;
         if (error.response.data.error) {
           // Display individual field validation error
           setModalMessage(Object.values(error.response.data.error));
-        } else if (errorMessageFromBackend === 'Email already exists') {
+        } else if (
+          errorMessageFromBackend === 'Email or Phone already exists'
+        ) {
           setModalMessage(
-            'Email already exists. Please use a different email.'
+            'Email or Phone already exists. Please use a different email or phone.'
           );
         } else {
           setModalMessage(errorMessageFromBackend || 'An error occurred');
@@ -87,8 +102,9 @@ const SignUp = () => {
               type='text'
               className='form-control'
               id='name'
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              name='name'
+              value={formData.name}
+              onChange={handleChange}
               required
             />
           </div>
@@ -103,8 +119,9 @@ const SignUp = () => {
               type='email'
               className='form-control'
               id='email'
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              name='email'
+              value={formData.email}
+              onChange={handleChange}
               required
             />
           </div>
@@ -119,9 +136,26 @@ const SignUp = () => {
               type='password'
               className='form-control'
               id='password'
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              name='password'
+              value={formData.password}
+              onChange={handleChange}
               required
+            />
+          </div>
+          <div className='mb-3'>
+            <label
+              htmlFor='phone'
+              className='form-label'
+            >
+              Phone
+            </label>
+            <input
+              type='text'
+              className='form-control'
+              id='phone'
+              name='phone'
+              value={formData.phone}
+              onChange={handleChange}
             />
           </div>
           <div className='mb-3'>
@@ -133,12 +167,12 @@ const SignUp = () => {
                 name='role'
                 id='customerRole'
                 value='customer'
-                checked={role === 'customer'}
-                onChange={() => setRole('customer')}
+                checked={formData.role === 'customer'}
+                onChange={handleChange}
               />
               <label
                 className='form-check-label'
-                htmlFor='userRole'
+                htmlFor='customerRole'
               >
                 Customer
               </label>
@@ -150,8 +184,8 @@ const SignUp = () => {
                 name='role'
                 id='sellerRole'
                 value='seller'
-                checked={role === 'seller'}
-                onChange={() => setRole('seller')}
+                checked={formData.role === 'seller'}
+                onChange={handleChange}
               />
               <label
                 className='form-check-label'
@@ -161,6 +195,44 @@ const SignUp = () => {
               </label>
             </div>
           </div>
+          {formData.role === 'seller' && (
+            <div className='mb-3'>
+              <label
+                htmlFor='businessName'
+                className='form-label'
+              >
+                Business Name
+              </label>
+              <input
+                type='text'
+                className='form-control'
+                id='businessName'
+                name='businessName'
+                value={formData.businessName}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          )}
+          {formData.role === 'customer' && (
+            <div className='mb-3'>
+              <label
+                htmlFor='address'
+                className='form-label'
+              >
+                Address
+              </label>
+              <input
+                type='text'
+                className='form-control'
+                id='address'
+                name='address'
+                value={formData.address}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          )}
           <button
             type='submit'
             className='btn btn-primary'
@@ -194,18 +266,31 @@ const SignUp = () => {
                 </button>
               </div>
               <div className='modal-body'>{modalMessage}</div>
-              <div className='modal-footer'>
-                <button
-                  type='button'
-                  className='btn btn-secondary'
-                  data-dismiss='modal'
-                  onClick={closeModal}
-                >
-                  Close
-                </button>
-              </div>
+              {isSuccess ? (
+                <div className='modal-footer'>
+                  <button
+                    type='button'
+                    className='btn btn-secondary'
+                    data-dismiss='modal'
+                    onClick={() => navigate('/')}
+                  >
+                    Close
+                  </button>
+                </div>
+              ) : (
+                <div className='modal-footer'>
+                  <button
+                    type='button'
+                    className='btn btn-secondary'
+                    data-dismiss='modal'
+                    onClick={closeModal}
+                  >
+                    Close
+                  </button>
+                </div>
+              )}
             </div>
-          </div>{' '}
+          </div>
         </div>
         <div
           className={`modal-backdrop fade ${showModal ? 'show' : ''}`}

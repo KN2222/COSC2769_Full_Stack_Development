@@ -6,6 +6,7 @@ import { useAuth } from '../../store/authContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
@@ -32,6 +33,7 @@ const Login = () => {
       const response = await axios.post('http://localhost:8000/auth/login', {
         email: email,
         password: password,
+        phone: phone,
       });
 
       // Handle successful login
@@ -65,17 +67,25 @@ const Login = () => {
         <form onSubmit={handleSubmit}>
           <div className='mb-3'>
             <label
-              htmlFor='email'
+              htmlFor='identifier'
               className='form-label'
             >
-              Email
+              Email or Phone
             </label>
             <input
-              type='email'
+              type='text'
               className='form-control'
-              id='email'
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              id='identifier'
+              value={email || phone}
+              onChange={(e) => {
+                if (e.target.value.includes('@')) {
+                  setEmail(e.target.value);
+                  setPhone('');
+                } else {
+                  setPhone(e.target.value);
+                  setEmail('');
+                }
+              }}
               required
             />
           </div>
