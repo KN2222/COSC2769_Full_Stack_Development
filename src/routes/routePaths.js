@@ -12,6 +12,7 @@ import CheckOut from '../pages/customer/checkout';
 import Profile from '../pages/customer/profile';
 import Status from '../pages/seller/status';
 import { SellerLayout } from '../layout/seller.layout';
+import SellerHome from '../pages/seller/home';
 
 export const routePaths = {
   public: [
@@ -108,7 +109,7 @@ export const routePaths = {
         },
         { 
           path: '/seller/home', 
-          element: <div>This is seller home page</div>
+          element: <SellerHome/>
         },        { 
           path: '/seller/profile', 
           element: <div>This is seller profile page</div>
