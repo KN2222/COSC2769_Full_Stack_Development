@@ -12,9 +12,10 @@ const Login = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const [showModal, setShowModal] = useState(false);
 
-  const { isUserAuthenticated } = useAuth();
+  const { isUserAuthenticated, getAuthenticatedUserInfo } = useAuth();
 
   const isAuthenticated = isUserAuthenticated();
+  const getUserInfo = getAuthenticatedUserInfo();
 
   const navigate = useNavigate();
   const [, setCookie] = useCookies(['accessToken']);
@@ -22,9 +23,17 @@ const Login = () => {
   useEffect(() => {
     // Check if there's an existing access token in local storage
     if (isAuthenticated) {
-      navigate('/'); // Redirect to the home page or a different route
+      const userInfo = getUserInfo();
+      console.log('User Role:', userInfo.role);
+      if (userInfo.role === 'admin') {
+        navigate('/admin/home');
+      } else if (userInfo.role === 'customer') {
+        navigate('/');
+      } else if (userInfo.role === 'seller') {
+        navigate('/seller/home');
+      }
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, navigate, getUserInfo]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
