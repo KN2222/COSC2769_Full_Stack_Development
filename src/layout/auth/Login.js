@@ -6,22 +6,25 @@ import { useAuth } from '../../store/authContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [showModal, setShowModal] = useState(false);
 
-  const { accessToken } = useAuth(); // Use the accessToken from AuthContext
+  const { isUserAuthenticated } = useAuth();
+
+  const isAuthenticated = isUserAuthenticated();
+
   const navigate = useNavigate();
   const [, setCookie] = useCookies(['accessToken']);
 
   useEffect(() => {
     // Check if there's an existing access token in local storage
-    const decodedToken = localStorage.getItem('decodedToken');
-    if (accessToken || decodedToken) {
+    if (isAuthenticated) {
       navigate('/'); // Redirect to the home page or a different route
     }
-  }, [accessToken, navigate]);
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,6 +33,7 @@ const Login = () => {
       const response = await axios.post('http://localhost:8000/auth/login', {
         email: email,
         password: password,
+        phone: phone,
       });
 
       // Handle successful login
@@ -63,17 +67,25 @@ const Login = () => {
         <form onSubmit={handleSubmit}>
           <div className='mb-3'>
             <label
-              htmlFor='email'
+              htmlFor='identifier'
               className='form-label'
             >
-              Email
+              Email or Phone
             </label>
             <input
-              type='email'
+              type='text'
               className='form-control'
-              id='email'
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              id='identifier'
+              value={email || phone}
+              onChange={(e) => {
+                if (e.target.value.includes('@')) {
+                  setEmail(e.target.value);
+                  setPhone('');
+                } else {
+                  setPhone(e.target.value);
+                  setEmail('');
+                }
+              }}
               required
             />
           </div>

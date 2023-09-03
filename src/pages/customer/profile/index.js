@@ -1,4 +1,21 @@
+import { useAuth } from '../../../store/authContext';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+
 export default function Profile() {
+  const { isUserAuthenticated } = useAuth();
+
+  const isAuthenticated = isUserAuthenticated();
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if there's an existing access token in local storage
+    if (!isAuthenticated) {
+      navigate('/'); // Redirect to the home page or a different route
+    }
+  }, [isAuthenticated, navigate]);
+
   return (
     <div class='container mt-3'>
       <div class='card p-3 text-center'>

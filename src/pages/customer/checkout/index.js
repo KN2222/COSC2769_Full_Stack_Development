@@ -9,7 +9,22 @@ import { useState, useEffect } from 'react';
 export default function CheckOut() {
   const [cartData, setCartData] = useState([]);
   const [cart, setCart] = useState('');
+  const [total, setTotal] = useState(0);
 
+  const handleQuantityChange = (productId, newQuantity) => {
+    const updatedCartData = { ...cart };
+
+    if (updatedCartData[productId]) {
+      updatedCartData[productId].quantity = parseInt(newQuantity);
+
+      setCart(updatedCartData);
+
+      // Convert updatedCartData to an array of objects
+      const cartArray = Object.values(updatedCartData);
+
+      localStorage.setItem('cart', JSON.stringify(cartArray));
+    }
+  };
   useEffect(() => {
     setCart(JSON.parse(localStorage.getItem('cart')) || {});
   }, []);
@@ -38,8 +53,17 @@ export default function CheckOut() {
   useEffect(() => {
     fetchProductsByIds(cart).then((productsData) => {
       setCartData(productsData);
+      console.log(cartData);
     });
   }, [cart]);
+
+  useEffect(() => {
+    const Sum = Object.values(cartData).reduce((sum, item) => {
+      const { quantity, price } = item;
+      return sum + quantity * price;
+    }, 0);
+    setTotal(Sum);
+  }, [cartData]);
 
   return (
     <section className='pt-5 pb-5'>
@@ -87,8 +111,11 @@ export default function CheckOut() {
                       <input
                         type='number'
                         className='form-control form-control-lg text-center'
-                        value={product.quantity}
-                        disabled
+                        value={product.quantity || null}
+                        onChange={(e) =>
+                          handleQuantityChange(product.id, e.target.value)
+                        }
+                        placeholder={product.quantity}
                       />
                     </td>
                     <td
@@ -118,7 +145,7 @@ export default function CheckOut() {
                 <Col sm={4}>
                   <div className='float-right text-right'>
                     <h4>Subtotal:</h4>
-                    <h1>$99.00</h1>
+                    <h1>${total}</h1>
                   </div>
                 </Col>
               </Row>
