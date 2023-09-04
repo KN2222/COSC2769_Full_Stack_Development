@@ -8,7 +8,6 @@ import React, {
 import { APIService } from '../axios/client';
 import { useCookies } from 'react-cookie';
 import jwt_decode from 'jwt-decode'; // Import jwt_decode library for decoding tokens
-import { useNavigate } from 'react-router-dom';
 
 export const AuthContext = React.createContext();
 
@@ -48,6 +47,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.removeItem('_id');
       localStorage.removeItem('role');
       localStorage.removeItem('iat');
+      return '/';
     }, [removeCookie]);
   }
 

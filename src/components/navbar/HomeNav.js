@@ -57,9 +57,10 @@ export const HomeNav = () => {
   const isAuthenticated = isUserAuthenticated();
 
   const handleLogout = () => {
-    Logout();
+    const route = Logout();
+    // Redirect the user to the specified route
+    window.location.href = route;
   };
-
   const renderSubcategories = (subCategories) => {
     return Object.entries(subCategories).map(([categoryName, category]) => {
       return !isObjectEmpty(category.subCategories) ? (

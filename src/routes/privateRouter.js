@@ -1,71 +1,44 @@
-import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { routePaths } from './routePaths';
-import { useAuth } from '../store/authContext';
-// import { ProtectedRoute } from '../components/ProtectedRoute';
+import { ProtectedRoute } from '../components/ProtectedRoute';
 
 export const PrivateRouter = () => {
-  const { isUserAuthenticated, getAuthenticatedUserInfo } = useAuth();
-  const userInfo = getAuthenticatedUserInfo();
   return (
     <Routes>
-      {routePaths.privateAdmin.map((routeGroup, index) => {
-        if (isUserAuthenticated() && userInfo.role === 'admin') {
-          return (
-            <Route
-              key={index}
-              path={routeGroup.path}
-              element={routeGroup.element}
-            >
-              {/* {routeGroup.children.map((route, childIndex) => (
-                <Route
-                  key={childIndex}
-                  path={route.path}
-                  element={route.element}
-                />
-              ))} */}
-            </Route>
-          );
-        } else {
-          return null; // Hide the route group if the user is not an admin
-        }
-      })}
+      <Route
+        path='/admin'
+        element={<ProtectedRoute />}
+      >
+        {routePaths.privateAdmin.map((route, index) => (
+          <Route
+            key={index}
+            path={route.path}
+            element={route.element}
+          >
+            {route.children.map((child, index) => (
+              <Route
+                key={index}
+                path={child.path}
+                element={child.element}
+              />
+            ))}
+          </Route>
+        ))}
+      </Route>
 
-      {routePaths.privateSeller.map((routeGroup, index) => {
-        if (isUserAuthenticated() && userInfo.role === 'seller') {
-          return (
-            <Route
-              key={index}
-              path={routeGroup.path}
-              element={routeGroup.element}
-            >
-              {/* {routeGroup.children.map((route, childIndex) => (
-                <Route
-                  key={childIndex}
-                  path={route.path}
-                  element={route.element}
-                />
-              ))} */}
-            </Route>
-          );
-        } else {
-          return null; // Hide the route group if the user is not a seller
-        }
-      })}
-
-      {routePaths.public.map((routeGroup, index) => (
+      {routePaths.privateSeller.map((route, index) => (
         <Route
           key={index}
-          path={routeGroup.path}
-          element={routeGroup.element}
+          path={route.path}
+          element={route.element}
         >
-          {/* {routeGroup.children.map((route, childIndex) => (
+          {route.children.map((child, index) => (
             <Route
-              key={childIndex}
-              path={route.path}
-              element={route.element}
+              key={index}
+              path={child.path}
+              element={child.element}
             />
-          ))} */}
+          ))}
         </Route>
       ))}
     </Routes>
