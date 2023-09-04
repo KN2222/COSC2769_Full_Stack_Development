@@ -6,14 +6,11 @@ import { useAuth } from '../store/authContext';
 
 export const PrivateRouter = () => {
   const { isUserAuthenticated, getAuthenticatedUserInfo } = useAuth();
-
+  const userInfo = getAuthenticatedUserInfo();
   return (
     <Routes>
       {routePaths.privateAdmin.map((routeGroup, index) => {
-        if (
-          isUserAuthenticated() &&
-          getAuthenticatedUserInfo().role === 'admin'
-        ) {
+        if (isUserAuthenticated() && userInfo.role === 'admin') {
           return (
             <Route
               key={index}
@@ -35,10 +32,7 @@ export const PrivateRouter = () => {
       })}
 
       {routePaths.privateSeller.map((routeGroup, index) => {
-        if (
-          isUserAuthenticated() &&
-          getAuthenticatedUserInfo().role === 'seller'
-        ) {
+        if (isUserAuthenticated() && userInfo.role === 'seller') {
           return (
             <Route
               key={index}
