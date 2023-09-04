@@ -147,7 +147,7 @@ const SignUp = () => {
               htmlFor='phone'
               className='form-label'
             >
-              Phone
+              Phone (Don't write the first 0 number)
             </label>
             <input
               type='text'

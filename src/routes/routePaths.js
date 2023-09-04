@@ -102,17 +102,18 @@ export const routePaths = {
       path: '/seller',
       element: <SellerLayout />,
       children: [
-        { 
-          path: '/seller/status', 
-          element: <Status />
+        {
+          path: '/seller/status',
+          element: <Status />,
         },
-        { 
-          path: '/seller/home', 
-          element: <div>This is seller home page</div>
-        },        { 
-          path: '/seller/profile', 
-          element: <div>This is seller profile page</div>
-        }
+        {
+          path: '/seller/home',
+          element: <div>This is seller home page</div>,
+        },
+        {
+          path: '/seller/profile',
+          element: <div>This is seller profile page</div>,
+        },
       ],
     },
   ],
