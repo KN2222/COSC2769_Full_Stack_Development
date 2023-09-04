@@ -5,6 +5,7 @@ import Col from 'react-bootstrap/Col';
 import { APIService } from '../../../axios/client';
 // import { useGetProducts } from '../../../api/getProducts';
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 export default function CheckOut() {
   const [cartData, setCartData] = useState([]);
@@ -29,12 +30,13 @@ export default function CheckOut() {
     setCart(JSON.parse(localStorage.getItem('cart')) || {});
   }, []);
 
-  console.log('cart', cart);
+  console.log('cart', cart, cart.length);
 
   const fetchProductsByIds = async (products) => {
     const productsData = {};
 
     for (const product of products) {
+      // Ensure 'products' is an iterable (e.g., an array)
       const { id, quantity } = product;
 
       try {
@@ -55,7 +57,7 @@ export default function CheckOut() {
       setCartData(productsData);
       console.log(cartData);
     });
-  }, [cart]);
+  }, [cart, cartData]);
 
   useEffect(() => {
     const Sum = Object.values(cartData).reduce((sum, item) => {
@@ -65,6 +67,32 @@ export default function CheckOut() {
     setTotal(Sum);
   }, [cartData]);
 
+  const handleCheckout = async () => {
+    try {
+      // Prepare the productOrders array
+      const productOrders = Object.values(cartData).map((product) => ({
+        productId: product.id,
+        quantity: product.quantity || 0,
+        price: product.price,
+      }));
+
+      console.log(productOrders);
+
+      // Send a POST request to the checkout endpoint
+      const response = await axios.post('http://localhost:8000/checkout', {
+        productOrders,
+      });
+
+      // Handle success
+      console.log('Checkout response:', response.data);
+      // You can add further handling or navigation logic here
+    } catch (error) {
+      // Handle error
+      console.error('Error during checkout:', error);
+      // You can display an error message or perform other error handling here
+    }
+  };
+
   return (
     <section className='pt-5 pb-5'>
       <div className='container'>
@@ -72,7 +100,8 @@ export default function CheckOut() {
           <div className='col-lg-12 col-md-12 col-12'>
             <h3 className='display-5 mb-2 text-center'>Shopping Cart</h3>
             <p className='mb-5 text-center'>
-              <i className='text-info font-weight-bold'>3</i> items in your cart
+              <i className='text-info font-weight-bold'>{cart.length}</i> items
+              in your cart
             </p>
             <table
               id='shoppingCart'
@@ -164,12 +193,13 @@ export default function CheckOut() {
               </Col>
               <Col sm={4}>
                 <div className='col-sm-6 order-md-2 text-right'>
-                  <a
-                    href='catalog.html'
-                    className='btn btn-primary mb-4 btn-lg pl-5 pr-5'
+                  <Button
+                    variant='primary'
+                    onClick={handleCheckout} // Call the checkout function
+                    className='mb-4 btn-lg pl-5 pr-5'
                   >
                     Checkout
-                  </a>
+                  </Button>
                 </div>
               </Col>
             </Row>

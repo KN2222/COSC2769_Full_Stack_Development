@@ -16,12 +16,13 @@ export const AuthProvider = ({ children }) => {
   const [cookies, setCookie, removeCookie] = useCookies(['sb']);
   const [accessToken, setAccessToken] = useState('default');
   // Decode the token and save the decoded object into local storage
+  const [userAvatar, setUserAvatar] = useState(null); // State to store the user avatar
 
   useEffect(() => {
-    console.log('accessToken', accessToken);
+    // console.log('accessToken', accessToken);
     const decodedData = decodeAndStoreTokenData(accessToken);
     console.log(decodedData);
-    console.log(localStorage.decodedToken);
+    // console.log(localStorage.decodedToken);
   }, [accessToken]);
 
   const decodeAndStoreTokenData = (token) => {
@@ -80,8 +81,70 @@ export const AuthProvider = ({ children }) => {
   // } else {
   //   console.log('User is not authenticated.');
   // }
+  // Remove the accessToken parameter from your functions
+  // const getUserAvatar = useCallback(
+  //   async (userId) => {
+  //     try {
+  //       const response = await fetch(
+  //         `http://localhost:8000/user/avatar/${userId}`,
+  //         {
+  //           method: 'GET',
+  //           headers: {
+  //             'Content-Type': 'application/json',
+  //             // Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NGY0MTA3YTU1NmIxOWI1MGNiMGJhNjYiLCJyb2xlIjoiY3VzdG9tZXIiLCJpYXQiOjE2OTM4MzIwODF9.MEhd3E7xlArvXMqaYom5BFv91HOh_0MBRZdSTvHYkug`,
+  //           },
+  //         }
+  //       );
 
-  // Usage
+  //       if (response.status === 200) {
+  //         const blob = await response.blob();
+  //         setUserAvatar(URL.createObjectURL(blob));
+  //       } else {
+  //         console.error('Failed to get user avatar:', response.statusText);
+  //       }
+  //     } catch (error) {
+  //       console.error('Error getting user avatar:', error);
+  //     }
+  //   },
+  //   [accessToken] // No need to depend on accessToken
+  // );
+
+  const getUserAvatar = useCallback(
+    async (userId) => {
+      try {
+        const response = await APIService.get(`/user/avatar/${userId}`, {
+          responseType: 'blob',
+        });
+
+        if (response.status === 200) {
+          const blob = response.data;
+          setUserAvatar(URL.createObjectURL(blob));
+        } else {
+          console.error('Failed to get user avatar:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error getting user avatar:', error);
+      }
+    },
+    [accessToken] // Include accessToken as a dependency
+  );
+
+  const getCustomerProfile = useCallback(async () => {
+    try {
+      const response = await APIService.get('/customer/profile');
+
+      if (response.status === 200) {
+        const userProfile = response.data;
+        return userProfile;
+      } else {
+        console.error('Failed to get user profile:', response.statusText);
+        throw new Error('Failed to get user profile');
+      }
+    } catch (error) {
+      console.error('Error getting user profile:', error);
+      throw error;
+    }
+  }, []);
 
   const setToken = useCallback(
     (token) => {
@@ -116,6 +179,9 @@ export const AuthProvider = ({ children }) => {
       isUserAuthenticated,
       getAuthenticatedUserInfo,
       Logout,
+      userAvatar,
+      getUserAvatar,
+      getCustomerProfile,
     }),
     [
       accessToken,
@@ -123,6 +189,9 @@ export const AuthProvider = ({ children }) => {
       isUserAuthenticated,
       getAuthenticatedUserInfo,
       Logout,
+      userAvatar,
+      getUserAvatar,
+      getCustomerProfile,
     ]
   );
 

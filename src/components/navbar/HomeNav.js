@@ -123,6 +123,7 @@ export const HomeNav = () => {
                     <>
                       {isObjectEmpty(category.subCategories) ? (
                         <Nav.Link
+                          key={categoryName}
                           as={Link}
                           to={`/category/${categoryName}`}
                         >
@@ -130,6 +131,7 @@ export const HomeNav = () => {
                         </Nav.Link>
                       ) : (
                         <NavDropdown
+                          key={categoryName}
                           id='collasible-nav-dropdown'
                           title={categoryName}
                           onClick={(e) => {
