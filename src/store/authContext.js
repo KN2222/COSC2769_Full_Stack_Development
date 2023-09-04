@@ -62,6 +62,7 @@ export const AuthProvider = ({ children }) => {
 
   const getAuthenticatedUserInfo = useCallback(() => {
     if (isUserAuthenticated()) {
+      console.log(localStorage.getItem('role'));
       const id = localStorage.getItem('_id');
       const role = localStorage.getItem('role');
       const iat = localStorage.getItem('iat');
@@ -129,12 +130,14 @@ export const AuthProvider = ({ children }) => {
     [accessToken] // Include accessToken as a dependency
   );
 
-  const getCustomerProfile = useCallback(async () => {
+  const getProfile = useCallback(async (role) => {
     try {
-      const response = await APIService.get('/customer/profile');
-
+      const response = await APIService.get(`/${role}/profile`);
+      console.log('response', response);
       if (response.status === 200) {
         const userProfile = response.data;
+        console.log('userProfile', userProfile);
+
         return userProfile;
       } else {
         console.error('Failed to get user profile:', response.statusText);
@@ -181,7 +184,7 @@ export const AuthProvider = ({ children }) => {
       Logout,
       userAvatar,
       getUserAvatar,
-      getCustomerProfile,
+      getProfile,
     }),
     [
       accessToken,
@@ -191,7 +194,7 @@ export const AuthProvider = ({ children }) => {
       Logout,
       userAvatar,
       getUserAvatar,
-      getCustomerProfile,
+      getProfile,
     ]
   );
 

@@ -9,9 +9,10 @@ import SignUp from '../layout/auth/SignUp';
 import ProductDetail from '../components/productDetail/ProductDetail';
 import { AdminProfile } from '../pages/admin/profile';
 import CheckOut from '../pages/customer/checkout';
-import Profile from '../pages/customer/profile';
+import CustomerProfile from '../pages/customer/profile';
 import Status from '../pages/seller/status';
 import { SellerLayout } from '../layout/seller.layout';
+import SellerProfile from '../pages/seller/profile';
 
 export const routePaths = {
   public: [
@@ -38,7 +39,7 @@ export const routePaths = {
         },
         {
           path: '/customer/profile',
-          element: <Profile />,
+          element: <CustomerProfile />,
         },
         {
           path: '/',
@@ -112,7 +113,7 @@ export const routePaths = {
         },
         {
           path: '/seller/profile',
-          element: <div>This is seller profile page</div>,
+          element: <SellerProfile />,
         },
       ],
     },

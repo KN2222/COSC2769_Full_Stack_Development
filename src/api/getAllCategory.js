@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useState } from "react";
-import { APIService } from "../axios/client";
-import { useToastContext } from "../store/toastContext";
-import { useModalContext } from "../store/modalContext";
+import { useCallback, useEffect, useState } from 'react';
+import { APIService } from '../axios/client';
+import { useToastContext } from '../store/toastContext';
+import { useModalContext } from '../store/modalContext';
 
 export const useGetAllCategory = () => {
   const [categories, setCategories] = useState([]);
@@ -14,19 +14,17 @@ export const useGetAllCategory = () => {
   useEffect(() => {
     const fetchAllCategory = async () => {
       try {
-        const response = await APIService.get("/admin/category");
-        console.log("response", response);
+        const response = await APIService.get('/admin/category');
         setCategories([...response.data.categories]);
         setCount(response.data.count);
         setLoading(false);
         setRefresh(false);
       } catch (error) {
-        console.error("Error fetching category tree:", error);
+        console.error('Error fetching category tree:', error);
         showToast(error.response.status, error.response.data.message);
       }
     };
     if (!showModal) {
-      console.log("in here");
       fetchAllCategory();
     }
   }, [showModal, showToast, refresh]);

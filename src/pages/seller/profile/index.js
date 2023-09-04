@@ -3,11 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { APIService } from '../../../axios/client';
 
-export default function CustomerProfile() {
-  const { isUserAuthenticated, getProfile, getAuthenticatedUserInfo } =
-    useAuth();
-  const userInfo = getAuthenticatedUserInfo();
-
+export default function SellerProfile() {
+  const { isUserAuthenticated, getProfile } = useAuth();
   const { getUserAvatar, userAvatar } = useAuth(); // Use the hook to access context values
   const [profile, setProfile] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
@@ -23,10 +20,11 @@ export default function CustomerProfile() {
   }, [isAuthenticated, navigate]);
 
   useEffect(() => {
-    // Call getCustomerProfile function to log its output
-    getProfile('customer')
+    // Call getProfile function to log its output
+    getProfile('seller')
       .then((userProfile) => {
-        setProfile(userProfile.customer);
+        console.log(userProfile);
+        setProfile(userProfile.seller);
       })
       .catch((error) => {
         console.error('Error getting user profile:', error);
@@ -35,10 +33,8 @@ export default function CustomerProfile() {
 
   useEffect(() => {
     // Call getUserAvatar when needed, e.g., when the component mounts
-    if (isAuthenticated) {
-      getUserAvatar(userInfo.role.slice(1, -1)); // Use the converted userId
-    }
-  }, [getUserAvatar, isAuthenticated]);
+    getUserAvatar(String(localStorage.getItem('_id').slice(1, -1))); // Use the converted userId
+  }, [getUserAvatar]);
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
@@ -109,12 +105,9 @@ export default function CustomerProfile() {
                         )}
                       </div>
                       <h6 className='f-w-600'>{profile.name}</h6>
-
-                      {/* {userInfo ?? (
-                        <p className='text-capitalize'>
-                          {String(userInfo.role.slice(1, -1))}
-                        </p>
-                      )} */}
+                      <p className='text-capitalize'>
+                        {String(localStorage.getItem('role').slice(1, -1))}
+                      </p>
                       <div class='input-group'>
                         <input
                           type='file'
@@ -153,9 +146,15 @@ export default function CustomerProfile() {
                           </h6>
                         </div>
                         <div className='col-sm-6'>
-                          <p className='m-b-10 f-w-600'>Address</p>
+                          <p className='m-b-10 f-w-600'>Business Name</p>
                           <h6 className='text-muted f-w-400'>
-                            {profile.address}
+                            {profile.businessName}
+                          </h6>
+                        </div>
+                        <div className='col-sm-6'>
+                          <p className='m-b-10 f-w-600'>Status</p>
+                          <h6 className='text-muted f-w-400'>
+                            {profile.status}
                           </h6>
                         </div>
                       </div>
