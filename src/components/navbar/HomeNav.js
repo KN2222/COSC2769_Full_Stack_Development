@@ -2,11 +2,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useCategoryTree } from '../../api/getCategoryTree';
 import { Navbar, Nav, Container, NavDropdown, Button } from 'react-bootstrap';
-import Col from 'react-bootstrap/Col';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
 
 import { useState } from 'react';
-import { useContext } from 'react';
-import { AuthContext } from '../../store/authContext';
+// import { useContext } from 'react';
+// import { AuthContext } from '../../store/authContext';
+import { useAuth } from '../../store/authContext';
 
 const isObjectEmpty = (obj) => {
   return Object.keys(obj).length === 0;
@@ -50,9 +53,15 @@ export const HomeNav = () => {
     }));
   };
 
-  const { accessToken } = useContext(AuthContext);
-  const isAuthenticated = !!accessToken;
+  const { isUserAuthenticated, getAuthenticatedUserInfo, Logout } = useAuth();
+  const isAuthenticated = isUserAuthenticated();
+  const userInfo = getAuthenticatedUserInfo();
 
+  const handleLogout = () => {
+    const route = Logout();
+    // Redirect the user to the specified route
+    window.location.href = route;
+  };
   const renderSubcategories = (subCategories) => {
     return Object.entries(subCategories).map(([categoryName, category]) => {
       return !isObjectEmpty(category.subCategories) ? (
@@ -111,11 +120,11 @@ export const HomeNav = () => {
             >
               {Object.entries(categoryTree).map(
                 ([categoryName, category], index) => {
-                  console.log('category', category);
                   return (
                     <>
                       {isObjectEmpty(category.subCategories) ? (
                         <Nav.Link
+                          key={categoryName + index}
                           as={Link}
                           to={`/category/${categoryName}`}
                         >
@@ -123,6 +132,7 @@ export const HomeNav = () => {
                         </Nav.Link>
                       ) : (
                         <NavDropdown
+                          key={categoryName + index}
                           id='collasible-nav-dropdown'
                           title={categoryName}
                           onClick={(e) => {
@@ -149,9 +159,54 @@ export const HomeNav = () => {
               <Nav>
                 <Nav.Link
                   as={Link}
-                  to='/profile'
+                  to='/checkout'
                 >
-                  Hello
+                  <Button variant='outline-dark'>
+                    <svg
+                      xmlns='http://www.w3.org/2000/svg'
+                      width='16'
+                      height='16'
+                      fill='currentColor'
+                      className='bi bi-cart-fill'
+                      viewBox='0 0 16 16'
+                    >
+                      <path d='M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z' />
+                    </svg>
+                  </Button>
+                </Nav.Link>
+                <Nav.Link
+                // as={Link}
+                // to='/customer/profile'
+                >
+                  <DropdownButton
+                    as={ButtonGroup}
+                    title='UserName'
+                  >
+                    {userInfo.role.slice(1, -1) === 'customer' ? (
+                      <Dropdown.Item
+                        eventKey='1'
+                        href='/customer/profile'
+                        onClick={() => {
+                          navigate(`/customer/profile`);
+                        }}
+                      >
+                        Profile
+                      </Dropdown.Item>
+                    ) : (
+                      <Dropdown.Item
+                        eventKey='2'
+                        href='/seller/profile'
+                        onClick={() => {
+                          navigate(`/seller/profile`);
+                        }}
+                      >
+                        Profile
+                      </Dropdown.Item>
+                    )}
+
+                    <Dropdown.Divider />
+                    <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
+                  </DropdownButton>
                 </Nav.Link>
               </Nav>
             ) : (

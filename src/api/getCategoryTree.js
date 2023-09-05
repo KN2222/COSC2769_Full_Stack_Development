@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback } from "react";
-import { APIService } from "../axios/client";
-import { useToastContext } from "../store/toastContext";
+import { useState, useEffect, useCallback } from 'react';
+import { APIService } from '../axios/client';
+import { useToastContext } from '../store/toastContext';
 
 export const useCategoryTree = () => {
   const [categoryTree, setCategoryTree] = useState({});
@@ -8,17 +8,14 @@ export const useCategoryTree = () => {
 
   const fetchCategoryTree = useCallback(async () => {
     try {
-      const response = await APIService.get("/customer/category");
-      console.log("response", response.data.hierarchicalCategoryTree);
+      const response = await APIService.get('/customer/category');
       setCategoryTree(response.data.hierarchicalCategoryTree);
     } catch (error) {
       showToast(error.response.status, error.response.data.message);
     }
   }, [showToast]);
 
-  useEffect(() => {
-    console.log("categoryTree", categoryTree);
-  }, [categoryTree]);
+  useEffect(() => {}, [categoryTree]);
 
   useEffect(() => {
     fetchCategoryTree();

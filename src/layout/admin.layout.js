@@ -3,16 +3,23 @@ import { AdminNavbar } from "../components/navbar/AdminNav";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Footer } from "../components/footer";
 import { useEffect } from "react";
+import { useAuth } from '../store/authContext';
 
 export const AdminLayout = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { getAuthenticatedUserInfo } = useAuth();
+  const userInfo = getAuthenticatedUserInfo();
 
   useEffect(() => {
-    if (location.pathname === "/admin") {
-      navigate("/admin/home");
+    if (userInfo.role.slice(1, -1) === 'admin') {
+      if (location.pathname === '/admin') {
+        navigate('/admin/home');
+      }
+    } else {
+      navigate('/');
     }
-  }, [navigate, location]);
+  }, [navigate, location, userInfo.role]);
 
   return (
     <div className="vw-100">
