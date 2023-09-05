@@ -12,15 +12,17 @@ export const SellerLayout = () => {
   const userInfo = getAuthenticatedUserInfo();
 
   useEffect(() => {
-    if (
-      location.pathname.includes('/seller') &&
-      (status === 'Pending' || status === 'Rejected')
-    ) {
-      navigate('/seller/status');
+    if (userInfo.role.slice(1, -1) === 'seller') {
+      if (
+        location.pathname.includes('/seller') &&
+        (status === 'Pending' || status === 'Rejected')
+      ) {
+        navigate('/seller/status');
+      }
     } else {
-      navigate('/seller/home');
+      navigate('/');
     }
-  }, [status, location.pathname, navigate]);
+  }, [status, userInfo.role, navigate, location.pathname]);
 
   return (
     <div className='vw-100'>
