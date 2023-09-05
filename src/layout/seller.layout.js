@@ -10,9 +10,11 @@ export const SellerLayout = () => {
 
   useEffect(() => {
     if (location.pathname.includes("/seller") && (status === "Pending" || status === "Rejected")) {
-      navigate("/seller/status");
       console.log("status", status);
       console.log("location", location.pathname);
+      navigate("/seller/status");
+    }else{
+      navigate("/seller/home");
     }
   }, [status, location.pathname]);
 
