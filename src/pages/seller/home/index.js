@@ -1,8 +1,10 @@
 import React from "react";
 import { useModal } from "../../../hooks/modal";
 import { useModalContext } from "../../../store/modalContext";
-import { CreateProductModal } from "../../../components/modal/SellerCreateProduct";
+import { CreateProductModal } from "../../../components/modal/SellerCreateProductModal";
 import { Button } from "react-bootstrap";
+import ProductCardSeller from "../../../components/sellerHome/ProductCardSeller";
+import { useGetSellerProduct } from "../../../api/getSellerProduct";
 
 export default function SellerHome() {
     const { openModal: openModalGlobal } = useModalContext();
@@ -11,7 +13,7 @@ export default function SellerHome() {
         openModal: openCreateModal,
         closeModal: closeCreateModal,
       } = useModal();
-
+      
     return (
       <div>
         <Button
@@ -28,6 +30,8 @@ export default function SellerHome() {
         <CreateProductModal         
         show={showCreateModal}
         onHide={closeCreateModal}/>
+        <hr />
+        <ProductCardSeller/>
       </div>
     );
   }

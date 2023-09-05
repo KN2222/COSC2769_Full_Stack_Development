@@ -3,28 +3,46 @@ import { Modal } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import { useCreateProduct } from "../../api/createProduct";
+import { useGetAllCategory } from "../../api/getAllCategory";
+import { useToastContext } from "../../store/toastContext";
 
-export const CreateProductModal = (props) => {
+export const UpdateProductModal = (props) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [price, setPrice] = useState(0);
-  const [stock, setStock] = useState(0);
+  const [price, setPrice] = useState(-1);
+  const [stock, setStock] = useState(-1);
   const [category, setCategory] = useState("");
-  const [file, setFile] = useState();
-  const [validated, setValidated] = useState(false);
+  const [file, setFile] = useState(null);
 
+  const { showToast } = useToastContext();
   const { isSuccess, createProduct } = useCreateProduct();
+  const {categories} = useGetAllCategory();
   const form = useRef(null);
 
   const handleCreateProduct = (e) => {
-    if (form.current.checkValidity() === false) {
+    if (form.current.checkValidity() === false || price === -1 || stock === -1 || title === "" || description === "" || category === "" || file === null) {
       e.preventDefault();
       e.stopPropagation();
+      showToast(400, "Please fill out all the fields");
+    }else if(price <= 0 ){
+      e.preventDefault();
+      e.stopPropagation();
+      showToast(400, "Price must be greater than or equal to 0");
+    }else if(stock < 0){
+      e.preventDefault();
+      e.stopPropagation();
+      showToast(400, "Stock must be greater than 0");
     } else {
       createProduct(title, description, price, stock, category, file);
-      setValidated(true);
+      setCategory("");
+      setFile(null);
       props.onHide();
     }
+  };
+
+  const handleClose = () => {
+    props.onHide(); 
+    setCategory(""); 
   };
 
   return (
@@ -35,7 +53,7 @@ export const CreateProductModal = (props) => {
       className="w-100"
       centered
     >
-      <Modal.Header closeButton>
+      <Modal.Header>
         <Modal.Title id="contained-modal-title-vcenter">
           Create new Product
         </Modal.Title>
@@ -95,14 +113,18 @@ export const CreateProductModal = (props) => {
                 value={category}
                 onChange={(e) => {
                   setCategory(e.target.value);
-                  console.log(e.target.value);
                 }}
                 custom="true"
               >
                 <option value="">Choose...</option>
-                <option value="64f076aa00ab20286931417f">Male Top</option>
-                <option value="option2">Option 2</option>
-                <option value="option3">Option 3</option>
+
+                {categories.map((category) => {
+                  return (
+                    <option key={category._id} value={category._id}>
+                      {category.name}
+                    </option>
+                  );
+                })}
               </Form.Select>
             </Form.Group>
             <br />
@@ -120,7 +142,7 @@ export const CreateProductModal = (props) => {
           <Button type="submit" variant="primary" onClick={handleCreateProduct}>
             Save
           </Button>
-          <Button onClick={props.onHide}>Close</Button>
+          <Button onClick={handleClose}>Close</Button>
         </Modal.Footer>
       </Modal.Header>
     </Modal>

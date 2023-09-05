@@ -8,16 +8,17 @@ export const useGetSellerProduct = () => {
     const fetchSellerProduct = async () => {
         try {
             const response = await APIService.get("/seller/product");
-            setProducts(response.data.products);
+            console.log(response);
+            setProducts(response.data.productsOfSeller);
             setLoading(false);
         } catch (error) {
             console.error("Error fetching seller product:", error);
         }
     };
 
-    useEffect(() => {
-        fetchSellerProduct();
-    }, []);
+    // useEffect(() => {
+    //     fetchSellerProduct();
+    // }, []);
 
     return {products, isLoading, fetchSellerProduct};
 }
