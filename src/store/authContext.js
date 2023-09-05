@@ -82,33 +82,6 @@ export const AuthProvider = ({ children }) => {
   // } else {
   //   console.log('User is not authenticated.');
   // }
-  // Remove the accessToken parameter from your functions
-  // const getUserAvatar = useCallback(
-  //   async (userId) => {
-  //     try {
-  //       const response = await fetch(
-  //         `http://localhost:8000/user/avatar/${userId}`,
-  //         {
-  //           method: 'GET',
-  //           headers: {
-  //             'Content-Type': 'application/json',
-  //             // Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NGY0MTA3YTU1NmIxOWI1MGNiMGJhNjYiLCJyb2xlIjoiY3VzdG9tZXIiLCJpYXQiOjE2OTM4MzIwODF9.MEhd3E7xlArvXMqaYom5BFv91HOh_0MBRZdSTvHYkug`,
-  //           },
-  //         }
-  //       );
-
-  //       if (response.status === 200) {
-  //         const blob = await response.blob();
-  //         setUserAvatar(URL.createObjectURL(blob));
-  //       } else {
-  //         console.error('Failed to get user avatar:', response.statusText);
-  //       }
-  //     } catch (error) {
-  //       console.error('Error getting user avatar:', error);
-  //     }
-  //   },
-  //   [accessToken] // No need to depend on accessToken
-  // );
 
   const getUserAvatar = useCallback(
     async (userId) => {
@@ -136,8 +109,6 @@ export const AuthProvider = ({ children }) => {
       console.log('response', response);
       if (response.status === 200) {
         const userProfile = response.data;
-        console.log('userProfile', userProfile);
-
         return userProfile;
       } else {
         console.error('Failed to get user profile:', response.statusText);
@@ -156,7 +127,6 @@ export const AuthProvider = ({ children }) => {
 
       // Decode the token and save the decoded object into local storage
       const decodedToken = jwt_decode(token);
-      console.log('decodedToken', decodedToken);
       localStorage.setItem('decodedToken', JSON.stringify(decodedToken));
     },
     [setCookie]

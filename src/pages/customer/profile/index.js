@@ -36,7 +36,7 @@ export default function CustomerProfile() {
   useEffect(() => {
     // Call getUserAvatar when needed, e.g., when the component mounts
     if (isAuthenticated) {
-      getUserAvatar(userInfo.role.slice(1, -1)); // Use the converted userId
+      getUserAvatar(userInfo.id.slice(1, -1)); // Use the converted userId
     }
   }, [getUserAvatar, isAuthenticated]);
 
@@ -115,12 +115,12 @@ export default function CustomerProfile() {
                           {String(userInfo.role.slice(1, -1))}
                         </p>
                       )} */}
-                      <div class='input-group'>
+                      <div className='input-group'>
                         <input
                           type='file'
                           accept='image/*'
                           onChange={handleImageChange}
-                          class='form-control'
+                          className='form-control'
                           id='inputGroupFile04'
                           aria-describedby='inputGroupFileAddon04'
                           aria-label='Upload'
@@ -165,10 +165,6 @@ export default function CustomerProfile() {
               </div>
             </div>
           </div>
-        </div>
-        <div class='mt-3 gap-2 d-flex justify-content-end'>
-          <button class='px-3 btn btn-sm btn-outline-primary'>Cancel</button>
-          <button class='px-3 btn btn-sm btn-primary'>Save</button>
         </div>
       </div>
     </div>
