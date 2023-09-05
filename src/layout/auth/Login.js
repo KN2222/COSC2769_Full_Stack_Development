@@ -6,34 +6,22 @@ import { useAuth } from '../../store/authContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [showModal, setShowModal] = useState(false);
 
-  const { isUserAuthenticated, getAuthenticatedUserInfo } = useAuth();
-
-  const isAuthenticated = isUserAuthenticated();
-  const getUserInfo = getAuthenticatedUserInfo();
-
+  const { accessToken } = useAuth(); // Use the accessToken from AuthContext
   const navigate = useNavigate();
   const [, setCookie] = useCookies(['accessToken']);
 
   useEffect(() => {
     // Check if there's an existing access token in local storage
-    if (isAuthenticated) {
-      const userInfo = getUserInfo();
-      console.log('User Role:', userInfo.role);
-      if (userInfo.role === 'admin') {
-        navigate('/admin/home');
-      } else if (userInfo.role === 'customer') {
-        navigate('/');
-      } else if (userInfo.role === 'seller') {
-        navigate('/seller/home');
-      }
+    const decodedToken = localStorage.getItem('decodedToken');
+    if (accessToken || decodedToken) {
+      navigate('/'); // Redirect to the home page or a different route
     }
-  }, [isAuthenticated, navigate, getUserInfo]);
+  }, [accessToken, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,7 +30,6 @@ const Login = () => {
       const response = await axios.post('http://localhost:8000/auth/login', {
         email: email,
         password: password,
-        phone: phone,
       });
 
       // Handle successful login
@@ -76,25 +63,17 @@ const Login = () => {
         <form onSubmit={handleSubmit}>
           <div className='mb-3'>
             <label
-              htmlFor='identifier'
+              htmlFor='email'
               className='form-label'
             >
-              Email or Phone
+              Email
             </label>
             <input
-              type='text'
+              type='email'
               className='form-control'
-              id='identifier'
-              value={email || phone}
-              onChange={(e) => {
-                if (e.target.value.includes('@')) {
-                  setEmail(e.target.value);
-                  setPhone('');
-                } else {
-                  setPhone(e.target.value);
-                  setEmail('');
-                }
-              }}
+              id='email'
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>

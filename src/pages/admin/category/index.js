@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
-import { Container, Row, Col, Stack, Button } from 'react-bootstrap';
-import { CategoryCard } from '../../../components/categoryCard';
-import { SkeletonCategoryCard } from '../../../components/loading/SkeletonCategoryCard';
-import { useModalContext } from '../../../store/modalContext';
-import { useGetAllCategory } from '../../../api/getAllCategory';
-import { useModal } from '../../../hooks/modal';
-import { CategoryCreateModal } from '../../../components/modal/CategoryCreateModal';
+import React, { useEffect, useState } from "react";
+import { Container, Row, Col, Stack, Button } from "react-bootstrap";
+import { CategoryCard } from "../../../components/categoryCard";
+import { SkeletonCategoryCard } from "../../../components/loading/SkeletonCategoryCard";
+import { useModalContext } from "../../../store/modalContext";
+import { useGetAllCategory } from "../../../api/getAllCategory";
+import { useModal } from "../../../hooks/modal";
+import { CategoryCreateModal } from "../../../components/modal/CategoryCreateModal";
 
 const Categories = ({ categories }) => {
   return (
@@ -29,20 +29,17 @@ export const AdminCategoryPage = () => {
   } = useModal();
 
   useEffect(() => {
-    console.log('categories', categories);
+    console.log("categories", categories);
   }, [categories]);
 
   return (
     <>
       <Container>
-        <Stack
-          direction='horizontal'
-          className='mb-2 '
-        >
+        <Stack direction="horizontal" className="mb-2 ">
           <Button
-            variant='primary'
-            size='md'
-            className='ms-auto'
+            variant="primary"
+            size="md"
+            className="ms-auto"
             onClick={() => {
               openModalGlobal();
               openCreateModal();
@@ -51,7 +48,7 @@ export const AdminCategoryPage = () => {
             Add Category
           </Button>
         </Stack>
-        <Row className='row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-3'>
+        <Row className="row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-3">
           {isLoading &&
             [...Array(12)].map((_, index) => (
               <Col key={index}>

@@ -166,6 +166,10 @@ export default function CustomerProfile() {
             </div>
           </div>
         </div>
+        <div class='mt-3 gap-2 d-flex justify-content-end'>
+          <button class='px-3 btn btn-sm btn-outline-primary'>Cancel</button>
+          <button class='px-3 btn btn-sm btn-primary'>Save</button>
+        </div>
       </div>
     </div>
   );

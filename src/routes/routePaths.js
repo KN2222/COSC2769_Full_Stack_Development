@@ -13,6 +13,7 @@ import CustomerProfile from '../pages/customer/profile';
 import Status from '../pages/seller/status';
 import { SellerLayout } from '../layout/seller.layout';
 import SellerProfile from '../pages/seller/profile';
+import SellerHome from '../pages/seller/home';
 
 export const routePaths = {
   public: [
@@ -52,7 +53,7 @@ export const routePaths = {
       ],
     },
     {
-      path: '*',
+      path: "*",
       element: <></>,
       children: [],
     },
@@ -103,18 +104,17 @@ export const routePaths = {
       path: '/seller',
       element: <SellerLayout />,
       children: [
-        {
-          path: '/seller/status',
-          element: <Status />,
+        { 
+          path: '/seller/status', 
+          element: <Status />
         },
-        {
-          path: '/seller/home',
-          element: <div>This is seller home page</div>,
-        },
-        {
-          path: '/seller/profile',
-          element: <SellerProfile />,
-        },
+        { 
+          path: '/seller/home', 
+          element: <SellerHome/>
+        },        { 
+          path: '/seller/profile', 
+          element: <SellerProfile />
+        }
       ],
     },
   ],

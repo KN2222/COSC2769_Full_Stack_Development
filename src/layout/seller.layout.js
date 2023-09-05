@@ -1,8 +1,8 @@
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { Footer } from '../components/footer';
-import { useEffect } from 'react';
-import { useGetSellerByID } from '../api/getSellerByID';
-import { useAuth } from '../store/authContext';
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Footer } from "../components/footer";
+import { useEffect } from "react";
+import { useGetSellerByID } from "../api/getSellerByID";
+import { useAuth } from "../store/authContext";
 
 export const SellerLayout = () => {
   const navigate = useNavigate();
@@ -12,22 +12,17 @@ export const SellerLayout = () => {
   const userInfo = getAuthenticatedUserInfo();
 
   useEffect(() => {
-    if (userInfo.role.slice(1, -1) === 'seller') {
-      if (
-        location.pathname.includes('/seller') &&
-        (status === 'Pending' || status === 'Rejected')
-      ) {
-        navigate('/seller/status');
-        console.log('status', status);
-        console.log('location', location.pathname);
-      }
-    } else {
-      navigate('/');
+    if (location.pathname.includes("/seller") && (status === "Pending" || status === "Rejected")) {
+      console.log("status", status);
+      console.log("location", location.pathname);
+      navigate("/seller/status");
+    }else{
+      navigate("/seller/home");
     }
-  }, [status, location.pathname, navigate, userInfo.role]);
+  }, [status, location.pathname, navigate]);
 
   return (
-    <div className='vw-100'>
+    <div className="vw-100">
       <Outlet />
       <Footer />
     </div>
