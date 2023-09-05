@@ -108,12 +108,12 @@ export default function SellerProfile() {
                       <p className='text-capitalize'>
                         {String(localStorage.getItem('role').slice(1, -1))}
                       </p>
-                      <div class='input-group'>
+                      <div className='input-group'>
                         <input
                           type='file'
                           accept='image/*'
                           onChange={handleImageChange}
-                          class='form-control'
+                          className='form-control'
                           id='inputGroupFile04'
                           aria-describedby='inputGroupFileAddon04'
                           aria-label='Upload'
