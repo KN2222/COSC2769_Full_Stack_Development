@@ -22,7 +22,7 @@ export const SellerLayout = () => {
         console.log('location', location.pathname);
       }
     } else {
-      navigate('/s');
+      navigate('/');
     }
   }, [status, location.pathname, navigate, userInfo.role]);
 
