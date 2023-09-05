@@ -53,8 +53,9 @@ export const HomeNav = () => {
     }));
   };
 
-  const { isUserAuthenticated, Logout } = useAuth();
+  const { isUserAuthenticated, getAuthenticatedUserInfo, Logout } = useAuth();
   const isAuthenticated = isUserAuthenticated();
+  const userInfo = getAuthenticatedUserInfo();
 
   const handleLogout = () => {
     const route = Logout();
@@ -119,12 +120,11 @@ export const HomeNav = () => {
             >
               {Object.entries(categoryTree).map(
                 ([categoryName, category], index) => {
-                  console.log('category', category);
                   return (
                     <>
                       {isObjectEmpty(category.subCategories) ? (
                         <Nav.Link
-                          key={categoryName}
+                          key={categoryName + index}
                           as={Link}
                           to={`/category/${categoryName}`}
                         >
@@ -132,7 +132,7 @@ export const HomeNav = () => {
                         </Nav.Link>
                       ) : (
                         <NavDropdown
-                          key={categoryName}
+                          key={categoryName + index}
                           id='collasible-nav-dropdown'
                           title={categoryName}
                           onClick={(e) => {
@@ -182,15 +182,28 @@ export const HomeNav = () => {
                     as={ButtonGroup}
                     title='UserName'
                   >
-                    <Dropdown.Item
-                      // eventKey='1'
-                      href='/customer/profile'
-                      onClick={() => {
-                        navigate(`/customer/profile`);
-                      }}
-                    >
-                      Profile
-                    </Dropdown.Item>
+                    {userInfo.role.slice(1, -1) === 'customer' ? (
+                      <Dropdown.Item
+                        eventKey='1'
+                        href='/customer/profile'
+                        onClick={() => {
+                          navigate(`/customer/profile`);
+                        }}
+                      >
+                        Profile
+                      </Dropdown.Item>
+                    ) : (
+                      <Dropdown.Item
+                        eventKey='2'
+                        href='/seller/profile'
+                        onClick={() => {
+                          navigate(`/seller/profile`);
+                        }}
+                      >
+                        Profile
+                      </Dropdown.Item>
+                    )}
+
                     <Dropdown.Divider />
                     <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
                   </DropdownButton>

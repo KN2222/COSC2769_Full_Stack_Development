@@ -12,8 +12,10 @@ export const AdminLayout = () => {
   const userInfo = getAuthenticatedUserInfo();
 
   useEffect(() => {
-    if (location.pathname === '/admin' && userInfo.role === 'admin') {
-      navigate('/admin/home');
+    if (userInfo.role.slice(1, -1) === 'admin') {
+      if (location.pathname === '/admin') {
+        navigate('/admin/home');
+      }
     } else {
       navigate('/');
     }
