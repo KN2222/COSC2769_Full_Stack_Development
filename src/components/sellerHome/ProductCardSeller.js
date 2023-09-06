@@ -7,9 +7,10 @@ import { useModal } from "../../hooks/modal";
 import { useModalContext } from "../../store/modalContext";
 import { ProductUpdateModal } from "../modal/SellerUpdateProductModal";
 import { useGetAllCategory } from "../../api/getAllCategory";
+import { useGetSellerProduct } from "../../api/getSellerProduct";
 
 function ProductCardSeller( props ) {
-  const {products, fetchSellerProduct} = props;
+  const {products, fetchSellerProduct} = useGetSellerProduct();
   const { openModal: openModalGlobal } = useModalContext();
   const { categories, isLoading } = useGetAllCategory();
 
@@ -24,6 +25,11 @@ function ProductCardSeller( props ) {
     openModal: openUpdateModal,
     closeModal: closeUpdateModal,
   } = useModal();
+
+  useEffect(() => {
+    console.log("In use Effect");
+    fetchSellerProduct();
+  },[openModalGlobal]);
 
   return (
     <div>
@@ -91,12 +97,7 @@ function ProductCardSeller( props ) {
                     show={showUpdateModal}
                     onHide={closeUpdateModal}
                     product={product}
-                    title={product.title}
-                    description={product.description}
-                    price={product.price}
-                    stock={product.stock}
                     category={product.categories[0]}
-                    // file={`http://localhost:8000/product/${product._id}.png`}
                   />
                 </div>
               </Card.Body>

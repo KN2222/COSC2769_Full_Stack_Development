@@ -39,9 +39,7 @@ export const CreateProductModal = (props) => {
         await createProduct(title, description, price, stock, category, file);
         setCategory("");
         setFile(null);
-        fetchSellerProduct(); 
         props.onHide();
-        fetchSellerProduct();
       } catch (error) {
         console.error("Error creating product:", error);
       }

@@ -16,7 +16,6 @@ export const useGetSellerProduct = () => {
     };
 
     useEffect(() => {
-        console.log("in Get Seller Product");
     }, [products]);
 
     return {products, isLoading, fetchSellerProduct};

@@ -8,44 +8,65 @@ import { useUpdateProduct } from "../../api/updateProduct";
 import { useGetSellerProduct } from "../../api/getSellerProduct";
 
 export const ProductUpdateModal = (props) => {
-  const [title, setTitle] = useState(props.title);
-  const [description, setDescription] = useState(props.description);
-  const [price, setPrice] = useState(props.price);
-  const [stock, setStock] = useState(props.stock);
+  const [title, setTitle] = useState(props.product.title);
+  const [description, setDescription] = useState(props.product.description);
+  const [price, setPrice] = useState(props.product.price);
+  const [stock, setStock] = useState(props.product.stock);
   const [categoryId, setCategory] = useState(props.category);
-  console.log(title);
-  console.log(categoryId);
+  const [file, setFile] = useState();
 
   const { updateProduct } = useUpdateProduct();
   const { showToast } = useToastContext();
-  const {categories} = useGetAllCategory();
+  const { categories } = useGetAllCategory();
   const { product, fetchSellerProduct } = useGetSellerProduct();
   const form = useRef(null);
-  
-  const handleUpdateProduct = (e) => {
-    if (form.current.checkValidity() === false || price === -1 || stock === -1 || title === "" || description === "") {
+
+  const handleUpdateProduct = async (e) => {
+    if (
+      form.current.checkValidity() === false ||
+      price === -1 ||
+      stock === -1 ||
+      title === "" ||
+      description === ""
+    ) {
       e.preventDefault();
       e.stopPropagation();
       showToast(400, "Please fill out all the fields");
-    }else if(price <= 0 ){
+    } else if (price <= 0) {
       e.preventDefault();
       e.stopPropagation();
       showToast(400, "Price must be greater than or equal to 0");
-    }else if(stock < 0){
+    } else if (stock < 0) {
       e.preventDefault();
       e.stopPropagation();
       showToast(400, "Stock must be greater than 0");
-    } else {
-      console.log(categoryId);
-      updateProduct(props.product._id,{title, description, price, stock, categoryId});
-      setCategory("");
-      fetchSellerProduct();
-      props.onHide();
+    } else { 
+      try{
+        console.log("before Update",          title,
+          description,
+          price,
+          stock,
+          categoryId);
+        await updateProduct(props.product._id, {
+          title,
+          description,
+          price,
+          stock,
+          categoryId,
+        }, file);
+        setCategory("");
+        props.onHide();
+      } catch (error) {
+        console.error("Error updating product:", error);
+      }
+
     }
   };
 
   const handleClose = () => {
-    props.onHide(); 
+    props.onHide();
+    setCategory(""); 
+    setFile(null);
   };
 
   return (
@@ -112,10 +133,7 @@ export const ProductUpdateModal = (props) => {
             </Form.Group>
 
             <Form.Group>
-              <Form.Label>Select category:</Form.Label>
-              <p className="text-danger">
-                Do not select a category if you do not want to change it
-              </p>
+              <Form.Label>Select new category if needed:</Form.Label>
               <Form.Select
                 defaultValue=""
                 onChange={(e) => {
@@ -123,7 +141,9 @@ export const ProductUpdateModal = (props) => {
                 }}
                 custom="true"
               >
-                <option value="" disabled>Choose...</option>
+                <option value="" disabled>
+                  Choose...
+                </option>
 
                 {categories.map((category) => {
                   return (
@@ -134,7 +154,14 @@ export const ProductUpdateModal = (props) => {
                 })}
               </Form.Select>
             </Form.Group>
-
+            <br />
+            <Form.Group controlId="formFile" className="mb-3">
+              <Form.Label>Upload new image here if needed:</Form.Label>
+              <Form.Control
+                type="file"
+                onChange={(e) => setFile(e.target.files[0])}
+              />
+            </Form.Group>
           </Form>
         </Modal.Body>
 

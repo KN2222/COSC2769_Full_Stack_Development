@@ -20,6 +20,7 @@ export default function SellerHome() {
   } = useModal();
 
   useEffect(() => {
+    console.log("In use Effect index");
     fetchSellerProduct();
   },[openModalGlobal]);
 
@@ -54,7 +55,7 @@ export default function SellerHome() {
           <CreateProductModal show={showCreateModal} onHide={closeCreateModal} />
         </Stack>
         <hr />
-        <ProductCardSeller products={products}/>
+        <ProductCardSeller openModalGlobal={openModalGlobal}/>
       </Container>
 
 
