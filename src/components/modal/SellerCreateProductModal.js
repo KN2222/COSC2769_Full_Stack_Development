@@ -4,6 +4,7 @@ import { Form } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import { useCreateProduct } from "../../api/createProduct";
 import { useGetAllCategory } from "../../api/getAllCategory";
+import { useGetSellerProduct } from "../../api/getSellerProduct";
 import { useToastContext } from "../../store/toastContext";
 
 export const CreateProductModal = (props) => {
@@ -14,12 +15,13 @@ export const CreateProductModal = (props) => {
   const [category, setCategory] = useState("");
   const [file, setFile] = useState(null);
 
+  const {fetchSellerProduct} = useGetSellerProduct();
   const { showToast } = useToastContext();
   const { isSuccess, createProduct } = useCreateProduct();
   const {categories} = useGetAllCategory();
   const form = useRef(null);
 
-  const handleCreateProduct = (e) => {
+  const handleCreateProduct = async(e) => {
     if (form.current.checkValidity() === false || price === -1 || stock === -1 || title === "" || description === "" || category === "" || file === null) {
       e.preventDefault();
       e.stopPropagation();
@@ -33,16 +35,23 @@ export const CreateProductModal = (props) => {
       e.stopPropagation();
       showToast(400, "Stock must be greater than 0");
     } else {
-      createProduct(title, description, price, stock, category, file);
-      setCategory("");
-      setFile(null);
-      props.onHide();
+      try {
+        await createProduct(title, description, price, stock, category, file);
+        setCategory("");
+        setFile(null);
+        fetchSellerProduct(); 
+        props.onHide();
+        fetchSellerProduct();
+      } catch (error) {
+        console.error("Error creating product:", error);
+      }
     }
   };
 
   const handleClose = () => {
     props.onHide(); 
     setCategory(""); 
+    setFile(null);
   };
 
   return (

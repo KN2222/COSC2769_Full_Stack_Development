@@ -2,25 +2,28 @@ import React, { useState, useRef } from "react";
 import { Modal } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import { Button } from "react-bootstrap";
-import { useCreateProduct } from "../../api/createProduct";
 import { useGetAllCategory } from "../../api/getAllCategory";
 import { useToastContext } from "../../store/toastContext";
+import { useUpdateProduct } from "../../api/updateProduct";
+import { useGetSellerProduct } from "../../api/getSellerProduct";
 
-export const UpdateProductModal = (props) => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState(-1);
-  const [stock, setStock] = useState(-1);
-  const [category, setCategory] = useState("");
-  const [file, setFile] = useState(null);
+export const ProductUpdateModal = (props) => {
+  const [title, setTitle] = useState(props.title);
+  const [description, setDescription] = useState(props.description);
+  const [price, setPrice] = useState(props.price);
+  const [stock, setStock] = useState(props.stock);
+  const [categoryId, setCategory] = useState(props.category);
+  console.log(title);
+  console.log(categoryId);
 
+  const { updateProduct } = useUpdateProduct();
   const { showToast } = useToastContext();
-  const { isSuccess, createProduct } = useCreateProduct();
   const {categories} = useGetAllCategory();
+  const { product, fetchSellerProduct } = useGetSellerProduct();
   const form = useRef(null);
-
-  const handleCreateProduct = (e) => {
-    if (form.current.checkValidity() === false || price === -1 || stock === -1 || title === "" || description === "" || category === "" || file === null) {
+  
+  const handleUpdateProduct = (e) => {
+    if (form.current.checkValidity() === false || price === -1 || stock === -1 || title === "" || description === "") {
       e.preventDefault();
       e.stopPropagation();
       showToast(400, "Please fill out all the fields");
@@ -33,16 +36,16 @@ export const UpdateProductModal = (props) => {
       e.stopPropagation();
       showToast(400, "Stock must be greater than 0");
     } else {
-      createProduct(title, description, price, stock, category, file);
+      console.log(categoryId);
+      updateProduct(props.product._id,{title, description, price, stock, categoryId});
       setCategory("");
-      setFile(null);
+      fetchSellerProduct();
       props.onHide();
     }
   };
 
   const handleClose = () => {
     props.onHide(); 
-    setCategory(""); 
   };
 
   return (
@@ -55,7 +58,7 @@ export const UpdateProductModal = (props) => {
     >
       <Modal.Header>
         <Modal.Title id="contained-modal-title-vcenter">
-          Create new Product
+          Update Product
         </Modal.Title>
         <Modal.Body>
           <Form noValidate ref={form}>
@@ -63,6 +66,7 @@ export const UpdateProductModal = (props) => {
               <Form.Label>Title</Form.Label>
               <Form.Control
                 type="text"
+                value={title}
                 onChange={(e) => {
                   setTitle(e.target.value);
                 }}
@@ -72,6 +76,7 @@ export const UpdateProductModal = (props) => {
             <Form.Group className="mb-3">
               <Form.Label>Description</Form.Label>
               <Form.Control
+                value={description}
                 as="textarea"
                 rows={4}
                 onChange={(e) => {
@@ -83,6 +88,7 @@ export const UpdateProductModal = (props) => {
             <Form.Group className="mb-3">
               <Form.Label>Price($)</Form.Label>
               <Form.Control
+                value={price}
                 type="number"
                 onChange={(e) => {
                   if (e.target.value >= 0) {
@@ -95,6 +101,7 @@ export const UpdateProductModal = (props) => {
             <Form.Group className="mb-3">
               <Form.Label>Stock</Form.Label>
               <Form.Control
+                value={stock}
                 type="number"
                 onChange={(e) => {
                   if (e.target.value >= 0) {
@@ -105,18 +112,18 @@ export const UpdateProductModal = (props) => {
             </Form.Group>
 
             <Form.Group>
-              <Form.Label>Select a category:</Form.Label>
+              <Form.Label>Select category:</Form.Label>
               <p className="text-danger">
-                By selecting a category, it will also select its parent
+                Do not select a category if you do not want to change it
               </p>
               <Form.Select
-                value={category}
+                defaultValue=""
                 onChange={(e) => {
-                  setCategory(e.target.value);
+                  setCategory(String(e.target.value));
                 }}
                 custom="true"
               >
-                <option value="">Choose...</option>
+                <option value="" disabled>Choose...</option>
 
                 {categories.map((category) => {
                   return (
@@ -127,19 +134,12 @@ export const UpdateProductModal = (props) => {
                 })}
               </Form.Select>
             </Form.Group>
-            <br />
-            <Form.Group controlId="formFile" className="mb-3">
-              <Form.Label>Upload image product here:</Form.Label>
-              <Form.Control
-                type="file"
-                onChange={(e) => setFile(e.target.files[0])}
-              />
-            </Form.Group>
+
           </Form>
         </Modal.Body>
 
         <Modal.Footer className="d-flex justify-content-between">
-          <Button type="submit" variant="primary" onClick={handleCreateProduct}>
+          <Button type="submit" variant="primary" onClick={handleUpdateProduct}>
             Save
           </Button>
           <Button onClick={handleClose}>Close</Button>

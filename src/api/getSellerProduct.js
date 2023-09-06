@@ -8,7 +8,6 @@ export const useGetSellerProduct = () => {
     const fetchSellerProduct = async () => {
         try {
             const response = await APIService.get("/seller/product");
-            console.log(response);
             setProducts(response.data.productsOfSeller);
             setLoading(false);
         } catch (error) {
@@ -16,9 +15,9 @@ export const useGetSellerProduct = () => {
         }
     };
 
-    // useEffect(() => {
-    //     fetchSellerProduct();
-    // }, []);
+    useEffect(() => {
+        console.log("in Get Seller Product");
+    }, [products]);
 
     return {products, isLoading, fetchSellerProduct};
 }

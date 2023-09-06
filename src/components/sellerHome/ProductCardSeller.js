@@ -1,25 +1,29 @@
 import React, { useEffect } from "react";
-import { Card } from "react-bootstrap";
+import { Card , Col} from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import { useDeleteProduct } from "../../api/deleteProduct";
 import { ProductDeleteModal } from "../modal/SellerDeleteProductModal";
 import { useModal } from "../../hooks/modal";
 import { useModalContext } from "../../store/modalContext";
-import { useGetSellerProduct } from "../../api/getSellerProduct";
+import { ProductUpdateModal } from "../modal/SellerUpdateProductModal";
+import { useGetAllCategory } from "../../api/getAllCategory";
 
-function ProductCardSeller() {
-  const { products, fetchSellerProduct } = useGetSellerProduct();
-  const { deleteProduct } = useDeleteProduct();
+function ProductCardSeller( props ) {
+  const {products, fetchSellerProduct} = props;
   const { openModal: openModalGlobal } = useModalContext();
+  const { categories, isLoading } = useGetAllCategory();
+
   const {
     showModal: showDeleteModal,
     openModal: openDeleteModal,
     closeModal: closeDeleteModal,
   } = useModal();
 
-  useEffect(() => {
-    fetchSellerProduct();
-  }, [products]);
+  const {
+    showModal: showUpdateModal,
+    openModal: openUpdateModal,
+    closeModal: closeUpdateModal,
+  } = useModal();
 
   return (
     <div>
@@ -54,6 +58,7 @@ function ProductCardSeller() {
                 </div>
                 <div className="mt-auto">
                   <Card.Text>Price: ${product.price}</Card.Text>
+                  <Card.Text>Stock: {product.stock}</Card.Text>
                   <Button
                     variant="primary"
                     size="md"
@@ -69,7 +74,29 @@ function ProductCardSeller() {
                     show={showDeleteModal}
                     onHide={closeDeleteModal}
                     product={product}
-                    fetchSellerProduct = {fetchSellerProduct}
+                  />
+
+                  <Button
+                    variant="primary"
+                    size="md"
+                    className="ms-auto"
+                    onClick={() => {
+                      openModalGlobal();
+                      openUpdateModal();
+                    }}
+                  >
+                    Update
+                  </Button>
+                  <ProductUpdateModal
+                    show={showUpdateModal}
+                    onHide={closeUpdateModal}
+                    product={product}
+                    title={product.title}
+                    description={product.description}
+                    price={product.price}
+                    stock={product.stock}
+                    category={product.categories[0]}
+                    // file={`http://localhost:8000/product/${product._id}.png`}
                   />
                 </div>
               </Card.Body>

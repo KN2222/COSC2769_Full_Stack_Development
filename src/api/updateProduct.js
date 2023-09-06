@@ -11,7 +11,7 @@ export const useUpdateProduct = () => {
       const response = await APIService.patch(`/seller/product/${id}`, {
         updateFields,
       });
-      console.log("in here");
+      console.log("in Update Product");
       setIsSuccess(true);
       closeModal();
       return response.data; // You can return the updated data if needed
