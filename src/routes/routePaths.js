@@ -1,9 +1,11 @@
 import { AdminLayout } from '../layout/admin.layout';
 import { AdminHomePage } from '../pages/admin/home';
 import { AdminSellerPage } from '../pages/admin/seller';
-import Home from '../pages/customer/home';
+import { AppLayout } from '../layout/app.layout';
 import { CustomerLayout } from '../layout/customer.layout';
 import { AdminCategoryPage } from '../pages/admin/category';
+import { SellerLayout } from '../layout/seller.layout';
+import Home from '../pages/customer/home';
 import Login from '../pages/Login/Login';
 import SignUp from '../pages/SignUp/SignUp';
 import ProductDetail from '../components/productDetail/ProductDetail';
@@ -11,7 +13,6 @@ import { AdminProfile } from '../pages/admin/profile';
 import CheckOut from '../pages/customer/checkout';
 import CustomerProfile from '../pages/customer/profile';
 import Status from '../pages/seller/status';
-import { SellerLayout } from '../layout/seller.layout';
 import SellerProfile from '../pages/seller/profile';
 import SellerHome from '../pages/seller/home';
 
@@ -19,7 +20,7 @@ export const routePaths = {
   public: [
     {
       path: '/',
-      element: <CustomerLayout />,
+      element: <AppLayout />,
       children: [
         {
           //TODO fetch data
@@ -38,10 +39,10 @@ export const routePaths = {
           path: '/checkout',
           element: <CheckOut />,
         },
-        {
-          path: '/customer/profile',
-          element: <CustomerProfile />,
-        },
+        // {
+        //   path: '/customer/profile',
+        //   element: <CustomerProfile />,
+        // },
         {
           path: '/',
           element: <Home />,
@@ -58,6 +59,24 @@ export const routePaths = {
       children: [],
     },
   ],
+
+  privateCustomer: [
+    {
+      path: '/cusomter',
+      element: <CustomerLayout />,
+      children: [
+        {
+          path: '/customer/profile',
+          element: <CustomerProfile />,
+        },
+        {
+          path: '/customer/product-order',
+          element: <div>Product Order</div>,
+        },
+      ],
+    },
+  ],
+
   privateAdmin: [
     {
       path: '/admin',
