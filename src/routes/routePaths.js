@@ -43,10 +43,6 @@ export const routePaths = {
           element: <CheckOut />,
         },
         {
-          path: '/product-order',
-          element: <OrderManagement />,
-        },
-        {
           path: '/profile',
           element: <Profile />,
         },
@@ -78,7 +74,7 @@ export const routePaths = {
         },
         {
           path: '/customer/product-order',
-          element: <div>Product Order</div>,
+          element: <OrderManagement />,
         },
       ],
     },

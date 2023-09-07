@@ -1,4 +1,4 @@
-import ProductCard from "../../../components/landingPage/ProductCard"
+import ProductCard from '../../../components/landingPage/ProductCard';
 
 export default function Home() {
   return (

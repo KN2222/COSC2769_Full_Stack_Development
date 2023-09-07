@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { useModal } from "../../../hooks/modal";
-import { Button, Container, Stack, Col } from "react-bootstrap";
+import React, { useEffect, useState } from 'react';
+import { useModal } from '../../../hooks/modal';
+import { Button, Container, Stack, Col } from 'react-bootstrap';
 import { useAuth } from '../../../store/authContext';
-import { useModalContext } from "../../../store/modalContext";
-import { useGetSellerProduct } from "../../../api/getSellerProduct";
-import ProductCardSeller from "../../../components/sellerHome/ProductCardSeller";
-import { CreateProductModal } from "../../../components/modal/SellerCreateProductModal";
+import { useModalContext } from '../../../store/modalContext';
+import { useGetSellerProduct } from '../../../api/getSellerProduct';
+import ProductCardSeller from '../../../components/sellerHome/ProductCardSeller';
+import { CreateProductModal } from '../../../components/modal/SellerCreateProductModal';
 
 const Products = ({ products }) => {
   return (
@@ -21,8 +21,12 @@ const Products = ({ products }) => {
 
 export default function SellerHome() {
   const { products, fetchSellerProduct } = useGetSellerProduct();
-  const {getProfile } = useAuth();
-  const { openModal: openModalGlobal, showModal, closeModal } = useModalContext();
+  const { getProfile } = useAuth();
+  const {
+    openModal: openModalGlobal,
+    showModal,
+    closeModal,
+  } = useModalContext();
   const {
     showModal: showCreateModal,
     openModal: openCreateModal,
@@ -32,9 +36,8 @@ export default function SellerHome() {
   const [profile, setProfile] = useState('');
 
   useEffect(() => {
-    console.log("In use Effect index");
     fetchSellerProduct();
-  },[closeModal]);
+  }, [closeModal]);
 
   useEffect(() => {
     // Call getProfile function to log its output
@@ -47,16 +50,18 @@ export default function SellerHome() {
       });
   }, [getProfile]);
 
-
   return (
     <>
       <Container>
-        <Stack direction="horizontal" className="mb-2 ">
+        <Stack
+          direction='horizontal'
+          className='mb-2 '
+        >
           <h1>{profile.businessName}</h1>
           <Button
-            variant="primary"
-            size="md"
-            className="ms-auto"
+            variant='primary'
+            size='md'
+            className='ms-auto'
             onClick={() => {
               openModalGlobal();
               openCreateModal();
@@ -64,14 +69,14 @@ export default function SellerHome() {
           >
             Add Product
           </Button>
-          <CreateProductModal show={showCreateModal} onHide={closeCreateModal} />
+          <CreateProductModal
+            show={showCreateModal}
+            onHide={closeCreateModal}
+          />
         </Stack>
         <hr />
-        <Products products={products}/>
+        <Products products={products} />
       </Container>
-
-
-
     </>
   );
 }

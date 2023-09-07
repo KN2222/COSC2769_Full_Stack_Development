@@ -20,8 +20,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     // console.log('accessToken', accessToken);
     const decodedData = decodeAndStoreTokenData(accessToken);
-    console.log(decodedData);
-    // console.log(localStorage.decodedToken);
+    // console.log(decodedData);
   }, [accessToken]);
 
   const decodeAndStoreTokenData = (token) => {
@@ -62,7 +61,6 @@ export const AuthProvider = ({ children }) => {
 
   const getAuthenticatedUserInfo = useCallback(() => {
     if (isUserAuthenticated()) {
-      console.log(localStorage.getItem('role'));
       const id = localStorage.getItem('_id');
       const role = localStorage.getItem('role');
       const iat = localStorage.getItem('iat');
@@ -106,7 +104,6 @@ export const AuthProvider = ({ children }) => {
   const getProfile = useCallback(async (role) => {
     try {
       const response = await APIService.get(`/${role}/profile`);
-      console.log('response', response);
       if (response.status === 200) {
         const userProfile = response.data;
         return userProfile;
@@ -134,7 +131,6 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     if (cookies.sb) {
-      console.log('cookies.sb', cookies.sb);
       const token = cookies.sb;
       APIService.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       setAccessToken(token);
