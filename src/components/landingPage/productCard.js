@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useGetProducts } from "../../api/getProducts";
+import { useGetImageById } from "../../api/getProductImage";
 import { Link } from "react-router-dom";
 import { SkeletonProductCard } from "../loading/SkeletonProductCard";
 import { Card, Button } from "react-bootstrap";
@@ -9,10 +10,10 @@ import FilterBar from "./FilterBar";
 export default function ProductCard() {
   const { data: products, loading } = useGetProducts();
   const productsPerPage = 9;
-
   const [activePage, setActivePage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterLetter, setFilterLetter] = useState(null);
+  const [dateFilter, setDateFilter] = useState(null);
   const [filteredProducts, setFilteredProducts] = useState([]);
 
   const handlePageChange = (page) => {
@@ -22,43 +23,70 @@ export default function ProductCard() {
   const startIndex = (activePage - 1) * productsPerPage;
 
   const handleSearch = (query) => {
-    setFilterLetter(null); // Clear the filter letter when using search
+    setFilterLetter(null);
     setSearchQuery(query);
   };
 
-  const handleLetterFilter = (letter) => {
-    setSearchQuery(""); // Clear the search query when using filter by letter
-    setFilterLetter(letter);
-  };
-
   useEffect(() => {
-    const filteredProducts = products.filter((product) => {
-      const cleanedQuery = searchQuery.trim().toLowerCase();
-      if (!cleanedQuery) {
-        return true;
-      }
-      const queryWords = cleanedQuery.split(" ");
-      return queryWords.some((queryWord) => {
-        const productTitle = product.title.toLowerCase();
-        const productDescription = product.description.toLowerCase();
-        return (
-          productTitle.includes(queryWord) ||
-          productDescription.includes(queryWord)
-        );
+    let filteredProducts = products;
+
+    if (searchQuery) {
+      filteredProducts = filteredProducts.filter((product) => {
+        const cleanedQuery = searchQuery.trim().toLowerCase();
+        if (!cleanedQuery) {
+          return true;
+        }
+        const queryWords = cleanedQuery.split(" ");
+        return queryWords.some((queryWord) => {
+          const productTitle = product.title.toLowerCase();
+          const productDescription = product.description.toLowerCase();
+          return (
+            productTitle.includes(queryWord) ||
+            productDescription.includes(queryWord)
+          );
+        });
       });
-    });
+    }
+
+    if (dateFilter === "newest") {
+      filteredProducts.sort((a, b) => new Date(a.date) - new Date(b.date));
+    } else if (dateFilter === "oldest") {
+      filteredProducts.sort((a, b) => new Date(b.date) - new Date(a.date));
+    }
 
     setFilteredProducts(filteredProducts);
-  }, [searchQuery, products]);
+  }, [searchQuery, products, dateFilter]);
 
-  const filteredByLetter = filterLetter
-    ? filteredProducts.filter((product) =>
-        product.title.toLowerCase().startsWith(filterLetter.toLowerCase())
-      )
-    : filteredProducts;
+  const handleLetterFilter = (order) => {
+    setSearchQuery("");
+    let sortedProducts;
 
-  const totalPages = Math.ceil(filteredByLetter.length / productsPerPage);
-  const visibleProducts = filteredByLetter.slice(
+    if (order === "asc") {
+      sortedProducts = [...products].sort((a, b) =>
+        a.title.localeCompare(b.title)
+      );
+    } else if (order === "desc") {
+      sortedProducts = [...products].sort((a, b) =>
+        b.title.localeCompare(a.title)
+      );
+    }
+
+    setFilteredProducts(sortedProducts);
+  };
+
+  const handlePriceFilter = (option) => {
+    let sortedProducts = [...filteredProducts];
+    if (option === "asc") {
+      sortedProducts.sort((a, b) => a.price - b.price);
+    } else if (option === "desc") {
+      sortedProducts.sort((a, b) => b.price - a.price);
+    }
+
+    setFilteredProducts(sortedProducts);
+  };
+
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+  const visibleProducts = filteredProducts.slice(
     startIndex,
     startIndex + productsPerPage
   );
@@ -67,40 +95,54 @@ export default function ProductCard() {
     <div className="container">
       <h1 className="mt-4">Product Cards</h1>
       <SearchBar onSearch={handleSearch} />
-      <FilterBar onSelect={handleLetterFilter} />
+      <FilterBar
+        onLetterFilter={handleLetterFilter}
+        onPriceFilter={handlePriceFilter}
+        onDateFilter={setDateFilter}
+        dateFilter={dateFilter}
+      />
       {loading ? (
-        <SkeletonProductCard /> // Show skeleton loading component if loading is true
+        <SkeletonProductCard />
       ) : (
         <div className="row row-cols-1 row-cols-md-3 g-4">
           {visibleProducts.length === 0 ? (
             <p className="text-center mt-5 mx-auto fw-semibold text-danger">
-              Sorry for the inconvenience, the products you are looking for are now out of stock!
+              Sorry for the inconvenience, the products you are looking for are
+              now out of stock!
             </p>
           ) : (
             visibleProducts.map((product) => (
-              <div key={product.id} className="col">
+              <div key={product._id} className="col">
                 <Link
                   style={{ textDecoration: "none" }}
-                  to={`/product/${product.id}`}
+                  to={`/product/${product._id}`}
                 >
                   <Card className="h-100 d-flex flex-column justify-content-between">
                     <Card.Img
                       variant="top"
-                      src={product.image}
                       alt={product.title}
+                      src={product.image}
                       style={{ objectFit: "cover", height: "200px" }}
                     />
                     <Card.Body className="d-flex flex-column">
                       <div>
-                        <Card.Title className="text-truncate">
-                          {product.title}
-                        </Card.Title>
+                        <div className="d-flex flex-row ">
+                          <Card.Title className="text-truncate">
+                            {product.title}
+                          </Card.Title>
+                        </div>
                         <Card.Text className="multi-line-truncate">
+                          <span className="fw-semibold text-decoration-underline">
+                            {" "}
+                            Description:
+                          </span>{" "}
                           {product.description}
                         </Card.Text>
                       </div>
                       <div className="mt-auto">
-                        <Card.Text>Price: ${product.price}</Card.Text>
+                        <Card.Text className="text-success fw-semibold">
+                          Price: ${product.price}
+                        </Card.Text>
                         <Button variant="primary">Add to Cart</Button>
                       </div>
                     </Card.Body>
@@ -111,12 +153,12 @@ export default function ProductCard() {
           )}
         </div>
       )}
-      <div className='mt-3'>
-        <nav aria-label='Page navigation '>
-          <ul className='pagination'>
-            <li className={`page-item ${activePage === 1 ? 'disabled' : ''}`}>
+      <div className="mt-3">
+        <nav aria-label="Page navigation ">
+          <ul className="pagination">
+            <li className={`page-item ${activePage === 1 ? "disabled" : ""}`}>
               <button
-                className='page-link'
+                className="page-link"
                 onClick={() => handlePageChange(activePage - 1)}
               >
                 Previous
@@ -126,11 +168,11 @@ export default function ProductCard() {
               <li
                 key={index}
                 className={`page-item ${
-                  activePage === index + 1 ? 'active' : ''
+                  activePage === index + 1 ? "active" : ""
                 }`}
               >
                 <button
-                  className='page-link'
+                  className="page-link"
                   onClick={() => handlePageChange(index + 1)}
                 >
                   {index + 1}
@@ -139,11 +181,11 @@ export default function ProductCard() {
             ))}
             <li
               className={`page-item ${
-                activePage === totalPages ? 'disabled' : ''
+                activePage === totalPages ? "disabled" : ""
               }`}
             >
               <button
-                className='page-link'
+                className="page-link"
                 onClick={() => handlePageChange(activePage + 1)}
               >
                 Next
