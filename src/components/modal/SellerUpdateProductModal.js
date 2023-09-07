@@ -5,20 +5,20 @@ import { Button } from "react-bootstrap";
 import { useGetAllCategory } from "../../api/getAllCategory";
 import { useToastContext } from "../../store/toastContext";
 import { useUpdateProduct } from "../../api/updateProduct";
-import { useGetSellerProduct } from "../../api/getSellerProduct";
 
 export const ProductUpdateModal = (props) => {
-  const [title, setTitle] = useState(props.product.title);
-  const [description, setDescription] = useState(props.product.description);
-  const [price, setPrice] = useState(props.product.price);
-  const [stock, setStock] = useState(props.product.stock);
-  const [categoryId, setCategory] = useState(props.product.categories[0]);
+  const { product } = props;
+
+  const [title, setTitle] = useState(product.title);
+  const [description, setDescription] = useState(product.description);
+  const [price, setPrice] = useState(product.price);
+  const [stock, setStock] = useState(product.stock);
+  const [categoryId, setCategory] = useState(product.categories[0]);
   const [file, setFile] = useState();
 
   const { updateProduct } = useUpdateProduct();
   const { showToast } = useToastContext();
   const { categories } = useGetAllCategory();
-  const { fetchSellerProduct } = useGetSellerProduct();
   const form = useRef(null);
 
   const handleUpdateProduct = async (e) => {
@@ -40,33 +40,26 @@ export const ProductUpdateModal = (props) => {
       e.preventDefault();
       e.stopPropagation();
       showToast(400, "Stock must be greater than 0");
-    } else { 
-      try{
-        await updateProduct(props.product._id, {
-          title,
-          description,
-          price,
-          stock,
-          categoryId,
-        }, file);
+    } else {
+      try {
+        await updateProduct(
+          props.product._id,
+          {
+            title,
+            description,
+            price,
+            stock,
+            categoryId,
+          },
+          file
+        );
         setCategory("");
         props.onHide();
       } catch (error) {
         console.error("Error updating product:", error);
       }
-
     }
   };
-
-  const handleClose = () => {
-    props.onHide();
-    setCategory(""); 
-    setFile(null);
-  };
-
-  useEffect(() => {
-    fetchSellerProduct();
-  },[])
 
   return (
     <Modal
@@ -86,7 +79,7 @@ export const ProductUpdateModal = (props) => {
               <Form.Label>Title</Form.Label>
               <Form.Control
                 type="text"
-                value={title}
+                defaultValue={product.title}
                 onChange={(e) => {
                   setTitle(e.target.value);
                 }}
@@ -96,7 +89,7 @@ export const ProductUpdateModal = (props) => {
             <Form.Group className="mb-3">
               <Form.Label>Description</Form.Label>
               <Form.Control
-                value={description}
+                defaultValue={product.description}
                 as="textarea"
                 rows={4}
                 onChange={(e) => {
@@ -108,7 +101,7 @@ export const ProductUpdateModal = (props) => {
             <Form.Group className="mb-3">
               <Form.Label>Price($)</Form.Label>
               <Form.Control
-                value={price}
+                defaultValue={product.price}
                 type="number"
                 onChange={(e) => {
                   if (e.target.value >= 0) {
@@ -121,7 +114,7 @@ export const ProductUpdateModal = (props) => {
             <Form.Group className="mb-3">
               <Form.Label>Stock</Form.Label>
               <Form.Control
-                value={stock}
+                defaultValue={product.stock}
                 type="number"
                 onChange={(e) => {
                   if (e.target.value >= 0) {
@@ -168,7 +161,7 @@ export const ProductUpdateModal = (props) => {
           <Button type="submit" variant="primary" onClick={handleUpdateProduct}>
             Save
           </Button>
-          <Button onClick={handleClose}>Close</Button>
+          <Button onClick={props.onHide}>Close</Button>
         </Modal.Footer>
       </Modal.Header>
     </Modal>
