@@ -111,9 +111,18 @@ export const routePaths = {
         { 
           path: '/seller/home', 
           element: <SellerHome/>
-        },        { 
+        },        
+        { 
           path: '/seller/profile', 
           element: <SellerProfile />
+        },
+        { 
+          path: '/seller/statistic', 
+          element: <div>This is seller statistic page</div>
+        },
+        { 
+          path: '/seller/order', 
+          element: <div>This is seller order page</div>
         }
       ],
     },

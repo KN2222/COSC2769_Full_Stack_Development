@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, Col } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import { useDeleteProduct } from "../../api/deleteProduct";
@@ -13,10 +13,12 @@ import { useGetImageFromID } from "../../api/getImageFromID";
 function ProductCardSeller(props) {
   const { product } = props;
    const {fetchSellerProduct } = useGetSellerProduct();
-  const { openModal: openModalGlobal } = useModalContext();
+  const { openModal: openModalGlobal, closeModal } = useModalContext();
   const { categories, isLoading } = useGetAllCategory();
+  const { getProductImage } = useGetImageFromID();
 
-  // const { productImage, setProductImage, getProductImage } = useGetImageFromID();
+  const [imageURL, setImageURL] = useState('');
+  const [productNew, setProductNew] = useState(product);
 
   const {
     showModal: showDeleteModal,
@@ -31,10 +33,22 @@ function ProductCardSeller(props) {
   } = useModal();
 
   useEffect(() => {
-    console.log("In use Effect");
     fetchSellerProduct();
+  }, [product, closeModal]);
 
-  }, [showDeleteModal, showUpdateModal]);
+  useEffect(() => {
+    // Call your function to get the image blob here
+    getProductImage(product._id)
+      .then((url) => {
+        console.log("title", product.title);
+        setImageURL(url);
+        fetchSellerProduct();
+        console.log("product", product);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  }, [product]);
 
   // useEffect(() => {
   //   getProductImage(String(localStorage.getItem('_id').slice(1, -1))); // Use the converted userId
@@ -54,6 +68,11 @@ function ProductCardSeller(props) {
 
   // console.log("extraAttributes", extraAttributes);
 
+  const currentProduct = () => {
+    console.log("product", product);
+    console.log("productNew", productNew);
+  }
+
   return (
     <>
       <Card className="h-100 d-flex flex-column justify-content-between">
@@ -68,7 +87,7 @@ function ProductCardSeller(props) {
           <Card.Img
             // id={`product-${product._id}`}
             variant="top"
-            src={`http://localhost:8000/product/${product._id}.png`}
+            src={imageURL}
             alt={product.title}
             style={{ objectFit: "cover", height: "200px" }}
           />
@@ -116,6 +135,14 @@ function ProductCardSeller(props) {
               onHide={closeUpdateModal}
               product={product}
             />
+                        <Button
+              variant="primary"
+              size="md"
+              className="ms-auto"
+              onClick={currentProduct}
+            >
+              Detail
+            </Button>
           </div>
         </Card.Body>
       </Card>

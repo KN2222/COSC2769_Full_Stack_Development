@@ -3,6 +3,7 @@ import { Footer } from "../components/footer";
 import { useEffect } from "react";
 import { useGetSellerByID } from "../api/getSellerByID";
 import { useAuth } from "../store/authContext";
+import { SellerNavbar } from "../components/navbar/SellerNav";
 
 export const SellerLayout = () => {
   const navigate = useNavigate();
@@ -28,6 +29,7 @@ export const SellerLayout = () => {
 
   return (
     <div className="vw-100">
+      <SellerNavbar/>
       <Outlet />
       <Footer />
     </div>

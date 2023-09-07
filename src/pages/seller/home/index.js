@@ -22,7 +22,7 @@ const Products = ({ products }) => {
 export default function SellerHome() {
   const { products, fetchSellerProduct } = useGetSellerProduct();
   const {getProfile } = useAuth();
-  const { openModal: openModalGlobal, showModal } = useModalContext();
+  const { openModal: openModalGlobal, showModal, closeModal } = useModalContext();
   const {
     showModal: showCreateModal,
     openModal: openCreateModal,
@@ -34,7 +34,7 @@ export default function SellerHome() {
   useEffect(() => {
     console.log("In use Effect index");
     fetchSellerProduct();
-  },[showModal]);
+  },[closeModal]);
 
   useEffect(() => {
     // Call getProfile function to log its output

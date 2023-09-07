@@ -9,7 +9,6 @@ export const ProductDeleteModal = (props) => {
 
   const handleDeleteProduct = () => {
     deleteProduct(props.product._id);
-    fetchSellerProduct();
     props.onHide();
   };
 

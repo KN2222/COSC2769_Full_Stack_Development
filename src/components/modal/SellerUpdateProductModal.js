@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Modal } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import { Button } from "react-bootstrap";
@@ -18,7 +18,6 @@ export const ProductUpdateModal = (props) => {
   const { updateProduct } = useUpdateProduct();
   const { showToast } = useToastContext();
   const { categories } = useGetAllCategory();
-  const { product, fetchSellerProduct } = useGetSellerProduct();
   const form = useRef(null);
 
   const handleUpdateProduct = async (e) => {
@@ -63,6 +62,10 @@ export const ProductUpdateModal = (props) => {
     setCategory(""); 
     setFile(null);
   };
+
+  useEffect(() => {
+    console.log("props.title", title);
+  },[props.product.title])
 
   return (
     <Modal
