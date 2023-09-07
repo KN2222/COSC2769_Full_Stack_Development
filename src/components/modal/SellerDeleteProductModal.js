@@ -5,11 +5,15 @@ import { useModalContext } from "../../store/modalContext";
 
 export const ProductDeleteModal = (props) => {
   const { deleteProduct } = useDeleteProduct();
-  const { fetchSellerProduct } = useGetSellerProduct();
+  // const { fetchSellerProduct } = useGetSellerProduct();
 
   const handleDeleteProduct = () => {
-    deleteProduct(props.product._id);
-    props.onHide();
+    try{
+      deleteProduct(props.product._id);
+      props.onHide();
+    }catch (error) {
+      console.error("Error deleting product:", error);
+    }
   };
 
   return (

@@ -18,6 +18,7 @@ import CustomerProfile from '../pages/customer/profile';
 import Status from '../pages/seller/status';
 import SellerProfile from '../pages/seller/profile';
 import SellerHome from '../pages/seller/home';
+import SellerOrder from '../pages/seller/order';
 
 export const routePaths = {
   public: [
@@ -122,6 +123,10 @@ export const routePaths = {
           path: '/seller/profile',
           element: <SellerProfile />,
         },
+        { 
+          path: '/seller/order', 
+          element: <SellerOrder />
+        }
       ],
     },
   ],
