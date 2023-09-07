@@ -35,7 +35,7 @@ export default function ProductDetail() {
       cart[existingIndex].quantity += quantity;
     } else {
       // If the product doesn't exist in the cart, add it as a new item
-      cart.push({ id: productId, quantity: quantity });
+      cart.push({ id: productId.toString(), quantity: quantity });
     }
 
     localStorage.setItem('cart', JSON.stringify(cart));

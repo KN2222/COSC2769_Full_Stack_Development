@@ -13,23 +13,25 @@ export const SellerLayout = () => {
   const userInfo = getAuthenticatedUserInfo();
 
   useEffect(() => {
-    if(location.pathname.includes("/seller") && userInfo.role.slice(1, -1) === 'seller'){
-      if ((status === "Pending" || status === "Rejected")) {
+    if (
+      location.pathname.includes("/seller") &&
+      userInfo.role.slice(1, -1) === "seller"
+    ) {
+      if (status === "Pending" || status === "Rejected") {
         console.log("status", status);
         console.log("location", location.pathname);
         navigate("/seller/status");
-      }else{
+      } else {
         navigate(location.pathname);
       }
-    }else{
+    } else {
       navigate("/");
     }
-    
   }, [status, location.pathname, navigate]);
 
   return (
     <div className="vw-100">
-      <SellerNavbar/>
+      <SellerNavbar />
       <Outlet />
       <Footer />
     </div>

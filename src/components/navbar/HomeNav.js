@@ -21,10 +21,6 @@ export const HomeNav = () => {
   const [dropdownSubOpen, setDropdownSubOpen] = useState({});
   const navigate = useNavigate();
 
-  useEffect(() => {
-    console.log('categoryTree', categoryTree);
-  }, [categoryTree]);
-
   const handleMouseMainEnter = (categoryId) => {
     setDropdownMainOpen((prevState) => ({
       ...prevState,
@@ -180,7 +176,7 @@ export const HomeNav = () => {
                 >
                   <DropdownButton
                     as={ButtonGroup}
-                    title='UserName'
+                    title='Account'
                   >
                     {userInfo.role.slice(1, -1) === 'customer' ? (
                       <Dropdown.Item

@@ -1,17 +1,18 @@
 import { AdminLayout } from '../layout/admin.layout';
 import { AdminHomePage } from '../pages/admin/home';
 import { AdminSellerPage } from '../pages/admin/seller';
-import Home from '../pages/customer/home';
+import { AppLayout } from '../layout/app.layout';
 import { CustomerLayout } from '../layout/customer.layout';
 import { AdminCategoryPage } from '../pages/admin/category';
-import Login from '../layout/auth/Login';
-import SignUp from '../layout/auth/SignUp';
+import { SellerLayout } from '../layout/seller.layout';
+import Home from '../pages/customer/home';
+import Login from '../pages/Login/Login';
+import SignUp from '../pages/SignUp/SignUp';
 import ProductDetail from '../components/productDetail/ProductDetail';
 import { AdminProfile } from '../pages/admin/profile';
 import CheckOut from '../pages/customer/checkout';
 import CustomerProfile from '../pages/customer/profile';
 import Status from '../pages/seller/status';
-import { SellerLayout } from '../layout/seller.layout';
 import SellerProfile from '../pages/seller/profile';
 import SellerHome from '../pages/seller/home';
 
@@ -19,13 +20,13 @@ export const routePaths = {
   public: [
     {
       path: '/',
-      element: <CustomerLayout />,
+      element: <AppLayout />,
       children: [
         {
+          //TODO fetch data
           path: '/category',
           element: <div>This is category page</div>,
         },
-
         {
           path: '/login',
           element: <Login />,
@@ -38,10 +39,10 @@ export const routePaths = {
           path: '/checkout',
           element: <CheckOut />,
         },
-        {
-          path: '/customer/profile',
-          element: <CustomerProfile />,
-        },
+        // {
+        //   path: '/customer/profile',
+        //   element: <CustomerProfile />,
+        // },
         {
           path: '/',
           element: <Home />,
@@ -53,11 +54,29 @@ export const routePaths = {
       ],
     },
     {
-      path: "*",
+      path: '*',
       element: <></>,
       children: [],
     },
   ],
+
+  privateCustomer: [
+    {
+      path: '/cusomter',
+      element: <CustomerLayout />,
+      children: [
+        {
+          path: '/customer/profile',
+          element: <CustomerProfile />,
+        },
+        {
+          path: '/customer/product-order',
+          element: <div>Product Order</div>,
+        },
+      ],
+    },
+  ],
+
   privateAdmin: [
     {
       path: '/admin',
@@ -79,22 +98,6 @@ export const routePaths = {
           path: '/admin/profile',
           element: <AdminProfile />,
         },
-        {
-          path: '/admin/category',
-          element: <div>This is admin category page</div>,
-        },
-        {
-          path: '/admin/category/:id',
-          element: <div>This is admin category detail page</div>,
-        },
-        {
-          path: '/admin/cv',
-          element: <div>This is admin seller page</div>,
-        },
-        {
-          path: '/admin/cv/:id',
-          element: <div>This is admin seller detail page</div>,
-        },
       ],
     },
   ],
@@ -104,9 +107,9 @@ export const routePaths = {
       path: '/seller',
       element: <SellerLayout />,
       children: [
-        { 
-          path: '/seller/status', 
-          element: <Status />
+        {
+          path: '/seller/status',
+          element: <Status />,
         },
         { 
           path: '/seller/home', 
