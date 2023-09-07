@@ -1,28 +1,40 @@
 import React, { useEffect, useState } from "react";
 import { useModal } from "../../../hooks/modal";
-import { Button, Container, Stack } from "react-bootstrap";
+import { Button, Container, Stack, Col } from "react-bootstrap";
 import { useAuth } from '../../../store/authContext';
 import { useModalContext } from "../../../store/modalContext";
 import { useGetSellerProduct } from "../../../api/getSellerProduct";
 import ProductCardSeller from "../../../components/sellerHome/ProductCardSeller";
 import { CreateProductModal } from "../../../components/modal/SellerCreateProductModal";
 
+const Products = ({ products }) => {
+  return (
+    <>
+      {products.map((product, index) => (
+        <Col key={index}>
+          <ProductCardSeller product={product} />
+        </Col>
+      ))}
+    </>
+  );
+};
 
 export default function SellerHome() {
   const { products, fetchSellerProduct } = useGetSellerProduct();
   const {getProfile } = useAuth();
-  const [profile, setProfile] = useState('');
-  const { openModal: openModalGlobal } = useModalContext();
+  const { openModal: openModalGlobal, showModal } = useModalContext();
   const {
     showModal: showCreateModal,
     openModal: openCreateModal,
     closeModal: closeCreateModal,
   } = useModal();
 
+  const [profile, setProfile] = useState('');
+
   useEffect(() => {
     console.log("In use Effect index");
     fetchSellerProduct();
-  },[openModalGlobal]);
+  },[showModal]);
 
   useEffect(() => {
     // Call getProfile function to log its output
@@ -55,7 +67,7 @@ export default function SellerHome() {
           <CreateProductModal show={showCreateModal} onHide={closeCreateModal} />
         </Stack>
         <hr />
-        <ProductCardSeller openModalGlobal={openModalGlobal}/>
+        <Products products={products}/>
       </Container>
 
 

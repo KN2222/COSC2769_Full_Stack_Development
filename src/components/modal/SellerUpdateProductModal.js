@@ -12,7 +12,7 @@ export const ProductUpdateModal = (props) => {
   const [description, setDescription] = useState(props.product.description);
   const [price, setPrice] = useState(props.product.price);
   const [stock, setStock] = useState(props.product.stock);
-  const [categoryId, setCategory] = useState(props.category);
+  const [categoryId, setCategory] = useState(props.product.categories[0]);
   const [file, setFile] = useState();
 
   const { updateProduct } = useUpdateProduct();
@@ -42,11 +42,6 @@ export const ProductUpdateModal = (props) => {
       showToast(400, "Stock must be greater than 0");
     } else { 
       try{
-        console.log("before Update",          title,
-          description,
-          price,
-          stock,
-          categoryId);
         await updateProduct(props.product._id, {
           title,
           description,

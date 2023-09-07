@@ -23,6 +23,7 @@ export const useUploadProductImage = () => {
       };
       const response = await APIService.post(`/seller/product/upload/${productId}`, formData, config);
       setIsSuccess(true);
+      console.log("Image uploaded successfully", response.data);
       return response.data; // You can return the updated data if needed
     } catch (error) {
       showToast(error.response.status, error.response.data.message);
