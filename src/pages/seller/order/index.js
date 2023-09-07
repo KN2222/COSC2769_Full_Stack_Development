@@ -36,6 +36,16 @@ export const SellerOrder = () => {
       });
   };
 
+  const handleRefresh = () => {
+    fetchSellerOrder()
+      .then(() => {
+        setProductOrderStatusChanged(true);
+      })
+      .catch((error) => {
+        console.error("Error shipping order:", error);
+      });
+  };
+
   useEffect(() => {
     // Fetch the seller order whenever productOrderStatusChanged changes
     if (productOrderStatusChanged) {
@@ -53,6 +63,12 @@ export const SellerOrder = () => {
     <div>
       <Container>
         <h1>As a seller you can choose to Ship or Cancel the order</h1>
+        <Button
+          variant="primary"
+          onClick={handleRefresh}
+        >
+          Refresh
+        </Button>
         <Table striped bordered hover>
           <thead>
             <tr>
