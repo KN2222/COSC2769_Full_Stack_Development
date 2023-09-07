@@ -62,7 +62,7 @@ export const routePaths = {
 
   privateCustomer: [
     {
-      path: '/cusomter',
+      path: '/customer',
       element: <CustomerLayout />,
       children: [
         {
