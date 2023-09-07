@@ -15,7 +15,7 @@ export const CreateProductModal = (props) => {
   const [category, setCategory] = useState("");
   const [file, setFile] = useState(null);
 
-  const {fetchSellerProduct} = useGetSellerProduct();
+  // const {fetchSellerProduct} = useGetSellerProduct();
   const { showToast } = useToastContext();
   const { isSuccess, createProduct } = useCreateProduct();
   const {categories} = useGetAllCategory();

@@ -18,6 +18,7 @@ export const ProductUpdateModal = (props) => {
   const { updateProduct } = useUpdateProduct();
   const { showToast } = useToastContext();
   const { categories } = useGetAllCategory();
+  const { fetchSellerProduct } = useGetSellerProduct();
   const form = useRef(null);
 
   const handleUpdateProduct = async (e) => {
@@ -64,8 +65,8 @@ export const ProductUpdateModal = (props) => {
   };
 
   useEffect(() => {
-    console.log("props.title", title);
-  },[props.product.title])
+    fetchSellerProduct();
+  },[])
 
   return (
     <Modal

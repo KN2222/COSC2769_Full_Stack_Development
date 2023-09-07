@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useModal } from "../../../hooks/modal";
-import { Button, Container, Stack, Col } from "react-bootstrap";
+import { Button, Container, Stack, Col, Row } from "react-bootstrap";
 import { useAuth } from '../../../store/authContext';
 import { useModalContext } from "../../../store/modalContext";
 import { useGetSellerProduct } from "../../../api/getSellerProduct";
@@ -9,13 +9,13 @@ import { CreateProductModal } from "../../../components/modal/SellerCreateProduc
 
 const Products = ({ products }) => {
   return (
-    <>
+    <div className="d-flex flex-row flex-wrap ">
       {products.map((product, index) => (
         <Col key={index}>
           <ProductCardSeller product={product} />
         </Col>
       ))}
-    </>
+    </div>
   );
 };
 
@@ -64,7 +64,9 @@ export default function SellerHome() {
           >
             Add Product
           </Button>
-          <CreateProductModal show={showCreateModal} onHide={closeCreateModal} />
+          <Row className='row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-3'>
+            <CreateProductModal show={showCreateModal} onHide={closeCreateModal} />
+          </Row>
         </Stack>
         <hr />
         <Products products={products}/>

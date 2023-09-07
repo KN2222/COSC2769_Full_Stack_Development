@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Card, Col } from "react-bootstrap";
 import { Button } from "react-bootstrap";
+import { PencilSquare, TrashFill } from "react-bootstrap-icons";
 import { useDeleteProduct } from "../../api/deleteProduct";
 import { ProductDeleteModal } from "../modal/SellerDeleteProductModal";
 import { useModal } from "../../hooks/modal";
@@ -12,12 +13,12 @@ import { useGetImageFromID } from "../../api/getImageFromID";
 
 function ProductCardSeller(props) {
   const { product } = props;
-   const {fetchSellerProduct } = useGetSellerProduct();
+  const { fetchSellerProduct } = useGetSellerProduct();
   const { openModal: openModalGlobal, closeModal } = useModalContext();
   const { categories, isLoading } = useGetAllCategory();
   const { getProductImage } = useGetImageFromID();
 
-  const [imageURL, setImageURL] = useState('');
+  const [imageURL, setImageURL] = useState("");
   const [productNew, setProductNew] = useState(product);
 
   const {
@@ -33,20 +34,18 @@ function ProductCardSeller(props) {
   } = useModal();
 
   useEffect(() => {
-    fetchSellerProduct();
+    // fetchSellerProduct();
   }, [product, closeModal]);
 
   useEffect(() => {
     // Call your function to get the image blob here
     getProductImage(product._id)
       .then((url) => {
-        console.log("title", product.title);
         setImageURL(url);
         fetchSellerProduct();
-        console.log("product", product);
       })
       .catch((error) => {
-        console.error('Error:', error);
+        console.error("Error:", error);
       });
   }, [product]);
 
@@ -71,11 +70,11 @@ function ProductCardSeller(props) {
   const currentProduct = () => {
     console.log("product", product);
     console.log("productNew", productNew);
-  }
+  };
 
   return (
-    <>
-      <Card className="h-100 d-flex flex-column justify-content-between">
+    <Card style={{ objectFit: "cover", width: "250px" }}>
+      <Card.Body className="d-flex flex-column">
         {product.image == "" ? (
           <Card.Img
             variant="top"
@@ -92,61 +91,62 @@ function ProductCardSeller(props) {
             style={{ objectFit: "cover", height: "200px" }}
           />
         )}
-        <Card.Body className="d-flex flex-column">
-          <div>
-            <Card.Title className="text-truncate">{product.title}</Card.Title>
-            <Card.Text className="multi-line-truncate">
-              {product.description}
-            </Card.Text>
-          </div>
-          <div className="mt-auto">
-            <Card.Text>Price: ${product.price}</Card.Text>
-            <Card.Text>Stock: {product.stock}</Card.Text>
-            <Button
-              variant="primary"
-              size="md"
-              className="ms-auto"
-              onClick={() => {
-                openModalGlobal();
-                openDeleteModal();
-              }}
-            >
-              Delete
-            </Button>
-            <ProductDeleteModal
-              show={showDeleteModal}
-              onHide={closeDeleteModal}
-              product={product}
-            />
+        <div>
+          <Card.Title className="text-truncate">{product.title}</Card.Title>
+          <Card.Text className="multi-line-truncate">
+            Description: {product.description}
+          </Card.Text>
+          <Card.Text>Price: ${product.price}</Card.Text>
+          <Card.Text>Stock: {product.stock}</Card.Text>
+        </div>
 
-            <Button
-              variant="primary"
-              size="md"
-              className="ms-auto"
-              onClick={() => {
-                openModalGlobal();
-                openUpdateModal();
-              }}
-            >
-              Update
-            </Button>
-            <ProductUpdateModal
-              show={showUpdateModal}
-              onHide={closeUpdateModal}
-              product={product}
-            />
-                        <Button
-              variant="primary"
-              size="md"
-              className="ms-auto"
-              onClick={currentProduct}
-            >
-              Detail
-            </Button>
-          </div>
-        </Card.Body>
-      </Card>
-    </>
+        <div className="mt-auto d-flex justify-content-center">
+          <Button
+            variant="primary"
+            size="md"
+            className="ms-auto"
+            onClick={() => {
+              openModalGlobal();
+              openUpdateModal();
+            }}
+          >
+            <PencilSquare size={15} />
+          </Button>
+
+          <Button
+            variant="primary"
+            size="md"
+            className="ms-auto"
+            onClick={() => {
+              openModalGlobal();
+              openDeleteModal();
+            }}
+          >
+            <TrashFill size={15} />
+          </Button>
+
+          <Button
+            variant="primary"
+            size="md"
+            className="ms-auto"
+            onClick={currentProduct}
+          >
+            Detail
+          </Button>
+        </div>
+      </Card.Body>
+      <ProductDeleteModal
+        show={showDeleteModal}
+        onHide={closeDeleteModal}
+        product={productNew}
+      />
+
+      <ProductUpdateModal
+        show={showUpdateModal}
+        onHide={closeUpdateModal}
+        product={product}
+      />
+    </Card>
   );
 }
 

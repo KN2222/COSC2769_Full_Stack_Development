@@ -9,7 +9,7 @@ export const useUpdateProduct = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const { closeModal } = useModalContext();
   const {uploadProductImage} = useUploadProductImage();
-  const{fetchSellerProduct} = useGetSellerProduct();
+  // const{fetchSellerProduct} = useGetSellerProduct();
   const { showToast } = useToastContext();
 
   const updateProduct = async (id, updateFields, file) => {
