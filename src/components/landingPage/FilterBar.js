@@ -1,41 +1,52 @@
-import React, { useState } from "react";
+import React from "react";
+import Dropdown from "react-bootstrap/Dropdown";
+import { ArrowRight, ArrowUp, ArrowDown } from "react-bootstrap-icons";
 
-export default function FilterBar({ onSelect }) {
-  const [showLetters, setShowLetters] = useState(false);
-  const letters = Array.from({ length: 26 }, (_, index) =>
-    String.fromCharCode(65 + index)
-  );
+export default function FilterBar({
+  onLetterFilter,
+  onPriceFilter,
+  onDateFilter,
+  dateFilter,
+}) {
+  const handleSortChange = (order) => {
+    onLetterFilter(order);
+  };
+
+  const handlePriceFilter = (option) => {
+    onPriceFilter(option);
+  };
+
+  const handleDateFilter = (filterType) => {
+    onDateFilter(filterType);
+  };
 
   return (
     <div className="mb-3">
-      {showLetters ? (
-        <div className="d-flex">
-          {letters.map((letter) => (
-            <button
-              key={letter}
-              className="btn btn-secondary me-2"
-              onClick={() => {
-                onSelect(letter);
-              }}
-            >
-              {letter}
-            </button>
-          ))}
-          <button
-            className="btn btn-danger me-2"
-            onClick={() => setShowLetters(false)}
-          >
-            Hide
-          </button>
-        </div>
-      ) : (
-        <button
-          className="btn btn-secondary"
-          onClick={() => setShowLetters(true)}
-        >
+      <Dropdown>
+        <Dropdown.Toggle variant="secondary" id="filterDropdown">
           Filter
-        </button>
-      )}
+        </Dropdown.Toggle>
+        <Dropdown.Menu>
+          <Dropdown.Item onClick={() => handleSortChange("asc")}>
+            A <ArrowRight /> Z
+          </Dropdown.Item>
+          <Dropdown.Item onClick={() => handleSortChange("desc")}>
+            Z <ArrowRight /> A
+          </Dropdown.Item>
+          <Dropdown.Item onClick={() => handlePriceFilter("asc")}>
+            Price <ArrowUp />
+          </Dropdown.Item>
+          <Dropdown.Item onClick={() => handlePriceFilter("desc")}>
+            Price <ArrowDown />
+          </Dropdown.Item>
+          <Dropdown.Item onClick={() => handleDateFilter("newest")}>
+            Newest
+          </Dropdown.Item>
+          <Dropdown.Item onClick={() => handleDateFilter("oldest")}>
+            Oldest
+          </Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
     </div>
   );
 }

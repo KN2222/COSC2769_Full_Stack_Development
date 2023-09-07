@@ -22,8 +22,8 @@ code {
 }
 
 .bg-primary-hover:hover {
-  background-color: #97aecb !important;; 
-  color: white; 
+  background-color: #97aecb !important;
+  color: white;
 }
 .multi-line-truncate {
   width: 100%;
@@ -32,7 +32,11 @@ code {
   -webkit-line-clamp: 3;
   overflow: hidden;
 }
-
+.one-line-truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .toast-container {
   position: fixed !important;
 }

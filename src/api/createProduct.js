@@ -31,7 +31,6 @@ export const useCreateProduct = () => {
       });
       setNewProduct(response.data);
       uploadProductImage({productId: response.data.product._id, file});
-      // uploadProductImage(response.data.product._id, file);  
       setIsSuccess(true);
       closeModal();
     } catch (error) {

@@ -1,14 +1,14 @@
 import { Modal } from "react-bootstrap";
 import { useDeleteProduct } from "../../api/deleteProduct";
+import { useGetSellerProduct } from "../../api/getSellerProduct";
 import { useModalContext } from "../../store/modalContext";
 
 export const ProductDeleteModal = (props) => {
   const { deleteProduct } = useDeleteProduct();
-  const { product, fetchSellerProduct } = props;
+  const { fetchSellerProduct } = useGetSellerProduct();
 
   const handleDeleteProduct = () => {
-    deleteProduct(product._id);
-    fetchSellerProduct();
+    deleteProduct(props.product._id);
     props.onHide();
   };
 

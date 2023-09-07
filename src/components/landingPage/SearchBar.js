@@ -7,6 +7,12 @@ export default function SearchBar({ onSearch }) {
     onSearch(searchQuery);
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      handleSearch();
+    }
+  };
+
   return (
     <div className="mb-2">
       <input
@@ -15,6 +21,7 @@ export default function SearchBar({ onSearch }) {
         placeholder="Search products..."
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
+        onKeyDown={handleKeyDown}
       />
       <button className="btn btn-primary mt-2" onClick={handleSearch}>
         Search

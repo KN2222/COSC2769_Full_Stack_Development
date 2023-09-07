@@ -1,49 +1,71 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Modal } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import { Button } from "react-bootstrap";
-import { useCreateProduct } from "../../api/createProduct";
 import { useGetAllCategory } from "../../api/getAllCategory";
 import { useToastContext } from "../../store/toastContext";
+import { useUpdateProduct } from "../../api/updateProduct";
+import { useGetSellerProduct } from "../../api/getSellerProduct";
 
-export const UpdateProductModal = (props) => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState(-1);
-  const [stock, setStock] = useState(-1);
-  const [category, setCategory] = useState("");
-  const [file, setFile] = useState(null);
+export const ProductUpdateModal = (props) => {
+  const [title, setTitle] = useState(props.product.title);
+  const [description, setDescription] = useState(props.product.description);
+  const [price, setPrice] = useState(props.product.price);
+  const [stock, setStock] = useState(props.product.stock);
+  const [categoryId, setCategory] = useState(props.product.categories[0]);
+  const [file, setFile] = useState();
 
+  const { updateProduct } = useUpdateProduct();
   const { showToast } = useToastContext();
-  const { isSuccess, createProduct } = useCreateProduct();
-  const {categories} = useGetAllCategory();
+  const { categories } = useGetAllCategory();
   const form = useRef(null);
 
-  const handleCreateProduct = (e) => {
-    if (form.current.checkValidity() === false || price === -1 || stock === -1 || title === "" || description === "" || category === "" || file === null) {
+  const handleUpdateProduct = async (e) => {
+    if (
+      form.current.checkValidity() === false ||
+      price === -1 ||
+      stock === -1 ||
+      title === "" ||
+      description === ""
+    ) {
       e.preventDefault();
       e.stopPropagation();
       showToast(400, "Please fill out all the fields");
-    }else if(price <= 0 ){
+    } else if (price <= 0) {
       e.preventDefault();
       e.stopPropagation();
       showToast(400, "Price must be greater than or equal to 0");
-    }else if(stock < 0){
+    } else if (stock < 0) {
       e.preventDefault();
       e.stopPropagation();
       showToast(400, "Stock must be greater than 0");
-    } else {
-      createProduct(title, description, price, stock, category, file);
-      setCategory("");
-      setFile(null);
-      props.onHide();
+    } else { 
+      try{
+        await updateProduct(props.product._id, {
+          title,
+          description,
+          price,
+          stock,
+          categoryId,
+        }, file);
+        setCategory("");
+        props.onHide();
+      } catch (error) {
+        console.error("Error updating product:", error);
+      }
+
     }
   };
 
   const handleClose = () => {
-    props.onHide(); 
+    props.onHide();
     setCategory(""); 
+    setFile(null);
   };
+
+  useEffect(() => {
+    console.log("props.title", title);
+  },[props.product.title])
 
   return (
     <Modal
@@ -55,7 +77,7 @@ export const UpdateProductModal = (props) => {
     >
       <Modal.Header>
         <Modal.Title id="contained-modal-title-vcenter">
-          Create new Product
+          Update Product
         </Modal.Title>
         <Modal.Body>
           <Form noValidate ref={form}>
@@ -63,6 +85,7 @@ export const UpdateProductModal = (props) => {
               <Form.Label>Title</Form.Label>
               <Form.Control
                 type="text"
+                value={title}
                 onChange={(e) => {
                   setTitle(e.target.value);
                 }}
@@ -72,6 +95,7 @@ export const UpdateProductModal = (props) => {
             <Form.Group className="mb-3">
               <Form.Label>Description</Form.Label>
               <Form.Control
+                value={description}
                 as="textarea"
                 rows={4}
                 onChange={(e) => {
@@ -83,6 +107,7 @@ export const UpdateProductModal = (props) => {
             <Form.Group className="mb-3">
               <Form.Label>Price($)</Form.Label>
               <Form.Control
+                value={price}
                 type="number"
                 onChange={(e) => {
                   if (e.target.value >= 0) {
@@ -95,6 +120,7 @@ export const UpdateProductModal = (props) => {
             <Form.Group className="mb-3">
               <Form.Label>Stock</Form.Label>
               <Form.Control
+                value={stock}
                 type="number"
                 onChange={(e) => {
                   if (e.target.value >= 0) {
@@ -105,18 +131,17 @@ export const UpdateProductModal = (props) => {
             </Form.Group>
 
             <Form.Group>
-              <Form.Label>Select a category:</Form.Label>
-              <p className="text-danger">
-                By selecting a category, it will also select its parent
-              </p>
+              <Form.Label>Select new category if needed:</Form.Label>
               <Form.Select
-                value={category}
+                defaultValue=""
                 onChange={(e) => {
-                  setCategory(e.target.value);
+                  setCategory(String(e.target.value));
                 }}
                 custom="true"
               >
-                <option value="">Choose...</option>
+                <option value="" disabled>
+                  Choose...
+                </option>
 
                 {categories.map((category) => {
                   return (
@@ -129,7 +154,7 @@ export const UpdateProductModal = (props) => {
             </Form.Group>
             <br />
             <Form.Group controlId="formFile" className="mb-3">
-              <Form.Label>Upload image product here:</Form.Label>
+              <Form.Label>Upload new image here if needed:</Form.Label>
               <Form.Control
                 type="file"
                 onChange={(e) => setFile(e.target.files[0])}
@@ -139,7 +164,7 @@ export const UpdateProductModal = (props) => {
         </Modal.Body>
 
         <Modal.Footer className="d-flex justify-content-between">
-          <Button type="submit" variant="primary" onClick={handleCreateProduct}>
+          <Button type="submit" variant="primary" onClick={handleUpdateProduct}>
             Save
           </Button>
           <Button onClick={handleClose}>Close</Button>

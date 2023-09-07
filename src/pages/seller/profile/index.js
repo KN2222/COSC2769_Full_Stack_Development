@@ -23,7 +23,6 @@ export default function SellerProfile() {
     // Call getProfile function to log its output
     getProfile('seller')
       .then((userProfile) => {
-        console.log(userProfile);
         setProfile(userProfile.seller);
       })
       .catch((error) => {
