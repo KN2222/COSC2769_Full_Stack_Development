@@ -1,7 +1,7 @@
-import { Routes, Route } from "react-router-dom";
-import { routePaths } from "./routePaths";
-import { useCategoryTree } from "../api/getCategoryTree";
-import { useEffect, useState } from "react";
+import { Routes, Route } from 'react-router-dom';
+import { routePaths } from './routePaths';
+import { useCategoryTree } from '../api/getCategoryTree';
+import { useEffect, useState } from 'react';
 
 const PublicRouter = () => {
   const { categoryTree } = useCategoryTree();
@@ -9,7 +9,6 @@ const PublicRouter = () => {
 
   useEffect(() => {
     if (categoryTree) {
-      console.log("categoryTree", categoryTree);
       setCategoryRoutes(mapToCategoryRoutes(categoryTree));
     }
     return () => {};
@@ -34,9 +33,17 @@ const PublicRouter = () => {
   return (
     <Routes>
       {routePaths.public.map((route, index) => (
-        <Route key={index} path={route.path} element={route.element}>
+        <Route
+          key={index}
+          path={route.path}
+          element={route.element}
+        >
           {route.children.map((child, index) => (
-            <Route key={index} path={child.path} element={child.element} />
+            <Route
+              key={index}
+              path={child.path}
+              element={child.element}
+            />
           ))}
         </Route>
       ))}
@@ -48,12 +55,10 @@ const PublicRouter = () => {
             <Route
               key={index}
               path={`/category/${name}`}
-              element={<h1>{name + " " + id}</h1>}
+              element={<h1>{name + ' ' + id}</h1>}
             />
           );
         })}
-
-      
     </Routes>
   );
 };

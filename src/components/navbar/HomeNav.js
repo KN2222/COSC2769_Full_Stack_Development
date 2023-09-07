@@ -5,10 +5,14 @@ import { Navbar, Nav, Container, NavDropdown, Button } from 'react-bootstrap';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
+import {
+  CartFill,
+  PersonCircle,
+  Truck,
+  BoxArrowLeft,
+} from 'react-bootstrap-icons';
 
 import { useState } from 'react';
-// import { useContext } from 'react';
-// import { AuthContext } from '../../store/authContext';
 import { useAuth } from '../../store/authContext';
 
 const isObjectEmpty = (obj) => {
@@ -158,16 +162,7 @@ export const HomeNav = () => {
                   to='/checkout'
                 >
                   <Button variant='outline-dark'>
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      width='16'
-                      height='16'
-                      fill='currentColor'
-                      className='bi bi-cart-fill'
-                      viewBox='0 0 16 16'
-                    >
-                      <path d='M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z' />
-                    </svg>
+                    <CartFill />
                   </Button>
                 </Nav.Link>
                 <Nav.Link
@@ -178,30 +173,28 @@ export const HomeNav = () => {
                     as={ButtonGroup}
                     title='Account'
                   >
-                    {userInfo.role.slice(1, -1) === 'customer' ? (
-                      <Dropdown.Item
-                        eventKey='1'
-                        href='/customer/profile'
-                        onClick={() => {
-                          navigate(`/customer/profile`);
-                        }}
-                      >
-                        Profile
-                      </Dropdown.Item>
-                    ) : (
-                      <Dropdown.Item
-                        eventKey='2'
-                        href='/seller/profile'
-                        onClick={() => {
-                          navigate(`/seller/profile`);
-                        }}
-                      >
-                        Profile
-                      </Dropdown.Item>
-                    )}
-
+                    <Dropdown.Item
+                      eventKey='1'
+                      href='/customer/profile'
+                      onClick={() => {
+                        navigate(`/customer/profile`);
+                      }}
+                    >
+                      <PersonCircle /> Profile
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      eventKey='2'
+                      href='/customer/product-order'
+                      onClick={() => {
+                        navigate(`/customer/product-order`);
+                      }}
+                    >
+                      <Truck /> My Order
+                    </Dropdown.Item>
                     <Dropdown.Divider />
-                    <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
+                    <Dropdown.Item onClick={handleLogout}>
+                      <BoxArrowLeft /> Logout
+                    </Dropdown.Item>
                   </DropdownButton>
                 </Nav.Link>
               </Nav>
@@ -212,16 +205,7 @@ export const HomeNav = () => {
                   to='/checkout'
                 >
                   <Button variant='outline-dark'>
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      width='16'
-                      height='16'
-                      fill='currentColor'
-                      className='bi bi-cart-fill'
-                      viewBox='0 0 16 16'
-                    >
-                      <path d='M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z' />
-                    </svg>
+                    <CartFill />
                   </Button>
                 </Nav.Link>
                 <Nav.Link

@@ -1,13 +1,12 @@
 import { useAuth } from '../../../store/authContext';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { APIService } from '../../../axios/client';
+import { UpdateUserProfileImage } from '../../../api/updateUserProfileImage';
 
 export default function SellerProfile() {
   const { isUserAuthenticated, getProfile } = useAuth();
   const { getUserAvatar, userAvatar } = useAuth(); // Use the hook to access context values
   const [profile, setProfile] = useState('');
-  const [selectedImage, setSelectedImage] = useState(null);
 
   const isAuthenticated = isUserAuthenticated();
   const navigate = useNavigate();
@@ -23,7 +22,6 @@ export default function SellerProfile() {
     // Call getProfile function to log its output
     getProfile('seller')
       .then((userProfile) => {
-        console.log(userProfile);
         setProfile(userProfile.seller);
       })
       .catch((error) => {
@@ -36,45 +34,8 @@ export default function SellerProfile() {
     getUserAvatar(String(localStorage.getItem('_id').slice(1, -1))); // Use the converted userId
   }, [getUserAvatar]);
 
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    setSelectedImage(file);
-
-    // Display the selected image as a preview
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const imagePreview = document.getElementById('image-preview');
-      imagePreview.src = e.target.result;
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const handleImageUpload = async () => {
-    if (!selectedImage) {
-      console.error('No image selected.');
-      return;
-    }
-
-    try {
-      const formData = new FormData();
-      formData.append('file', selectedImage);
-
-      const response = await APIService.post('/user/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data', // Use 'multipart/form-data' for file uploads
-        },
-      });
-
-      if (response.status === 200) {
-        console.log('Image uploaded successfully.');
-        // You may want to refresh the user's avatar or take other actions
-      } else {
-        console.error('Failed to upload image:', response.statusText);
-      }
-    } catch (error) {
-      console.error('Error uploading image:', error);
-    }
-  };
+  const { selectedImage, handleImageChange, handleImageUpload } =
+    UpdateUserProfileImage();
 
   return (
     <div className='container mt-3'>
@@ -95,12 +56,24 @@ export default function SellerProfile() {
                             id='image-preview'
                             alt='ava preview'
                             className='rounded-circle img-thumbnail'
+                            style={{
+                              overflow: 'hidden',
+                              height: '240px',
+                              width: '240px',
+                              borderRadius: '50%',
+                            }}
                           />
                         ) : (
                           <img
                             src={userAvatar}
                             alt='userAvatar'
                             className='rounded-circle img-thumbnail'
+                            style={{
+                              overflow: 'hidden',
+                              height: '240px',
+                              width: '240px',
+                              borderRadius: '50%',
+                            }}
                           />
                         )}
                       </div>

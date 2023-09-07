@@ -11,17 +11,39 @@ const Login = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const [showModal, setShowModal] = useState(false);
 
-  const { accessToken } = useAuth(); // Use the accessToken from AuthContext
+  const { accessToken, getAuthenticatedUserInfo, isUserAuthenticated } =
+    useAuth(); // Use the accessToken from AuthContext
   const navigate = useNavigate();
   const [, setCookie] = useCookies(['accessToken']);
+  const isAuthenticated = isUserAuthenticated();
+
+  function LoginSuccessfull() {
+    const userInfo = getAuthenticatedUserInfo();
+    const userRole = userInfo.role.slice(1, -1);
+    if (userRole === 'customer') {
+      navigate('/');
+    } else if (userRole === 'seller') {
+      navigate('/seller/home');
+    } else if (userRole === 'admin') {
+      navigate('/admin/home');
+    }
+  }
 
   useEffect(() => {
-    // Check if there's an existing access token in local storage
-    const decodedToken = localStorage.getItem('decodedToken');
-    if (accessToken || decodedToken) {
-      navigate('/'); // Redirect to the home page or a different route
+    if (isAuthenticated) {
+      const userInfo = getAuthenticatedUserInfo();
+      const userRole = userInfo.role.slice(1, -1);
+
+      if (userRole === 'customer') {
+        navigate('/');
+      } else if (userRole === 'seller') {
+        navigate('/seller/home');
+      } else if (userRole === 'admin') {
+        navigate('/admin/home');
+      }
     }
-  }, [accessToken, navigate]);
+    // }
+  }, [accessToken, navigate, getAuthenticatedUserInfo, isAuthenticated]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -135,7 +157,7 @@ const Login = () => {
                       type='button'
                       className='btn btn-secondary'
                       data-dismiss='modal'
-                      onClick={() => navigate('/')}
+                      onClick={() => LoginSuccessfull()}
                     >
                       Close
                     </button>

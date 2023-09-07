@@ -1,10 +1,10 @@
-import React, { useRef, useState } from "react";
-import { Card, ListGroup, Button, Stack } from "react-bootstrap";
-import { PencilSquare, TrashFill } from "react-bootstrap-icons";
-import { useModal } from "../../hooks/modal";
-import { useModalContext } from "../../store/modalContext";
-import { CategoryUpdateModal } from "../modal/CategoryUpdateModal";
-import { CategoryDeleteModal } from "../modal/CategoryDeleteModal";
+import React, { useRef, useState } from 'react';
+import { Card, ListGroup, Button, Stack } from 'react-bootstrap';
+import { PencilSquare, TrashFill } from 'react-bootstrap-icons';
+import { useModal } from '../../hooks/modal';
+import { useModalContext } from '../../store/modalContext';
+import { CategoryUpdateModal } from '../modal/CategoryUpdateModal';
+import { CategoryDeleteModal } from '../modal/CategoryDeleteModal';
 
 export const CategoryCard = ({ category }) => {
   const {
@@ -23,42 +23,44 @@ export const CategoryCard = ({ category }) => {
 
   const handleClick = (categoryId) => {
     const card = document.getElementById(categoryId);
-    console.log("card", card);
     if (card) {
-      console.log("Scrolling to card:", card);
       card.scrollIntoView({
-        behavior: "smooth",
-        block: "end",
-        inline: "nearest",
+        behavior: 'smooth',
+        block: 'end',
+        inline: 'nearest',
       });
     } else {
-      console.log("Card element not found.");
+      console.log('Card element not found.');
     }
   };
 
   const extraAttributes = Object.keys(category).filter(
     (key) =>
-      key !== "name" &&
-      key !== "admins" &&
-      key !== "subCategories" &&
-      key !== "adminId" &&
-      key !== "_id" &&
-      key !== "__v" &&
-      key !== "parentId" &&
-      key !== "subCategoryNames"
+      key !== 'name' &&
+      key !== 'admins' &&
+      key !== 'subCategories' &&
+      key !== 'adminId' &&
+      key !== '_id' &&
+      key !== '__v' &&
+      key !== 'parentId' &&
+      key !== 'subCategoryNames'
   );
 
   return (
     <>
-      <Card border="dark" className="h-100 " id={category._id}>
+      <Card
+        border='dark'
+        className='h-100 '
+        id={category._id}
+      >
         <Card.Body>
           <Stack
-            direction="horizontal"
-            className="d-flex-row justify-content-end"
+            direction='horizontal'
+            className='d-flex-row justify-content-end'
           >
             <Button
-              variant="light"
-              className="rounded-end"
+              variant='light'
+              className='rounded-end'
               onClick={() => {
                 openModalGlobal();
                 openModalUpdate();
@@ -66,10 +68,10 @@ export const CategoryCard = ({ category }) => {
             >
               <PencilSquare size={15} />
             </Button>
-            <div className="vr" />
+            <div className='vr' />
             <Button
-              variant="light"
-              className="rounded-end"
+              variant='light'
+              className='rounded-end'
               onClick={() => {
                 openModalGlobal();
                 openModalDelete();
@@ -82,7 +84,7 @@ export const CategoryCard = ({ category }) => {
           <Card.Title>
             <h3>{category.name}</h3>
           </Card.Title>
-          <ListGroup className="list-group-flush">
+          <ListGroup className='list-group-flush'>
             {extraAttributes.map((attribute, index) => {
               return (
                 <ListGroup.Item key={index}>
@@ -91,10 +93,16 @@ export const CategoryCard = ({ category }) => {
               );
             })}
           </ListGroup>
-          <Card.Text as={"h6"} className="py-2">
+          <Card.Text
+            as={'h6'}
+            className='py-2'
+          >
             Modify By
           </Card.Text>
-          <ListGroup horizontal className=" flex-wrap">
+          <ListGroup
+            horizontal
+            className=' flex-wrap'
+          >
             {category.admins.map((admin, index) => {
               return <ListGroup.Item key={index}>{admin}</ListGroup.Item>;
             })}
@@ -102,15 +110,18 @@ export const CategoryCard = ({ category }) => {
         </Card.Body>
 
         <Card.Body>
-          <Card.Text as={"h6"} className="py-2">
+          <Card.Text
+            as={'h6'}
+            className='py-2'
+          >
             Subcategories:
           </Card.Text>
-          <div className="d-flex flex-wrap gap-1">
+          <div className='d-flex flex-wrap gap-1'>
             {category.subCategoryNames.map((subCategory, index) => {
               return (
                 <Button
                   key={index}
-                  variant="primary"
+                  variant='primary'
                   onClick={() => handleClick(category.subCategories[index])}
                 >
                   {subCategory}

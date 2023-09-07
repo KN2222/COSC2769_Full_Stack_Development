@@ -8,6 +8,7 @@ import React, {
 import { APIService } from '../axios/client';
 import { useCookies } from 'react-cookie';
 import jwt_decode from 'jwt-decode'; // Import jwt_decode library for decoding tokens
+import { GetUserAvatar } from '../api/getUserAvatar';
 
 export const AuthContext = React.createContext();
 
@@ -15,13 +16,11 @@ export const AuthProvider = ({ children }) => {
   const [cookies, setCookie, removeCookie] = useCookies(['sb']);
   const [accessToken, setAccessToken] = useState('default');
   // Decode the token and save the decoded object into local storage
-  const [userAvatar, setUserAvatar] = useState(null); // State to store the user avatar
 
   useEffect(() => {
     // console.log('accessToken', accessToken);
     const decodedData = decodeAndStoreTokenData(accessToken);
-    console.log(decodedData);
-    // console.log(localStorage.decodedToken);
+    // console.log(decodedData);
   }, [accessToken]);
 
   const decodeAndStoreTokenData = (token) => {
@@ -62,7 +61,6 @@ export const AuthProvider = ({ children }) => {
 
   const getAuthenticatedUserInfo = useCallback(() => {
     if (isUserAuthenticated()) {
-      console.log(localStorage.getItem('role'));
       const id = localStorage.getItem('_id');
       const role = localStorage.getItem('role');
       const iat = localStorage.getItem('iat');
@@ -83,30 +81,11 @@ export const AuthProvider = ({ children }) => {
   //   console.log('User is not authenticated.');
   // }
 
-  const getUserAvatar = useCallback(
-    async (userId) => {
-      try {
-        const response = await APIService.get(`/user/avatar/${userId}`, {
-          responseType: 'blob',
-        });
-
-        if (response.status === 200) {
-          const blob = response.data;
-          setUserAvatar(URL.createObjectURL(blob));
-        } else {
-          console.error('Failed to get user avatar:', response.statusText);
-        }
-      } catch (error) {
-        console.error('Error getting user avatar:', error);
-      }
-    },
-    [accessToken] // Include accessToken as a dependency
-  );
+  const { userAvatar, getUserAvatar } = GetUserAvatar();
 
   const getProfile = useCallback(async (role) => {
     try {
       const response = await APIService.get(`/${role}/profile`);
-      console.log('response', response);
       if (response.status === 200) {
         const userProfile = response.data;
         return userProfile;
@@ -134,7 +113,6 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     if (cookies.sb) {
-      console.log('cookies.sb', cookies.sb);
       const token = cookies.sb;
       APIService.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       setAccessToken(token);

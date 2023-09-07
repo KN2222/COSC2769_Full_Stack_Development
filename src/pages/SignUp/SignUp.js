@@ -14,10 +14,6 @@ const SignUp = () => {
     role: 'customer', // Default role is 'user'
   });
 
-  useEffect(() => {
-    console.log(formData);
-  }, [formData]);
-
   const [modalMessage, setModalMessage] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [isSuccess, setIsSuccess] = useState(true);
@@ -50,7 +46,6 @@ const SignUp = () => {
         'http://localhost:8000/auth/signup',
         formData
       );
-      console.log(formData);
       // Handle success
       setModalMessage(response.data.message);
       setIsSuccess(true);

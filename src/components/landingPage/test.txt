@@ -1,0 +1,16 @@
+{"_id":"64f07c5a00ab2028693141da",
+"title":"Short Bottoms","price":40,
+"description":"For female for love",
+"image":"",
+"stock":98,
+"categories":["64f07c0600ab2028693141b9","64ef528ba173ddc55757c4ab","64ef5281a173ddc55757c49a"],
+"seller":"64ef634a5bafe61da02cf85a",
+"date":"2023-08-31T11:41:14.303Z","__v":0}
+
+{"id":1,
+"title":"Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops",
+"price":109.95,
+"description":"Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to 15 inches) in the padded sleeve, your everyday",
+"category":"men's clothing",
+"image":"https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
+"rating":{"rate":3.9,"count":120}}
