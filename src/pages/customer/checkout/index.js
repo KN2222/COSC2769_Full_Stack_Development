@@ -6,6 +6,9 @@ import { APIService } from '../../../axios/client';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../../store/authContext';
 import { useNavigate } from 'react-router-dom';
+import { Trash3Fill } from 'react-bootstrap-icons';
+import { GetProductsByIds } from '../../../api/getProductsByIds';
+import { CreateOrder } from '../../../api/createOrder';
 
 export default function CheckOut() {
   const [cartData, setCartData] = useState([]);
@@ -37,25 +40,11 @@ export default function CheckOut() {
   };
 
   useEffect(() => {
-    setCart(JSON.parse(localStorage.getItem('cart')) || {});
+    const cartFromLocalStorage = JSON.parse(localStorage.getItem('cart')) || {};
+    setCart(cartFromLocalStorage);
   }, []);
 
-  const fetchProductsByIds = async (products) => {
-    const productsData = {};
-
-    for (const product of products) {
-      const { id, quantity } = product;
-      try {
-        const response = await APIService.get(`/seller/product/${id}`);
-        const fetchedProduct = response.data.product; // Access the 'product' object in the response
-
-        productsData[id] = { id, quantity, ...fetchedProduct };
-      } catch (error) {
-        console.error('Error fetching product data:', error);
-      }
-    }
-    return productsData;
-  };
+  const { fetchProductsByIds } = GetProductsByIds();
 
   const handleDelete = (productId) => {
     // Create a copy of the current cart
@@ -76,11 +65,16 @@ export default function CheckOut() {
 
       // Update the cart in local storage
       localStorage.setItem('cart', JSON.stringify(updatedCart));
+      window.location.reload();
     }
   };
 
   useEffect(() => {
     const fetchProducts = async () => {
+      if (Object.keys(cart).length === 0) {
+        return; // Exit the function if the cart is empty
+      }
+
       const productsData = await fetchProductsByIds(cart);
       setCartData(productsData);
     };
@@ -96,55 +90,10 @@ export default function CheckOut() {
     setTotal(Sum);
   }, [cartData]);
 
-  const handleCheckout = async () => {
-    if (!isAuthenticated) {
-      alert('Please Login first to place order');
-      navigate('/login');
-    } else {
-      try {
-        // Prepare the productOrders array
-        const productOrders = Object.values(cartData).map((product) => ({
-          productId: product.id,
-          quantity: product.quantity || 0,
-          price: product.price,
-        }));
+  const { handleCheckout } = CreateOrder();
 
-        // Create the request body with the correct property name
-        const requestBody = {
-          productOrders: productOrders, // Use "productOrders" here
-        };
-
-        // Convert the requestBody to a JSON string
-        const requestBodyJSON = JSON.stringify(requestBody);
-
-        // Send a POST request to the checkout endpoint using APIService
-        const response = await APIService.post(
-          '/customer/checkout',
-          requestBodyJSON,
-          {
-            headers: {
-              'Content-Type': 'application/json', // Set the Content-Type header
-            },
-          }
-        );
-
-        // Handle success
-        console.log('Checkout response:', response.data);
-        if (response.data.message === 'Create order successfully') {
-          // Clear the 'cart' item from local storage
-          localStorage.removeItem('cart');
-
-          // Reload the page
-          window.location.reload();
-        }
-
-        // You can add further handling or navigation logic here
-      } catch (error) {
-        // Handle error
-        console.error('Error during checkout:', error);
-        // You can display an error message or perform other error handling here
-      }
-    }
+  const handleCheckoutClick = () => {
+    handleCheckout(cartData, isAuthenticated, navigate);
   };
 
   return (
@@ -216,14 +165,7 @@ export default function CheckOut() {
                           variant='outline-danger'
                           onClick={() => handleDelete(product.id)}
                         >
-                          <svg
-                            xmlns='http://www.w3.org/2000/svg'
-                            width='16'
-                            height='16'
-                            fill='currentColor'
-                            className='bi bi-trash3-fill'
-                            viewBox='0 0 16 16'
-                          ></svg>
+                          <Trash3Fill />
                         </Button>
                       </div>
                     </td>
@@ -258,7 +200,7 @@ export default function CheckOut() {
                 <div className='col-sm-6 order-md-2 text-right'>
                   <Button
                     variant='primary'
-                    onClick={handleCheckout} // Call the checkout function
+                    onClick={handleCheckoutClick} // Call the checkout function
                     className='mb-4 btn-lg pl-5 pr-5'
                   >
                     Checkout

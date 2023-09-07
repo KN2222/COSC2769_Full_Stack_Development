@@ -8,6 +8,7 @@ import React, {
 import { APIService } from '../axios/client';
 import { useCookies } from 'react-cookie';
 import jwt_decode from 'jwt-decode'; // Import jwt_decode library for decoding tokens
+import { GetUserAvatar } from '../api/getUserAvatar';
 
 export const AuthContext = React.createContext();
 
@@ -15,7 +16,6 @@ export const AuthProvider = ({ children }) => {
   const [cookies, setCookie, removeCookie] = useCookies(['sb']);
   const [accessToken, setAccessToken] = useState('default');
   // Decode the token and save the decoded object into local storage
-  const [userAvatar, setUserAvatar] = useState(null); // State to store the user avatar
 
   useEffect(() => {
     // console.log('accessToken', accessToken);
@@ -81,25 +81,7 @@ export const AuthProvider = ({ children }) => {
   //   console.log('User is not authenticated.');
   // }
 
-  const getUserAvatar = useCallback(
-    async (userId) => {
-      try {
-        const response = await APIService.get(`/user/avatar/${userId}`, {
-          responseType: 'blob',
-        });
-
-        if (response.status === 200) {
-          const blob = response.data;
-          setUserAvatar(URL.createObjectURL(blob));
-        } else {
-          console.error('Failed to get user avatar:', response.statusText);
-        }
-      } catch (error) {
-        console.error('Error getting user avatar:', error);
-      }
-    },
-    [accessToken] // Include accessToken as a dependency
-  );
+  const { userAvatar, getUserAvatar } = GetUserAvatar();
 
   const getProfile = useCallback(async (role) => {
     try {

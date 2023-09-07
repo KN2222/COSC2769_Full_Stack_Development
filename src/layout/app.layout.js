@@ -4,40 +4,40 @@ import { AdminNavbar } from '../components/navbar/AdminNav';
 import { Footer } from '../components/footer';
 import { Outlet } from 'react-router-dom';
 import { useAuth } from '../store/authContext';
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 
 export const AppLayout = () => {
   const { isUserAuthenticated, getAuthenticatedUserInfo } = useAuth();
   const isAuthenticated = isUserAuthenticated();
   const userInfo = getAuthenticatedUserInfo();
 
-  const navbarRef = useRef(null);
+  const [navbarComponent, setNavbarComponent] = useState(null);
 
   useEffect(() => {
     if (!isAuthenticated) {
-      navbarRef.current = <HomeNav />;
+      setNavbarComponent(<HomeNav />);
     } else {
       const userRole = userInfo.role.slice(1, -1);
 
       switch (userRole) {
         case 'customer':
-          navbarRef.current = <HomeNav />;
+          setNavbarComponent(<HomeNav />);
           break;
         case 'seller':
-          navbarRef.current = <SellerNavbar />;
+          setNavbarComponent(<SellerNavbar />);
           break;
         case 'admin':
-          navbarRef.current = <AdminNavbar />;
+          setNavbarComponent(<AdminNavbar />);
           break;
         default:
-          navbarRef.current = <HomeNav />;
+          setNavbarComponent(<HomeNav />);
       }
     }
-  }, [isAuthenticated, userInfo]);
+  }, []);
 
   return (
     <div className='vw-100'>
-      {navbarRef.current}
+      {navbarComponent}
       <Outlet />
       <Footer />
     </div>
