@@ -1,28 +1,46 @@
-import React from "react";
-import Order from "./Order";
-import sampleProducts from "../../api/sampleProducts";
-import { Container } from "react-bootstrap";
+import React from 'react';
+import Order from './Order';
+import sampleProducts from '../../api/sampleProducts';
+import { Container } from 'react-bootstrap';
+import { APIService } from '../../axios/client';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import { useCallback } from 'react';
 
 const OrderStatus = () => {
-  const orders = [
-    {
-      id: 1,
-      products: [
-        sampleProducts[0],
-        sampleProducts[1],
-        sampleProducts[2],
-        sampleProducts[3],
-      ],
-    },
-  ];
+  // {{store}}/customer/order
+
+  const [orders, setOrders] = useState([]);
+
+  const getOrder = useCallback(async () => {
+    try {
+      const response = await APIService.get('/customer/order');
+      if (response.data && response.data.productOrderOfCustomer) {
+        setOrders(response.data.productOrderOfCustomer);
+      } else {
+        // Handle the case where the response doesn't contain the expected data
+        console.error('Unexpected response format:', response);
+      }
+    } catch (error) {
+      // Handle errors here, e.g., show an error message to the user
+      console.error('Error fetching order:', error);
+    }
+  }, []);
+
+  useEffect(() => {
+    getOrder(); // Call it once when the component mounts
+  }, []); // Empty dependency array to run only on mount
+
+  console.log(orders); // This will show the initial value of 'order' in the first render
 
   return (
     <Container>
-      <h1 className="mt-4 text-center text-primary">Order Status</h1>
-      <div className="mt-4">
-        {orders.map((order) => (
-          <Order key={order.id} order={order} />
-        ))}
+      <h1 className='mt-4 text-center text-primary'>Order Status</h1>
+      <div className='mt-4'>
+        <Order
+          // key={id}
+          order={orders}
+        />
       </div>
     </Container>
   );

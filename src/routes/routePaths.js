@@ -101,22 +101,6 @@ export const routePaths = {
           path: '/admin/profile',
           element: <AdminProfile />,
         },
-        {
-          path: '/admin/category',
-          element: <div>This is admin category page</div>,
-        },
-        {
-          path: '/admin/category/:id',
-          element: <div>This is admin category detail page</div>,
-        },
-        {
-          path: '/admin/cv',
-          element: <div>This is admin seller page</div>,
-        },
-        {
-          path: '/admin/cv/:id',
-          element: <div>This is admin seller detail page</div>,
-        },
       ],
     },
   ],
@@ -137,14 +121,6 @@ export const routePaths = {
         {
           path: '/seller/profile',
           element: <SellerProfile />,
-        },
-        {
-          path: '/seller/statistic',
-          element: <div>This is seller statistic page</div>,
-        },
-        {
-          path: '/seller/order',
-          element: <div>This is seller order page</div>,
         },
       ],
     },

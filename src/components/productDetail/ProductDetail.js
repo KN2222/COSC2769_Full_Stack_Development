@@ -1,21 +1,22 @@
-import { NavLink, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useGetProducts } from '../../api/getProducts';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { SkeletonProductDetail } from '../loading/SkeletonProductDetail';
+import { useToastContext } from '../../store/toastContext';
 
 export default function ProductDetail() {
   const { productId } = useParams();
-
-  console.log('Product ID:', productId);
 
   const { data: products, loading } = useGetProducts(productId);
 
   const [quantity, setQuantity] = useState(1);
 
+  const { showToast } = useToastContext();
+
   const handleAddToCart = () => {
-    updateCart(product.id, quantity);
-    alert(`Added ${quantity} ${product.title} to the cart.`);
+    updateCart(productId, quantity);
+    showToast(200, `Added ${quantity} ${product.title} to the cart.`);
   };
 
   if (loading) {
@@ -69,7 +70,7 @@ export default function ProductDetail() {
       <div className='row mt-5'>
         <div className='col-md-4'>
           <img
-            src={product.image}
+            src={`http://localhost:8000/seller/product/image/${productId}`}
             alt={product.title}
             className='img-fluid'
           />

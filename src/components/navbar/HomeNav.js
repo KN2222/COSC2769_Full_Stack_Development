@@ -183,7 +183,7 @@ export const HomeNav = () => {
                       <PersonCircle /> Profile
                     </Dropdown.Item>
                     <Dropdown.Item
-                      eventKey='1'
+                      eventKey='2'
                       href='/customer/product-order'
                       onClick={() => {
                         navigate(`/customer/product-order`);
