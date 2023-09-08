@@ -156,7 +156,7 @@ export const ProductCategoryAttributeModal = (props) => {
           <Button type="submit" variant="primary" onClick={handleUpdateProduct}>
             Save
           </Button>
-          <Button onClick={handleClose}>Close</Button>
+          <Button onClick={handleClose}>Back</Button>
           {/* <Button onClick={seeDetails}>Detail</Button> */}
         </Modal.Footer>
       </Modal.Header>
