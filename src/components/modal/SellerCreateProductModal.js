@@ -140,7 +140,7 @@ export const CreateProductModal = (props) => {
                 By selecting a category, it will also select its parent
               </p>
               <Form.Select
-                value={category}
+                defaultValue={""}
                 onChange={(e) => {
                   setCategory(e.target.value);
                 }}

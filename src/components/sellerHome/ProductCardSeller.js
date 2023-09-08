@@ -13,7 +13,6 @@ function ProductCardSeller({ product }) {
   const { getProductImage } = useGetImageFromID();
 
   const [imageURL, setImageURL] = useState("");
-  const [productNew] = useState(product);
 
   const {
     showModal: showDeleteModal,
@@ -38,9 +37,9 @@ function ProductCardSeller({ product }) {
       });
   }, [product]);
 
-  const seeDetails = () => {
-    console.log("See details", product);
-  }
+  // const seeDetails = () => {
+  //   console.log("See details", product);
+  // }
 
   const filteredAttributes = ['title', 'description', 'price', 'stock', 'categories', '_id', 'image', 'seller', 'date', '__v'];
 
@@ -105,14 +104,14 @@ function ProductCardSeller({ product }) {
               <TrashFill size={15} />
             </Button>
 
-            <Button variant="primary" size="md" className="ms-auto" onClick={seeDetails}>Inspect</Button>
+            {/* <Button variant="primary" size="md" className="ms-auto" onClick={seeDetails}>Inspect</Button> */}
           </div>
         </Card.Body>
       </Card>
       <ProductDeleteModal
         show={showDeleteModal}
         onHide={closeDeleteModal}
-        product={productNew}
+        product={product}
       />
 
       <ProductUpdateModal

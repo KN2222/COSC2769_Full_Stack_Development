@@ -70,19 +70,19 @@ export const ProductUpdateModal = (props) => {
     }
   };
 
-  const seeDetails = () => {
-    const mergedAttributes = {
-      ...{
-        title,
-        description,
-        price,
-        stock,
-        // categoryId,
-      },
-      ...attributeValues,
-    };
-    console.log("mergedAttributes", mergedAttributes);
-  };
+  // const seeDetails = () => {
+  //   const mergedAttributes = {
+  //     ...{
+  //       title,
+  //       description,
+  //       price,
+  //       stock,
+  //       // categoryId,
+  //     },
+  //     ...attributeValues,
+  //   };
+  //   console.log("mergedAttributes", mergedAttributes);
+  // };
 
   return (
     <Modal
@@ -204,7 +204,7 @@ export const ProductUpdateModal = (props) => {
             Save
           </Button>
           <Button onClick={props.onHide}>Close</Button>
-          <Button onClick={seeDetails}>Detail</Button>
+          {/* <Button onClick={seeDetails}>Detail</Button> */}
         </Modal.Footer>
       </Modal.Header>
     </Modal>

@@ -89,19 +89,19 @@ export const ProductCategoryAttributeModal = (props) => {
     }
   };
 
-  const seeDetails = () => {
-    const mergedAttributes = {
-      ...{
-        title,
-        description,
-        price,
-        stock,
-        // categoryId,
-      },
-      ...attributeValues,
-    };
-    console.log("mergedAttributes", mergedAttributes);
-  };
+//   const seeDetails = () => {
+//     const mergedAttributes = {
+//       ...{
+//         title,
+//         description,
+//         price,
+//         stock,
+//         // categoryId,
+//       },
+//       ...attributeValues,
+//     };
+//     console.log("mergedAttributes", mergedAttributes);
+//   };
 
   const { deleteProduct } = useDeleteProduct();
   const handleClose = async() => {
@@ -157,8 +157,8 @@ export const ProductCategoryAttributeModal = (props) => {
           <Button type="submit" variant="primary" onClick={handleUpdateProduct}>
             Save
           </Button>
-          <Button onClick={handleClose}>Close</Button>
-          <Button onClick={seeDetails}>Detail</Button>
+          <Button onClick={handleClose}>Back</Button>
+          {/* <Button onClick={seeDetails}>Detail</Button> */}
         </Modal.Footer>
       </Modal.Header>
     </Modal>
