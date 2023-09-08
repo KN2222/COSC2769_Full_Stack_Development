@@ -15,7 +15,6 @@ export const useCreateProduct = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      console.log("Inside isSuccess");
       setIsSuccess(false);
     }
   }, [isSuccess]);
@@ -33,6 +32,7 @@ export const useCreateProduct = () => {
       uploadProductImage({productId: response.data.product._id, file});
       setIsSuccess(true);
       closeModal();
+      return response.data;
     } catch (error) {
       showToast(error.response.status, error.response.data.message);
     }
