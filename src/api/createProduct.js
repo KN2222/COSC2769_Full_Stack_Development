@@ -15,7 +15,6 @@ export const useCreateProduct = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      console.log("Inside isSuccess");
       setIsSuccess(false);
     }
   }, [isSuccess]);

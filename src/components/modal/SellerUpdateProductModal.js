@@ -8,13 +8,25 @@ import { useUpdateProduct } from "../../api/updateProduct";
 
 export const ProductUpdateModal = (props) => {
   const { product } = props;
-
+  const filteredAttributes = [
+    "title",
+    "description",
+    "price",
+    "stock",
+    "categories",
+    "_id",
+    "image",
+    "seller",
+    "date",
+    "__v",
+  ];
   const [title, setTitle] = useState(product.title);
   const [description, setDescription] = useState(product.description);
   const [price, setPrice] = useState(product.price);
   const [stock, setStock] = useState(product.stock);
-  const [categoryId, setCategory] = useState(product.categories[0]);
+  // const [categoryId, setCategory] = useState(product.categories[0]);
   const [file, setFile] = useState();
+  const [attributeValues, setAttributeValues] = useState();
 
   const { updateProduct } = useUpdateProduct();
   const { showToast } = useToastContext();
@@ -42,23 +54,34 @@ export const ProductUpdateModal = (props) => {
       showToast(400, "Stock must be greater than 0");
     } else {
       try {
+        const mergedAttributes = {
+          ...{title,description,price,stock,},
+          ...attributeValues,
+        };
         await updateProduct(
           props.product._id,
-          {
-            title,
-            description,
-            price,
-            stock,
-            categoryId,
-          },
+          mergedAttributes,
           file
         );
-        setCategory("");
         props.onHide();
       } catch (error) {
         console.error("Error updating product:", error);
       }
     }
+  };
+
+  const seeDetails = () => {
+    const mergedAttributes = {
+      ...{
+        title,
+        description,
+        price,
+        stock,
+        // categoryId,
+      },
+      ...attributeValues,
+    };
+    console.log("mergedAttributes", mergedAttributes);
   };
 
   return (
@@ -124,7 +147,26 @@ export const ProductUpdateModal = (props) => {
               />
             </Form.Group>
 
-            <Form.Group>
+            {Object.keys(product)
+              .filter((attribute) => !filteredAttributes.includes(attribute))
+              .map((attribute) => (
+                <Form.Group key={attribute} className="mb-3">
+                  <Form.Label>{attribute}</Form.Label>
+                  <Form.Control
+                    defaultValue={product[attribute]}
+                    type="text"
+                    onChange={(e) => {
+                      const updatedAttributeValues = {
+                        ...attributeValues,
+                        [attribute]: e.target.value,
+                      };
+                      setAttributeValues(updatedAttributeValues);
+                    }}
+                  />
+                </Form.Group>
+              ))}
+
+            {/* <Form.Group>
               <Form.Label>Select new category if needed:</Form.Label>
               <Form.Select
                 defaultValue=""
@@ -145,7 +187,7 @@ export const ProductUpdateModal = (props) => {
                   );
                 })}
               </Form.Select>
-            </Form.Group>
+            </Form.Group> */}
             <br />
             <Form.Group controlId="formFile" className="mb-3">
               <Form.Label>Upload new image here if needed:</Form.Label>
@@ -162,6 +204,7 @@ export const ProductUpdateModal = (props) => {
             Save
           </Button>
           <Button onClick={props.onHide}>Close</Button>
+          <Button onClick={seeDetails}>Detail</Button>
         </Modal.Footer>
       </Modal.Header>
     </Modal>

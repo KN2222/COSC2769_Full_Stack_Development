@@ -38,10 +38,7 @@ function ProductCardSeller({ product }) {
       });
   }, [product]);
 
-  const currentProduct = () => {
-    console.log("product", product);
-    console.log("productNew", productNew);
-  };
+  const filteredAttributes = ['title', 'description', 'price', 'stock', 'categories', '_id', 'image', 'seller', 'date', '__v'];
 
   return (
     <>
@@ -70,6 +67,13 @@ function ProductCardSeller({ product }) {
             </Card.Text>
             <Card.Text>Price: ${product.price}</Card.Text>
             <Card.Text>Stock: {product.stock}</Card.Text>
+            {Object.keys(product)
+            .filter((attribute) => !filteredAttributes.includes(attribute))
+            .map((attribute) => (
+              <Card.Text key={attribute}>
+                {attribute}: {product[attribute]}
+              </Card.Text>
+            ))}
           </div>
 
           <div className="mt-auto d-flex justify-content-center">
@@ -95,15 +99,6 @@ function ProductCardSeller({ product }) {
               }}
             >
               <TrashFill size={15} />
-            </Button>
-
-            <Button
-              variant="primary"
-              size="md"
-              className="ms-auto"
-              onClick={currentProduct}
-            >
-              Detail
             </Button>
           </div>
         </Card.Body>
