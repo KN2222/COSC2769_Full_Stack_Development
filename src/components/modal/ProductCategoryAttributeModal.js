@@ -137,7 +137,6 @@ export const ProductCategoryAttributeModal = (props) => {
                 <Form.Group key={attribute} className="mb-3">
                   <Form.Label>{attribute}</Form.Label>
                   <Form.Control
-                    defaultValue={typeof product[attribute] === 'number' ? 1 : ''}
                     type={typeof product[attribute] === 'number' ? 'number' : 'text'}
                     onChange={(e) => {
                       const updatedAttributeValues = {
