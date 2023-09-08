@@ -38,11 +38,15 @@ function ProductCardSeller({ product }) {
       });
   }, [product]);
 
+  const seeDetails = () => {
+    console.log("See details", product);
+  }
+
   const filteredAttributes = ['title', 'description', 'price', 'stock', 'categories', '_id', 'image', 'seller', 'date', '__v'];
 
   return (
     <>
-      <Card style={{ objectFit: "cover", width: "250px" }}>
+      <Card style={{ objectFit: "cover", width: "280px" }}>
         <Card.Body className="d-flex flex-column">
           {product.image === "" ? (
             <Card.Img
@@ -61,7 +65,7 @@ function ProductCardSeller({ product }) {
             />
           )}
           <div>
-            <Card.Title className="text-truncate">{product.title}</Card.Title>
+            <Card.Title className="text-truncate d-flex justify-content-center">{product.title}</Card.Title>
             <Card.Text className="multi-line-truncate">
               Description: {product.description}
             </Card.Text>
@@ -100,6 +104,8 @@ function ProductCardSeller({ product }) {
             >
               <TrashFill size={15} />
             </Button>
+
+            <Button variant="primary" size="md" className="ms-auto" onClick={seeDetails}>Inspect</Button>
           </div>
         </Card.Body>
       </Card>

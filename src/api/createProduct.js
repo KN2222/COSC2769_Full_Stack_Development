@@ -32,6 +32,7 @@ export const useCreateProduct = () => {
       uploadProductImage({productId: response.data.product._id, file});
       setIsSuccess(true);
       closeModal();
+      return response.data;
     } catch (error) {
       showToast(error.response.status, error.response.data.message);
     }

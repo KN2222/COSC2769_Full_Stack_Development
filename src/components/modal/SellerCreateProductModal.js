@@ -6,20 +6,36 @@ import { useCreateProduct } from "../../api/createProduct";
 import { useGetAllCategory } from "../../api/getAllCategory";
 import { useGetSellerProduct } from "../../api/getSellerProduct";
 import { useToastContext } from "../../store/toastContext";
+import { useModalContext } from "../../store/modalContext";
+import { useModal } from "../../hooks/modal";
+import { ProductCategoryAttributeModal } from "./ProductCategoryAttributeModal";
+
 
 export const CreateProductModal = (props) => {
+  const { onHide } = props;
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(-1);
   const [stock, setStock] = useState(-1);
   const [category, setCategory] = useState("");
   const [file, setFile] = useState(null);
+  const [productDataReady, setProductDataReady] = useState(false);
+  const [product, setProduct] = useState(null);
+
+  const { openModal: openModalGlobal } = useModalContext();
+  const {
+    showModal: showAttributeModal,
+    openModal: openAttributeModal,
+    closeModal: closeAttributeModal,
+  } = useModal();
 
   // const {fetchSellerProduct} = useGetSellerProduct();
   const { showToast } = useToastContext();
   const { isSuccess, createProduct } = useCreateProduct();
   const {categories} = useGetAllCategory();
   const form = useRef(null);
+
+  const filteredAttributes = ['title', 'description', 'price', 'stock', 'categories', '_id', 'image', 'seller', 'date', '__v'];
 
   const handleCreateProduct = async(e) => {
     if (form.current.checkValidity() === false || price === -1 || stock === -1 || title === "" || description === "" || category === "" || file === null) {
@@ -36,10 +52,17 @@ export const CreateProductModal = (props) => {
       showToast(400, "Stock must be greater than 0");
     } else {
       try {
-        await createProduct(title, description, price, stock, category, file);
-        setCategory("");
-        setFile(null);
-        props.onHide();
+        const response = await createProduct(title, description, price, stock, category, file);
+        const filteredLength = await Object.keys(response.product).filter((key) => !filteredAttributes.includes(key)).length;
+        if(filteredLength > 0){
+          await setProduct(response.product);
+          setProductDataReady(true);
+          openModalGlobal();
+          openAttributeModal();
+        }else{
+        onHide();
+        }
+
       } catch (error) {
         console.error("Error creating product:", error);
       }
@@ -47,7 +70,7 @@ export const CreateProductModal = (props) => {
   };
 
   const handleClose = () => {
-    props.onHide(); 
+    onHide(); 
     setCategory(""); 
     setFile(null);
   };
@@ -60,7 +83,7 @@ export const CreateProductModal = (props) => {
       className="w-100"
       centered
     >
-      <Modal.Header>
+      <Modal.Header className="d-flex flex-column justify-content-center">
         <Modal.Title id="contained-modal-title-vcenter">
           Create new Product
         </Modal.Title>
@@ -152,6 +175,14 @@ export const CreateProductModal = (props) => {
           <Button onClick={handleClose}>Close</Button>
         </Modal.Footer>
       </Modal.Header>
+      {productDataReady && ( // Conditionally render the modal when productDataReady is true
+    <ProductCategoryAttributeModal         
+      show={showAttributeModal}
+      onHide={closeAttributeModal}
+      product={product}
+      createModalClose={handleClose}
+    />
+  )}
     </Modal>
   );
 };
