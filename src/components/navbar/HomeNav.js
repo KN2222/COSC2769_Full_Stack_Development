@@ -1,5 +1,4 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
 import { useCategoryTree } from '../../api/getCategoryTree';
 import { Navbar, Nav, Container, NavDropdown, Button } from 'react-bootstrap';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
@@ -53,9 +52,8 @@ export const HomeNav = () => {
     }));
   };
 
-  const { isUserAuthenticated, getAuthenticatedUserInfo, Logout } = useAuth();
+  const { isUserAuthenticated, Logout } = useAuth();
   const isAuthenticated = isUserAuthenticated();
-  const userInfo = getAuthenticatedUserInfo();
 
   const handleLogout = () => {
     const route = Logout();
@@ -77,7 +75,7 @@ export const HomeNav = () => {
           drop='end'
           onClick={(e) => {
             e.stopPropagation();
-            navigate(`/category/${categoryName}`);
+            navigate(`/category/${category._id}`);
           }}
         >
           {renderSubcategories(category.subCategories)}
@@ -88,7 +86,7 @@ export const HomeNav = () => {
           eventKey={2}
           onClick={(e) => {
             e.stopPropagation();
-            navigate(`/category/${categoryName}`);
+            navigate(`/category/${category._id}`);
           }}
         >
           {categoryName}
@@ -102,6 +100,7 @@ export const HomeNav = () => {
   return (
     <>
       <Navbar
+        key={'navasd'}
         expand='lg'
         className='bg-body-tertiary m-0 pb-0 sticky-top justify-content-between'
       >

@@ -1,4 +1,4 @@
-import { ProtectedRoute } from '../components/ProtectedRoute';
+// import { ProtectedRoute } from '../components/ProtectedRoute';
 import { AdminLayout } from '../layout/admin.layout';
 import { AdminHomePage } from '../pages/admin/home';
 import { AdminSellerPage } from '../pages/admin/seller';
@@ -20,6 +20,8 @@ import SellerProfile from '../pages/seller/profile';
 import SellerHome from '../pages/seller/home';
 import SellerOrder from '../pages/seller/order';
 import { SellerStatistic } from '../pages/seller/statistic';
+import Category from '../pages/customer/category';
+import NotFoundPage from '../pages/errors/404';
 
 export const routePaths = {
   public: [
@@ -28,9 +30,9 @@ export const routePaths = {
       element: <AppLayout />,
       children: [
         {
-          //TODO fetch data
-          path: '/category',
-          element: <div>This is category page</div>,
+          // TODO fetch data
+          path: '/category/:categoryId',
+          element: <Category />,
         },
         {
           path: '/login',
@@ -103,6 +105,11 @@ export const routePaths = {
           path: '/admin/profile',
           element: <AdminProfile />,
         },
+        {
+          path: '*',
+          element: <NotFoundPage />,
+          children: [],
+        },
       ],
     },
   ],
@@ -124,14 +131,14 @@ export const routePaths = {
           path: '/seller/profile',
           element: <SellerProfile />,
         },
-        { 
-          path: '/seller/order', 
-          element: <SellerOrder />
+        {
+          path: '/seller/order',
+          element: <SellerOrder />,
         },
-        { 
-          path: '/seller/statistic', 
-          element: <SellerStatistic />
-        }
+        {
+          path: '/seller/statistic',
+          element: <SellerStatistic />,
+        },
       ],
     },
   ],

@@ -1,14 +1,19 @@
 import { Modal } from "react-bootstrap";
 import { useDeleteProduct } from "../../api/deleteProduct";
+import { useToastContext } from "../../store/toastContext";
 
 export const ProductDeleteModal = (props) => {
   const { deleteProduct } = useDeleteProduct();
+  const { showToast } = useToastContext();
+
   const handleDeleteProduct = () => {
     try{
       deleteProduct(props.product._id);
+      showToast("200", "Successfully deleted product");
       props.onHide();
     }catch (error) {
-      console.error("Error deleting product:", error);
+      showToast(error.response.status, error.response.data.message);
+
     }
   };
 
