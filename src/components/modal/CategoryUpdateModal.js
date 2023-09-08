@@ -22,7 +22,12 @@ function isExtraAttributeValid(attributeName) {
     attributeName !== "admins" &&
     attributeName !== "subCategories" &&
     attributeName !== "subCategoryNames" &&
-    attributeName !== "__v"
+    attributeName !== "__v" &&
+    attributeName !== "title" &&
+    attributeName !== "description" &&
+    attributeName !== "seller" &&
+    attributeName !== "date" &&
+    attributeName !== "categories"
   ) {
     return true;
   } else {
@@ -78,6 +83,7 @@ export const CategoryUpdateModal = (props) => {
       setSubCategories(category.subCategories);
       setNewSubCategories([]);
       setNewAttributes([]);
+      setExtraValues({});
       setIsAddNewSubCategory(false);
       setIsAddNewAttribute(false);
     }

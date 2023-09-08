@@ -135,7 +135,7 @@ export const HomeNav = () => {
                           id='collasible-nav-dropdown'
                           title={categoryName}
                           onClick={(e) => {
-                            navigate(`/category/${categoryName}`);
+                            navigate(`/category/${category._id}`);
                           }}
                           show={dropdownMainOpen[category._id]}
                           onMouseEnter={() =>

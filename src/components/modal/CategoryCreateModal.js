@@ -19,14 +19,18 @@ function isExtraAttributeValid(attributeName) {
     attributeName !== "admins" &&
     attributeName !== "subCategories" &&
     attributeName !== "subCategoryNames" &&
-    attributeName !== "__v"
+    attributeName !== "__v" &&
+    attributeName !== "title" &&
+    attributeName !== "description" &&
+    attributeName !== "seller" &&
+    attributeName !== "date" &&
+    attributeName !== "categories"
   ) {
     return true;
   } else {
     return false;
   }
 }
-
 export const CategoryCreateModal = (props) => {
   const { isSuccess, createCategory } = useCreateCategory();
   const [categoryName, setCategoryName] = useState();
@@ -51,6 +55,7 @@ export const CategoryCreateModal = (props) => {
     if (!props.show) {
       setNewAttributes([]);
       setIsAddNewAttribute(false);
+      setExtraValues({});
     }
   }, [props.show]);
 

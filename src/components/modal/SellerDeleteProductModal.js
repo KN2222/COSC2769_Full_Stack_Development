@@ -9,7 +9,7 @@ export const ProductDeleteModal = (props) => {
   const handleDeleteProduct = () => {
     try{
       deleteProduct(props.product._id);
-      showToast("200", "Successfully deleted product");
+      showToast(200, "Successfully deleted product");
       props.onHide();
     }catch (error) {
       showToast(error.response.status, error.response.data.message);
