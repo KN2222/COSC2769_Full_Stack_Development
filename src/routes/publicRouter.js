@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import { routePaths } from './routePaths';
 import { useCategoryTree } from '../api/getCategoryTree';
 import { useEffect, useState } from 'react';
+import NotFoundPage from '../pages/errors/404';
 
 const PublicRouter = () => {
   const { categoryTree } = useCategoryTree();
@@ -47,18 +48,6 @@ const PublicRouter = () => {
           ))}
         </Route>
       ))}
-
-      {categoryRoutes &&
-        categoryRoutes.map((category, index) => {
-          const { name, id } = category;
-          return (
-            <Route
-              key={index}
-              path={`/category/${name}`}
-              element={<h1>{name + ' ' + id}</h1>}
-            />
-          );
-        })}
     </Routes>
   );
 };

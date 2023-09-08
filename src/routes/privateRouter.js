@@ -1,10 +1,14 @@
 import { Route, Routes } from 'react-router-dom';
 import { routePaths } from './routePaths';
 import { ProtectedRoute } from '../components/ProtectedRoute';
-
+import NotFoundPage from '../pages/errors/404';
 export const PrivateRouter = () => {
   return (
     <Routes>
+      <Route
+        path='*'
+        component={NotFoundPage}
+      />
       <Route
         path='/customer'
         element={<ProtectedRoute />}

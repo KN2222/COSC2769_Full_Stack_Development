@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useGetProducts } from '../../api/getProducts';
-import { useGetImageById } from '../../api/getProductImage';
 import { Link } from 'react-router-dom';
 import { SkeletonProductCard } from '../loading/SkeletonProductCard';
 import { Card, Button } from 'react-bootstrap';
