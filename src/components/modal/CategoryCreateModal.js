@@ -1,7 +1,6 @@
 import React, { useEffect, useReducer, useRef, useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { useToastContext } from "../../store/toastContext";
-import { CategoryForm } from "../form/CategoryUpdateForm";
 import { useCreateCategory } from "../../api/createCategory";
 import { CategoryAddForm } from "../form/CategoryAddForm";
 const attributeTypeReducer = (state, action) => {
@@ -13,8 +12,23 @@ const attributeTypeReducer = (state, action) => {
   throw Error("Invalid action type");
 };
 
+function isExtraAttributeValid(attributeName) {
+  if (
+    attributeName !== "name" &&
+    attributeName !== "_id" &&
+    attributeName !== "admins" &&
+    attributeName !== "subCategories" &&
+    attributeName !== "subCategoryNames" &&
+    attributeName !== "__v"
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 export const CategoryCreateModal = (props) => {
-  const { newCategory, isSuccess, createCategory } = useCreateCategory();
+  const { isSuccess, createCategory } = useCreateCategory();
   const [categoryName, setCategoryName] = useState();
   const [isAddNewAttribute, setIsAddNewAttribute] = useState(false);
   const [newAttributes, setNewAttributes] = useState([]);
@@ -53,6 +67,7 @@ export const CategoryCreateModal = (props) => {
       console.log("e.target.value", e.target.value);
       if (
         e.target.value &&
+        isExtraAttributeValid(e.target.value) &&
         e.target.value.length > 0 &&
         attributeType.type !== "none"
       ) {
@@ -63,6 +78,13 @@ export const CategoryCreateModal = (props) => {
             type: attributeType.type,
           },
         ]);
+
+        setExtraValues((prevState) => ({
+          ...prevState,
+          [e.target.value]: attributeType.type === "number" ? 0 : "",
+        }));
+      } else {
+        showToast(400, "Invalid attribute name");
       }
     }
   };
@@ -75,6 +97,7 @@ export const CategoryCreateModal = (props) => {
       createCategory(categoryName, { ...extraValues });
       setValidated(true);
       setNewAttributes([]);
+      setExtraValues({});
       props.onHide();
     }
   };

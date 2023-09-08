@@ -11,6 +11,8 @@ export const ToastNotification = ({ show, statusCode, message }) => {
   useEffect(() => {
     if (statusCode === 200) {
       setIsSuccess(true);
+    } else {
+      setIsSuccess(false);
     }
   }, [statusCode]);
 
