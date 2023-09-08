@@ -15,6 +15,21 @@ const attributeTypeReducer = (state, action) => {
   throw Error("Invalid action type");
 };
 
+function isExtraAttributeValid(attributeName) {
+  if (
+    attributeName !== "name" &&
+    attributeName !== "_id" &&
+    attributeName !== "admins" &&
+    attributeName !== "subCategories" &&
+    attributeName !== "subCategoryNames" &&
+    attributeName !== "__v"
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 export const CategoryUpdateModal = (props) => {
   const { createSubCategory, isSuccess: isUpdateSubSuccess } =
     useCreateSubCategory();
@@ -101,6 +116,7 @@ export const CategoryUpdateModal = (props) => {
       console.log("e.target.value", e.target.value);
       if (
         e.target.value &&
+        isExtraAttributeValid(e.target.value) &&
         e.target.value.length > 0 &&
         attributeType.type !== "none"
       ) {
@@ -111,6 +127,13 @@ export const CategoryUpdateModal = (props) => {
             type: attributeType.type,
           },
         ]);
+
+        setExtraValues((prevState) => ({
+          ...prevState,
+          [e.target.value]:  attributeType.type === "number" ? 0 : "" ,
+        }))
+      } else {
+        showToast(400, "Invalid attribute name");
       }
     }
   };
@@ -156,6 +179,7 @@ export const CategoryUpdateModal = (props) => {
 
       setNewSubCategories([]);
       setNewAttributes([]);
+      setExtraValues({});
       props.onHide();
     }
   };
@@ -169,7 +193,7 @@ export const CategoryUpdateModal = (props) => {
       key !== "adminId" &&
       key !== "_id" &&
       key !== "__v" &&
-      key !== "parentId"
+      key !== "parentId"     
   );
 
   return (

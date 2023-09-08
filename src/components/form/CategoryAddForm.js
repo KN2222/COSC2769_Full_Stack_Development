@@ -58,7 +58,7 @@ export const CategoryAddForm = React.forwardRef(
                   onChange={(e) => {
                     setExtraValues((prevState) => ({
                       ...prevState,
-                      [attribute.name]: e.target.value,
+                      [attribute.name]: parseFloat(e.target.value),
                     }));
                   }}
                 />
@@ -90,7 +90,10 @@ export const CategoryAddForm = React.forwardRef(
                     id="inline-radio-1"
                     label="Number"
                     className="text-start"
-                    onClick={() => dispatchAttributeType({ type: "number" })}
+                    onClick={() => {
+                      dispatchAttributeType({ type: "number" });
+                      
+                    }}
                   />
                   <Form.Check
                     type="radio"
@@ -98,7 +101,10 @@ export const CategoryAddForm = React.forwardRef(
                     id="inline-radio-2"
                     label="String"
                     className="text-start"
-                    onClick={() => dispatchAttributeType({ type: "string" })}
+                    onClick={() => {
+                      dispatchAttributeType({ type: "string" });
+                    
+                    }}
                   />
                   <FormControl
                     className="m-1"
