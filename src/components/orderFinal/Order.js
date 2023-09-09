@@ -11,7 +11,6 @@ function Order({ order }) {
   const toggleExpansion = () => {
     setIsExpanded(!isExpanded);
   };
-
   const ordersToDisplay = isExpanded ? order : order.slice(0, 2);
 
   function extractFilenameWithoutExtension(filePath) {
@@ -27,14 +26,14 @@ function Order({ order }) {
   return (
     <div className='mb-4 p-4 w-75 mx-auto'>
       <div className='row row-cols-1 row-cols-md-2 g-4'>
-        {ordersToDisplay.map((order) => (
+        {ordersToDisplay.reverse().map((order) => (
           <div
             key={order.id}
             className='col'
           >
             <Link
               style={{ textDecoration: 'none' }}
-              to={`/product/${order.id}`}
+              to={`/product/${extractFilenameWithoutExtension(order.image)}`}
             >
               <Card className='h-100'>
                 <Card.Img
