@@ -10,6 +10,7 @@ import {
   Truck,
   BoxArrowLeft,
 } from 'react-bootstrap-icons';
+import React from 'react';
 
 import { useState } from 'react';
 import { useAuth } from '../../store/authContext';
@@ -20,38 +21,8 @@ const isObjectEmpty = (obj) => {
 
 export const HomeNav = () => {
   const { categoryTree } = useCategoryTree();
-  const [dropdownMainOpen, setDropdownMainOpen] = useState({});
-  const [dropdownSubOpen, setDropdownSubOpen] = useState({});
+  const [dropdownOpen, setDropdownOpen] = useState({});
   const navigate = useNavigate();
-
-  const handleMouseMainEnter = (categoryId) => {
-    setDropdownMainOpen((prevState) => ({
-      ...prevState,
-      [categoryId]: true,
-    }));
-  };
-
-  const handleMouseMainLeave = (categoryId) => {
-    setDropdownMainOpen((prevState) => ({
-      ...prevState,
-      [categoryId]: false,
-    }));
-  };
-
-  const handleMouseSubEnter = (categoryId) => {
-    setDropdownSubOpen((prevState) => ({
-      ...prevState,
-      [categoryId]: true,
-    }));
-  };
-
-  const handleMouseSubLeave = (categoryId) => {
-    setDropdownSubOpen((prevState) => ({
-      ...prevState,
-      [categoryId]: false,
-    }));
-  };
-
   const { isUserAuthenticated, Logout } = useAuth();
   const isAuthenticated = isUserAuthenticated();
 
@@ -60,30 +31,53 @@ export const HomeNav = () => {
     // Redirect the user to the specified route
     window.location.href = route;
   };
+
+  const handleMouseEnter = (categoryId) => {
+    setDropdownOpen((prevState) => ({
+      ...prevState,
+      [categoryId]: true,
+    }));
+  };
+
+  const handleMouseLeave = (categoryId) => {
+    setDropdownOpen((prevState) => ({
+      ...prevState,
+      [categoryId]: false,
+    }));
+  };
+
+  const renderCategoryDropdown = (category, categoryName) => {
+    return (
+      <NavDropdown
+        key={category._id}
+        id='basic-nav-dropdown'
+        title={categoryName}
+        className='p-0'
+        show={dropdownOpen[category._id]}
+        onMouseEnter={() => handleMouseEnter(category._id)}
+        onMouseLeave={() => handleMouseLeave(category._id)}
+        autoClose={'outside'}
+        drop='end'
+        onClick={(e) => {
+          e.stopPropagation();
+          navigate(`/category/${category._id}`);
+        }}
+      >
+        {renderSubcategories(category.subCategories)}
+      </NavDropdown>
+    );
+  };
+
   const renderSubcategories = (subCategories) => {
     return Object.entries(subCategories).map(([categoryName, category]) => {
       return !isObjectEmpty(category.subCategories) ? (
-        <NavDropdown
-          id='basic-nav-dropdown'
-          key={category._id}
-          title={categoryName}
-          className='p-0'
-          show={dropdownSubOpen[category._id]}
-          onMouseEnter={() => handleMouseSubEnter(category._id)}
-          onMouseLeave={() => handleMouseSubLeave(category._id)}
-          autoClose={'outside'}
-          drop='end'
-          onClick={(e) => {
-            e.stopPropagation();
-            navigate(`/category/${category._id}`);
-          }}
-        >
-          {renderSubcategories(category.subCategories)}
-        </NavDropdown>
+        <React.Fragment key={category._id}>
+          {renderCategoryDropdown(category, categoryName)}
+        </React.Fragment>
       ) : (
         <NavDropdown.Item
           key={category._id}
-          eventKey={2}
+          eventKey='1'
           onClick={(e) => {
             e.stopPropagation();
             navigate(`/category/${category._id}`);
@@ -94,8 +88,6 @@ export const HomeNav = () => {
       );
     });
   };
-
-  if (!categoryTree) return null;
 
   return (
     <>
@@ -117,110 +109,82 @@ export const HomeNav = () => {
               style={{ maxHeight: '100px' }}
               className='me-auto'
             >
-              {Object.entries(categoryTree).map(
-                ([categoryName, category], index) => {
-                  return (
-                    <>
-                      {isObjectEmpty(category.subCategories) ? (
-                        <Nav.Link
-                          key={categoryName + index}
-                          as={Link}
-                          to={`/category/${categoryName}`}
-                        >
-                          {categoryName}
-                        </Nav.Link>
-                      ) : (
-                        <NavDropdown
-                          key={categoryName + index}
-                          id='collasible-nav-dropdown'
-                          title={categoryName}
-                          onClick={(e) => {
-                            navigate(`/category/${category._id}`);
-                          }}
-                          show={dropdownMainOpen[category._id]}
-                          onMouseEnter={() =>
-                            handleMouseMainEnter(category._id)
-                          }
-                          onMouseLeave={() =>
-                            handleMouseMainLeave(category._id)
-                          }
-                        >
-                          {renderSubcategories(category.subCategories)}
-                        </NavDropdown>
-                      )}
-                    </>
-                  );
-                }
+              {Object.entries(categoryTree).map(([categoryName, category]) => {
+                return (
+                  <React.Fragment key={category._id}>
+                    {isObjectEmpty(category.subCategories) ? (
+                      <Nav.Link
+                        key={category._id}
+                        as={Link}
+                        to={`/category/${category._id}`}
+                      >
+                        {categoryName}
+                      </Nav.Link>
+                    ) : (
+                      <React.Fragment key={category._id}>
+                        {renderCategoryDropdown(category, categoryName)}
+                      </React.Fragment>
+                    )}
+                  </React.Fragment>
+                );
+              })}
+            </Nav>
+            <Nav>
+              <Nav.Link
+                as={Link}
+                to='/checkout'
+              >
+                <Button variant='outline-dark'>
+                  <CartFill />
+                </Button>
+              </Nav.Link>
+
+              {isAuthenticated ? (
+                <>
+                  <Nav>
+                    <DropdownButton
+                      as={ButtonGroup}
+                      title='Account'
+                    >
+                      <Dropdown.Item
+                        eventKey='1'
+                        as={Link} // Use Link component from react-router-dom
+                        to='/customer/profile'
+                      >
+                        <PersonCircle /> Profile
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        eventKey='2'
+                        as={Link} // Use Link component from react-router-dom
+                        to='/customer/product-order'
+                      >
+                        <Truck /> My Order
+                      </Dropdown.Item>
+                      <Dropdown.Divider />
+                      {/* You can use a button or other UI element here for logout */}
+                      <Dropdown.Item onClick={handleLogout}>
+                        <BoxArrowLeft /> Logout
+                      </Dropdown.Item>
+                    </DropdownButton>
+                  </Nav>
+                </>
+              ) : (
+                <>
+                  <Nav.Link
+                    as={Link}
+                    to='/login'
+                  >
+                    <Button>Login</Button>
+                  </Nav.Link>
+                  <Nav.Link
+                    as={Link}
+                    to='/signup'
+                  >
+                    <Button variant='outline-primary'>Sign Up</Button>
+                  </Nav.Link>
+                </>
               )}
             </Nav>
-
-            {isAuthenticated ? (
-              <Nav>
-                <Nav.Link
-                  as={Link}
-                  to='/checkout'
-                >
-                  <Button variant='outline-dark'>
-                    <CartFill />
-                  </Button>
-                </Nav.Link>
-                <Nav.Link
-                // as={Link}
-                // to='/customer/profile'
-                >
-                  <DropdownButton
-                    as={ButtonGroup}
-                    title='Account'
-                  >
-                    <Dropdown.Item
-                      eventKey='1'
-                      href='/customer/profile'
-                      onClick={() => {
-                        navigate(`/customer/profile`);
-                      }}
-                    >
-                      <PersonCircle /> Profile
-                    </Dropdown.Item>
-                    <Dropdown.Item
-                      eventKey='2'
-                      href='/customer/product-order'
-                      onClick={() => {
-                        navigate(`/customer/product-order`);
-                      }}
-                    >
-                      <Truck /> My Order
-                    </Dropdown.Item>
-                    <Dropdown.Divider />
-                    <Dropdown.Item onClick={handleLogout}>
-                      <BoxArrowLeft /> Logout
-                    </Dropdown.Item>
-                  </DropdownButton>
-                </Nav.Link>
-              </Nav>
-            ) : (
-              <Nav>
-                <Nav.Link
-                  as={Link}
-                  to='/checkout'
-                >
-                  <Button variant='outline-dark'>
-                    <CartFill />
-                  </Button>
-                </Nav.Link>
-                <Nav.Link
-                  as={Link}
-                  to='/login'
-                >
-                  <Button>Login</Button>
-                </Nav.Link>
-                <Nav.Link
-                  as={Link}
-                  to='/signup'
-                >
-                  <Button variant='outline-primary'>Sign Up</Button>
-                </Nav.Link>
-              </Nav>
-            )}
           </Navbar.Collapse>
         </Container>
       </Navbar>

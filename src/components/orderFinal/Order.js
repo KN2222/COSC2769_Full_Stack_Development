@@ -95,13 +95,19 @@ function Order({ order }) {
                       <Button
                         variant='success'
                         className='me-2'
-                        onClick={() => acceptOrder(order._id)}
+                        onClick={() => {
+                          acceptOrder(order._id);
+                          window.location.reload();
+                        }}
                       >
                         Accept
                       </Button>
                       <Button
                         variant='danger'
-                        onClick={() => rejectOrder(order._id)}
+                        onClick={() => {
+                          rejectOrder(order._id);
+                          window.location.reload();
+                        }}
                       >
                         Reject
                       </Button>
