@@ -2,13 +2,14 @@ import { Button } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { APIService } from '../../../axios/client';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../../store/authContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Trash3Fill } from 'react-bootstrap-icons';
 import { GetProductsByIds } from '../../../api/getProductsByIds';
 import { CreateOrder } from '../../../api/createOrder';
+import { useGetCategoryById } from '../../../api/getCategoryById';
+import React from 'react';
 
 export default function CheckOut() {
   const [cartData, setCartData] = useState([]);
@@ -40,7 +41,7 @@ export default function CheckOut() {
   };
 
   useEffect(() => {
-    const cartFromLocalStorage = JSON.parse(localStorage.getItem('cart')) || {};
+    const cartFromLocalStorage = JSON.parse(localStorage.getItem('cart')) || [];
     setCart(cartFromLocalStorage);
   }, []);
 
@@ -71,7 +72,7 @@ export default function CheckOut() {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      if (Object.keys(cart).length === 0) {
+      if (cart.length === 0) {
         return; // Exit the function if the cart is empty
       }
 
@@ -80,7 +81,7 @@ export default function CheckOut() {
     };
 
     fetchProducts(); // Fetch products when the component mounts
-  }, [cart]);
+  }, [cart, fetchProductsByIds]);
 
   useEffect(() => {
     const Sum = Object.values(cartData).reduce((sum, item) => {
@@ -96,6 +97,48 @@ export default function CheckOut() {
     handleCheckout(cartData, isAuthenticated, navigate);
   };
 
+  const { fetchCategoryById } = useGetCategoryById();
+  const [productCategoryNames, setProductCategoryNames] = useState({});
+
+  useEffect(() => {
+    // Fetch and set the category names for each product in the cart when the component mounts
+    if (Object.keys(cartData).length === 0) {
+      return;
+    }
+
+    const promises = Object.keys(cartData).map((productId) => {
+      const product = cartData[productId];
+      if (product.categories && product.categories.length > 0) {
+        const categoryPromises = product.categories.map((categoryId) =>
+          fetchCategoryById(categoryId)
+            .then((category) => category.name)
+            .catch((error) => {
+              console.error('Error fetching category:', error);
+              return 'Category Not Found';
+            })
+        );
+
+        return Promise.all(categoryPromises).then((categoryNames) => ({
+          [productId]: categoryNames,
+        }));
+      } else {
+        return { [productId]: ['Category Not Found'] };
+      }
+    });
+
+    Promise.all(promises)
+      .then((results) => {
+        // Combine the results into a single object
+        const categoryNames = results.reduce((acc, result) => {
+          return { ...acc, ...result };
+        }, {});
+        setProductCategoryNames(categoryNames);
+      })
+      .catch((error) => {
+        console.error('Error fetching category names:', error);
+      });
+  }, [fetchCategoryById, cartData]);
+
   return (
     <section className='pt-5 pb-5'>
       <div className='container'>
@@ -109,7 +152,7 @@ export default function CheckOut() {
                   items in your cart
                 </>
               ) : (
-                <>You don't have any item in your cart yet</>
+                <>You don't have any items in your cart yet</>
               )}
             </p>
             <table
@@ -137,9 +180,42 @@ export default function CheckOut() {
                           />
                         </div>
                         <div className='col-md-9 text-left mt-sm-2'>
-                          <h4>{product.title}</h4>
+                          <Link
+                            style={{ textDecoration: 'none' }}
+                            to={`/product/${product.id}`}
+                          >
+                            <h4>{product.title}</h4>
+                          </Link>
                           <p className='font-weight-light'>
-                            {product.category}
+                            Description: {product.description}
+                            <br />
+                            Color: {product.Color}
+                            <br />
+                            Size: {product.Size}
+                            <br />
+                            <p>
+                              Category:&nbsp;
+                              {productCategoryNames[product.id] ? (
+                                <>
+                                  {Object.values(
+                                    productCategoryNames[product.id]
+                                  ).map((category, index, categoriesArray) => (
+                                    <React.Fragment key={category}>
+                                      <Link
+                                        to={`/category/${product.categories[index]}`}
+                                        style={{ textDecoration: 'none' }}
+                                      >
+                                        {category}
+                                        {index < categoriesArray.length - 1 &&
+                                          ', '}
+                                      </Link>
+                                    </React.Fragment>
+                                  ))}
+                                </>
+                              ) : (
+                                <></>
+                              )}
+                            </p>
                           </p>
                         </div>
                       </div>
@@ -191,9 +267,9 @@ export default function CheckOut() {
             <Row>
               <Col sm={8}>
                 <div className='col-sm-6 mb-3 mb-m-1 order-md-1 text-md-left'>
-                  <a href='/'>
+                  <Link to='/'>
                     <i className='fas fa-arrow-left mr-2'></i> Continue Shopping
-                  </a>
+                  </Link>
                 </div>
               </Col>
               <Col sm={4}>

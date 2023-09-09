@@ -30,8 +30,6 @@ const OrderStatus = () => {
     getOrder(); // Call it once when the component mounts
   }, []); // Empty dependency array to run only on mount
 
-  console.log(orders); // This will show the initial value of 'order' in the first render
-
   return (
     <Container>
       <h1 className='mt-4 text-center text-primary'>Order Status</h1>
