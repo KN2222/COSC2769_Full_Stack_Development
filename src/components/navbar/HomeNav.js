@@ -148,20 +148,23 @@ export const HomeNav = () => {
                     >
                       <Dropdown.Item
                         eventKey='1'
-                        as={Link} // Use Link component from react-router-dom
-                        to='/customer/profile'
+                        href='/customer/profile'
+                        onClick={() => {
+                          navigate(`/customer/profile`);
+                        }}
                       >
                         <PersonCircle /> Profile
                       </Dropdown.Item>
                       <Dropdown.Item
                         eventKey='2'
-                        as={Link} // Use Link component from react-router-dom
-                        to='/customer/product-order'
+                        href='/customer/product-order'
+                        onClick={() => {
+                          navigate(`/customer/product-order`);
+                        }}
                       >
                         <Truck /> My Order
                       </Dropdown.Item>
                       <Dropdown.Divider />
-                      {/* You can use a button or other UI element here for logout */}
                       <Dropdown.Item onClick={handleLogout}>
                         <BoxArrowLeft /> Logout
                       </Dropdown.Item>
