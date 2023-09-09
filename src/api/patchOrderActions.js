@@ -1,7 +1,9 @@
 import { useCallback } from 'react';
 import { APIService } from '../axios/client';
-
+import { useToastContext } from '../store/toastContext';
 export function PatchOrderActions() {
+  const { showToast } = useToastContext();
+
   // Define a function to reject an order
   const rejectOrder = useCallback(async (orderId) => {
     try {
@@ -10,6 +12,7 @@ export function PatchOrderActions() {
       );
       // Handle the response here
       console.log('Order rejection response:', response.data);
+      window.Location.reload();
     } catch (error) {
       // Handle errors here
       console.error('Error rejecting order:', error);

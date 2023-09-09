@@ -1,6 +1,5 @@
 import React from 'react';
 import Order from './Order';
-import sampleProducts from '../../api/sampleProducts';
 import { Container } from 'react-bootstrap';
 import { APIService } from '../../axios/client';
 import { useState } from 'react';
@@ -31,16 +30,11 @@ const OrderStatus = () => {
     getOrder(); // Call it once when the component mounts
   }, []); // Empty dependency array to run only on mount
 
-  console.log(orders); // This will show the initial value of 'order' in the first render
-
   return (
     <Container>
       <h1 className='mt-4 text-center text-primary'>Order Status</h1>
       <div className='mt-4'>
-        <Order
-          // key={id}
-          order={orders}
-        />
+        <Order order={orders} />
       </div>
     </Container>
   );

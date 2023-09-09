@@ -52,23 +52,21 @@ export const SellerNavbar = () => {
               </Nav.Link>
             </Nav>
             <Nav>
-              <Nav.Link>
-                <DropdownButton
-                  as={ButtonGroup}
-                  title='Account'
+              <DropdownButton
+                as={ButtonGroup}
+                title='Account'
+              >
+                <Dropdown.Item
+                  href='/seller/profile'
+                  onClick={() => {
+                    navigate(`/seller/profile`);
+                  }}
                 >
-                  <Dropdown.Item
-                    href='/seller/profile'
-                    onClick={() => {
-                      navigate(`/seller/profile`);
-                    }}
-                  >
-                    <PersonCircle /> Profile
-                  </Dropdown.Item>
-                  <Dropdown.Divider />
-                  <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
-                </DropdownButton>
-              </Nav.Link>
+                  <PersonCircle /> Profile
+                </Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
+              </DropdownButton>
             </Nav>
           </Navbar.Collapse>
         </Container>
