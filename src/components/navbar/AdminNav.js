@@ -57,23 +57,21 @@ export const AdminNavbar = () => {
               </Nav.Link>
             </Nav> */}
             <Nav>
-              <Nav.Link>
-                <DropdownButton
-                  as={ButtonGroup}
-                  title='Admin'
+              <DropdownButton
+                as={ButtonGroup}
+                title='Admin'
+              >
+                <Dropdown.Item
+                  href='/admin/profile'
+                  onClick={() => {
+                    navigate(`/admin/profile`);
+                  }}
                 >
-                  <Dropdown.Item
-                    href='/admin/profile'
-                    onClick={() => {
-                      navigate(`/admin/profile`);
-                    }}
-                  >
-                    <PersonCircle /> Profile
-                  </Dropdown.Item>
-                  <Dropdown.Divider />
-                  <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
-                </DropdownButton>
-              </Nav.Link>
+                  <PersonCircle /> Profile
+                </Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
+              </DropdownButton>
             </Nav>
           </Navbar.Collapse>
         </Container>
