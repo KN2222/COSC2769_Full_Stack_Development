@@ -5,7 +5,7 @@ import { useCookies } from 'react-cookie';
 import { useAuth } from '../../store/authContext';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
+  const [emailOrPhone, setEmailOrPhone] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
@@ -45,14 +45,35 @@ const Login = () => {
     // }
   }, [accessToken, navigate, getAuthenticatedUserInfo, isAuthenticated]);
 
+  const validateInputIsEmail = (input) => {
+    // Regular expression pattern for email validation
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
+    return emailPattern.test(input);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:8000/auth/login', {
-        email: email,
-        password: password,
-      });
+      const isEmail = validateInputIsEmail(emailOrPhone);
+
+      const requestData = isEmail
+        ? {
+            phone: '',
+            email: emailOrPhone,
+            password: password,
+          }
+        : {
+            phone: emailOrPhone,
+            email: '',
+            password: password,
+          };
+
+      const response = await axios.post(
+        'http://localhost:8000/auth/login',
+        requestData
+      );
 
       // Handle successful login
       setSuccessMessage(response.data.message);
@@ -85,18 +106,19 @@ const Login = () => {
         <form onSubmit={handleSubmit}>
           <div className='mb-3'>
             <label
-              htmlFor='email'
+              htmlFor='emailOrPhone'
               className='form-label'
             >
-              Email
+              Email or Phone
             </label>
             <input
-              type='email'
+              type=''
               className='form-control'
-              id='email'
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              id='emailOrPhone'
+              value={emailOrPhone}
+              onChange={(e) => setEmailOrPhone(e.target.value)}
               required
+              placeholder='Email or Phone'
             />
           </div>
           <div className='mb-3'>

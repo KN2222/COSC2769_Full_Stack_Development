@@ -47,15 +47,6 @@ export const AdminNavbar = () => {
                 Seller CV
               </Nav.Link>
             </Nav>
-            {/* <Nav className='ms-auto'>
-              {' '}
-              <Nav.Link
-                as={Link}
-                to={`/admin/profile`}
-              >
-                <PersonCircle />
-              </Nav.Link>
-            </Nav> */}
             <Nav>
               <DropdownButton
                 as={ButtonGroup}
