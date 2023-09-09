@@ -6,8 +6,8 @@ export const CategoryDeleteModal = (props) => {
   const { deleteCategory } = useDeleteCategory();
   const { category } = props;
 
-  const handleDeleteCategory = () => {
-    deleteCategory(category._id);
+  const handleDeleteCategory = async () => {
+    await deleteCategory(category._id);
     props.onHide();
   };
 

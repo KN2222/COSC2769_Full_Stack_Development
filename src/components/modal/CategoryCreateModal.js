@@ -94,12 +94,12 @@ export const CategoryCreateModal = (props) => {
     }
   };
 
-  const handleCreateCategory = (e) => {
+  const handleCreateCategory = async (e) => {
     if (form.current.checkValidity() === false) {
       e.preventDefault();
       e.stopPropagation();
     } else {
-      createCategory(categoryName, { ...extraValues });
+      await createCategory(categoryName, { ...extraValues });
       setValidated(true);
       setNewAttributes([]);
       setExtraValues({});

@@ -7,7 +7,7 @@ import { useToastContext } from "../store/toastContext";
 export const useUpdateProduct = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const { closeModal } = useModalContext();
-  const {uploadProductImage} = useUploadProductImage();
+  const { uploadProductImage } = useUploadProductImage();
   const { showToast } = useToastContext();
 
   const updateProduct = async (id, updateFields, file) => {
@@ -15,16 +15,17 @@ export const useUpdateProduct = () => {
       const response = await APIService.patch(`/seller/product/${id}`, {
         updateFields,
       });
-      if(file){
+      if (file) {
         console.log("file exists");
-        await uploadProductImage({productId: id, file});
+        await uploadProductImage({ productId: id, file });
       }
       setIsSuccess(true);
       closeModal();
       showToast(200, "Product updated successfully");
       return response.data; // You can return the updated data if needed
     } catch (error) {
-      showToast(error.response.status, error.response.data.message);    }
+      showToast(error.response.status, error.response.data.message);
+    }
   };
 
   useEffect(() => {

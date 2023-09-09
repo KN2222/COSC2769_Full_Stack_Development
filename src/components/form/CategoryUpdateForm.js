@@ -47,7 +47,9 @@ export const CategoryUpdateForm = React.forwardRef(
             <Form.Group className="mb-3" controlId="formBasicName">
               <Form.Label>{attribute}</Form.Label>
               <Form.Control
-                type="text"
+                type={
+                  typeof category[attribute] === "string" ? "text" : "number"
+                }
                 defaultValue={category[attribute]}
                 onChange={(e) => {
                   setExtraValues((prevState) => ({
@@ -61,7 +63,6 @@ export const CategoryUpdateForm = React.forwardRef(
         })}
 
         {newAttributes.map((attribute, index) => {
-  
           if (attribute.type === "string") {
             return (
               <Form.Group className="mb-3">

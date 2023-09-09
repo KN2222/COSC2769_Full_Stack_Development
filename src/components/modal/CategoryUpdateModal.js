@@ -59,10 +59,6 @@ export const CategoryUpdateModal = (props) => {
   const form = useRef(null);
 
   useEffect(() => {
-    console.log("validated", validated);
-  }, [validated]);
-
-  useEffect(() => {
     if (isUpdateSuccess || isUpdateSubSuccess) {
       showToast(200, "Category updated successfully");
     }
@@ -136,8 +132,8 @@ export const CategoryUpdateModal = (props) => {
 
         setExtraValues((prevState) => ({
           ...prevState,
-          [e.target.value]:  attributeType.type === "number" ? 0 : "" ,
-        }))
+          [e.target.value]: attributeType.type === "number" ? 0 : "",
+        }));
       } else {
         showToast(400, "Invalid attribute name");
       }
@@ -152,22 +148,29 @@ export const CategoryUpdateModal = (props) => {
       console.log(defaultExtraValues);
       return defaultExtraValues;
     } else {
-      return extraValues;
+      const defaultExtraValues = extraAttributes.reduce((acc, attribute) => {
+        return { ...acc, [attribute]: category[attribute] };
+      }, {});
+      console.log(defaultExtraValues);
+      
+      return { ...defaultExtraValues, ...extraValues };
     }
   };
 
-  const handleUpdateCategory = (e) => {
+  const handleUpdateCategory = async (e) => {
     console.log(extraValues);
     console.log(extraAttributes);
+    const extra = getExtraValues();
+    console.log(extra);
 
     if (form.current.checkValidity() === false) {
       console.log("here");
       e.preventDefault();
       e.stopPropagation();
     } else {
-      if (newSubCategories.length > 0) {
-        newSubCategories.forEach((subCategoryName) => {
-          createSubCategory({
+      if (subCategoriesNames.length > 0) {
+        subCategoriesNames.forEach(async (subCategoryName) => {
+          await createSubCategory({
             name: subCategoryName,
             updateFields: {
               ...getExtraValues(),
@@ -177,7 +180,7 @@ export const CategoryUpdateModal = (props) => {
         });
       }
 
-      updateCategory(category._id, {
+      await updateCategory(category._id, {
         name: categoryName,
         ...getExtraValues(),
         subCategories: subCategoriesNames,
@@ -199,7 +202,7 @@ export const CategoryUpdateModal = (props) => {
       key !== "adminId" &&
       key !== "_id" &&
       key !== "__v" &&
-      key !== "parentId"     
+      key !== "parentId"
   );
 
   return (
