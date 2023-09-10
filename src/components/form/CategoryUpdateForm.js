@@ -27,7 +27,7 @@ export const CategoryUpdateForm = React.forwardRef(
     return (
       <Form noValidate validated={validated} ref={ref}>
         <Form.Group className="mb-3" controlId="formBasicName">
-          <Form.Label>Name</Form.Label>
+          <Form.Label>Category Name</Form.Label>
           <Form.Control
             required
             type="text"
@@ -41,7 +41,7 @@ export const CategoryUpdateForm = React.forwardRef(
             Please provide a Category Name.
           </Form.Control.Feedback>
         </Form.Group>
-
+        <h5 className="text-success">Current Attributes:</h5>
         {extraAttributes.map((attribute, index) => {
           return (
             <Form.Group className="mb-3" controlId="formBasicName">
@@ -141,6 +141,7 @@ export const CategoryUpdateForm = React.forwardRef(
                     isValid={attributeType.type !== "none"}
                     onKeyDown={handleNewAttributeEnter}
                   />
+                  <span className="text-success">"Enter" to confirm</span>
                 </>
               )}
             </ListGroup.Item>
@@ -181,14 +182,17 @@ export const CategoryUpdateForm = React.forwardRef(
                   }}
                 />
                 {isAddNewSubCategory && (
-                  <Form.Control
-                    type="text"
-                    required
-                    autoFocus
-                    className="m-1"
-                    placeholder="New Subcategory"
-                    onKeyDown={handleNewSubCategoryEnter}
-                  />
+                  <>
+                    <Form.Control
+                      type="text"
+                      required
+                      autoFocus
+                      className="m-1"
+                      placeholder="New Subcategory"
+                      onKeyDown={handleNewSubCategoryEnter}
+                    />
+                    <span className="text-success">"Enter" to confirm</span>
+                  </>
                 )}
               </Button>
             </ListGroup.Item>

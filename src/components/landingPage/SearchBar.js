@@ -23,10 +23,10 @@ export default function SearchBar({
 
   return (
     <Container className="">
-      <div class="row w-100 d-flex justify-content-center align-items-center">
-        <div class="col-md-9">
-          <div class="search">
-            <i class="fa fa-search"></i>
+      <div className="row w-100 d-flex justify-content-center align-items-center">
+        <div className="col-md-9">
+          <div className="search">
+            <i className="fa fa-search"></i>
             <input
               type="text"
               className="form-control"
@@ -35,7 +35,7 @@ export default function SearchBar({
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={handleKeyDown}
             />
-            <button class="btn btn-primary search-btn" onClick={handleSearch}>
+            <button className="btn btn-primary search-btn" onClick={handleSearch}>
               Search
             </button>
             {/* <button class="btn btn-primary filter-btn" onClick={handleSearch}> */}
