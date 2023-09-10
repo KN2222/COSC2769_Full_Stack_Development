@@ -1,5 +1,4 @@
 import { Container } from "react-bootstrap";
-
 export const HomeBanner = () => {
   return (
     <Container
@@ -12,7 +11,7 @@ export const HomeBanner = () => {
       
     >
       <img
-        src="banner.gif"
+        src="/banner.gif"
         alt="banner"
         style={{ width: "65%", height: "5.5rem" }}
       />

@@ -3,6 +3,7 @@ import { Footer } from '../components/footer';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useAuth } from '../store/authContext';
+import { HomeBanner } from '../components/banner/HomeBanner';
 export const CustomerLayout = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -22,6 +23,7 @@ export const CustomerLayout = () => {
 
   return (
     <div className='vw-100'>
+      <HomeBanner/>
       <HomeNav />
       <Outlet />
       <Footer />
