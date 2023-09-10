@@ -146,11 +146,8 @@ export const HomeNav = () => {
 
               {isAuthenticated ? (
                 <>
-                  <Nav>
-                    <DropdownButton
-                      as={ButtonGroup}
-                      title='Account'
-                    >
+                  <Navbar.Collapse>
+                    <DropdownButton title="Account" className="">
                       <Dropdown.Item
                         eventKey='1'
                         href='/customer/profile'
@@ -174,7 +171,7 @@ export const HomeNav = () => {
                         <BoxArrowLeft /> Logout
                       </Dropdown.Item>
                     </DropdownButton>
-                  </Nav>
+                  </Navbar.Collapse>
                 </>
               ) : (
                 <>

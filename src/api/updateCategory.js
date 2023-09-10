@@ -22,7 +22,7 @@ export const useUpdateCategory = () => {
   useEffect(() => {
     if (isSuccess) {
       setIsSuccess(false);
-    }
+    } 
   }, [isSuccess]);
 
   return {
