@@ -34,24 +34,31 @@ export const ProductUpdateModal = (props) => {
   const form = useRef(null);
 
   const handleUpdateProduct = async (e) => {
-    if (
-      form.current.checkValidity() === false ||
-      price === -1 ||
-      stock === -1 ||
+    if (price <= 0) {
+      e.preventDefault();
+      e.stopPropagation();
+      showToast(400, "Price must be greater than or equal to 0");
+    }else if (price.toString().split(".")[1]?.length > 2) {
+      e.preventDefault();
+      e.stopPropagation();
+      showToast(400, "Price should have at most two decimal places");
+    } else if (stock <= 0) {
+      e.preventDefault();
+      e.stopPropagation();
+      showToast(400, "Stock must be greater than 0");
+    } else if (
+      price === "" ||
+      stock === "" ||
       title === "" ||
       description === ""
     ) {
       e.preventDefault();
       e.stopPropagation();
       showToast(400, "Please fill out all the fields");
-    } else if (price <= 0) {
+    }else if (form.current.checkValidity() === false){
       e.preventDefault();
       e.stopPropagation();
-      showToast(400, "Price must be greater than or equal to 0");
-    } else if (stock < 0) {
-      e.preventDefault();
-      e.stopPropagation();
-      showToast(400, "Stock must be greater than 0");
+      showToast(400, "Stock shoud be a whole number");
     } else {
       try {
         const mergedAttributes = {
@@ -139,6 +146,7 @@ export const ProductUpdateModal = (props) => {
               <Form.Control
                 defaultValue={product.price}
                 type="number"
+                step={0.01}
                 onChange={(e) => {
                   if (e.target.value >= 0) {
                     setPrice(e.target.value);
@@ -152,6 +160,7 @@ export const ProductUpdateModal = (props) => {
               <Form.Control
                 defaultValue={product.stock}
                 type="number"
+                step={1}
                 onChange={(e) => {
                   if (e.target.value >= 0) {
                     setStock(e.target.value);
