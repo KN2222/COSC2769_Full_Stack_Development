@@ -12,6 +12,7 @@ export const AdminLayout = () => {
   const userInfo = getAuthenticatedUserInfo();
 
   useEffect(() => {
+    if (!userInfo) return navigate('/');
     if (userInfo.role.slice(1, -1) === 'admin') {
       if (location.pathname === '/admin') {
         navigate('/admin/home');
@@ -19,7 +20,7 @@ export const AdminLayout = () => {
     } else {
       navigate('/');
     }
-  }, [navigate, location, userInfo.role]);
+  }, [navigate, location.pathname]);
 
   return (
     <div className='vw-100'>

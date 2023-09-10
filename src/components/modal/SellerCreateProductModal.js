@@ -60,7 +60,8 @@ export const CreateProductModal = (props) => {
           openModalGlobal();
           openAttributeModal();
         }else{
-        onHide();
+          deleteUseState();
+          onHide();
         }
 
       } catch (error) {
@@ -74,6 +75,17 @@ export const CreateProductModal = (props) => {
     setCategory(""); 
     setFile(null);
   };
+
+  const deleteUseState = () => {
+    setTitle("");
+    setDescription("");
+    setPrice(-1);
+    setStock(-1);
+    setCategory("");
+    setFile(null);
+    setProductDataReady(false);
+    setProduct(null);
+  }
 
   return (
     <Modal
@@ -181,6 +193,7 @@ export const CreateProductModal = (props) => {
       onHide={closeAttributeModal}
       product={product}
       createModalClose={handleClose}
+      deleteUseState={deleteUseState}
     />
   )}
     </Modal>
