@@ -14,12 +14,14 @@ export function UpdateUserProfileImage() {
     setSelectedImage(file);
 
     // Display the selected image as a preview
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const imagePreview = document.getElementById("image-preview");
-      imagePreview.src = e.target.result;
-    };
-    reader.readAsDataURL(file);
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const imagePreview = document.getElementById("image-preview");
+        imagePreview.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    } 
   }, []);
 
   // Define a function to handle image upload

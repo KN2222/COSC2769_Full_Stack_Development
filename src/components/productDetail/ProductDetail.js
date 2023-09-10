@@ -6,6 +6,8 @@ import { useToastContext } from '../../store/toastContext';
 import { useGetCategoryById } from '../../api/getCategoryById';
 import { useEffect, useState } from 'react';
 import React from 'react';
+import PutCart from '../../api/putCart';
+
 export default function ProductDetail() {
   const { fetchCategoryById } = useGetCategoryById();
 
@@ -18,6 +20,8 @@ export default function ProductDetail() {
   const [quantity, setQuantity] = useState(1);
 
   const { showToast } = useToastContext();
+
+  const { updateCustomerCart } = PutCart();
 
   const handleAddToCart = () => {
     updateCart(productId, quantity);
@@ -41,7 +45,6 @@ export default function ProductDetail() {
               return category.name;
             })
           );
-          console.log(categoryData);
           setCategories(categoryData);
         } catch (error) {
           console.error('Error fetching category names:', error);
@@ -63,10 +66,11 @@ export default function ProductDetail() {
       cart[existingIndex].quantity += quantity;
     } else {
       // If the product doesn't exist in the cart, add it as a new item
-      cart.push({ id: productId.toString(), quantity: quantity });
+      cart.push({ product: productId.toString(), quantity: quantity });
     }
 
     localStorage.setItem('cart', JSON.stringify(cart));
+    updateCustomerCart(cart);
   };
 
   return (

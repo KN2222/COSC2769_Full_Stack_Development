@@ -20,7 +20,7 @@ export const CategoryAddForm = React.forwardRef(
     return (
       <Form noValidate validated={validated} ref={ref}>
         <Form.Group className="mb-3" controlId="formBasicName">
-          <Form.Label>Name</Form.Label>
+          <Form.Label>Category Name</Form.Label>
           <Form.Control
             type="text"
             required
@@ -32,7 +32,8 @@ export const CategoryAddForm = React.forwardRef(
             Please provide a Category Name.
           </Form.Control.Feedback>
         </Form.Group>
-
+            {newAttributes.length<=0?<h6 className="text-danger">Click "+" to add attribute</h6>:<div><h5 className="text-success">Current Attributes:</h5><p>Admin can set a default value for attribute, however seller can change this value later</p>
+              </div>}
         {newAttributes.map((attribute, index) => {
           if (attribute.type === "string") {
             return (
@@ -82,6 +83,7 @@ export const CategoryAddForm = React.forwardRef(
                   }}
                 />
               </Button>
+              <br />
               {isAddNewAttribute && (
                 <>
                   <Form.Check
@@ -114,8 +116,10 @@ export const CategoryAddForm = React.forwardRef(
                     isValid={attributeType.type !== "none"}
                     onKeyDown={handleNewAttributeEnter}
                   />
+                  <span className="text-success">"Enter" to confirm</span>
                 </>
               )}
+              
             </ListGroup.Item>
           </ListGroup>
         </Form.Group>

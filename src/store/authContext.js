@@ -9,6 +9,7 @@ import { APIService } from '../axios/client';
 import { useCookies } from 'react-cookie';
 import jwt_decode from 'jwt-decode'; // Import jwt_decode library for decoding tokens
 import { GetUserAvatar } from '../api/getUserAvatar';
+import GetCart from '../api/getCart';
 
 export const AuthContext = React.createContext();
 
@@ -18,9 +19,7 @@ export const AuthProvider = ({ children }) => {
   // Decode the token and save the decoded object into local storage
 
   useEffect(() => {
-    // console.log('accessToken', accessToken);
     const decodedData = decodeAndStoreTokenData(accessToken);
-    // console.log(decodedData);
   }, [accessToken]);
 
   const decodeAndStoreTokenData = (token) => {
@@ -34,7 +33,7 @@ export const AuthProvider = ({ children }) => {
 
       return decodedToken;
     } catch (error) {
-      console.error('Error decoding and storing token data:', error);
+      // console.error('Error decoding and storing token data:', error);
       return null;
     }
   };
@@ -46,6 +45,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.removeItem('_id');
       localStorage.removeItem('role');
       localStorage.removeItem('iat');
+      localStorage.removeItem('cart');
       return '/';
     }, [removeCookie]);
   }
@@ -98,6 +98,17 @@ export const AuthProvider = ({ children }) => {
       throw error;
     }
   }, []);
+
+  const { cartData, isLoading } = GetCart();
+
+  useEffect(() => {
+    if (!isLoading) {
+      const extractedCart = cartData.cart;
+      if (extractedCart && extractedCart.cart) {
+        localStorage.setItem('cart', JSON.stringify(extractedCart.cart));
+      }
+    }
+  });
 
   const setToken = useCallback(
     (token) => {

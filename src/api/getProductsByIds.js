@@ -6,13 +6,13 @@ export function GetProductsByIds() {
     async (products) => {
       const productsData = {};
 
-      for (const product of products) {
-        const { id, quantity } = product;
+      for (const productToFetch of products) {
+        const { product, quantity } = productToFetch;
         try {
-          const response = await APIService.get(`/seller/product/${id}`);
+          const response = await APIService.get(`/seller/product/${product}`);
           const fetchedProduct = response.data.product; // Access the 'product' object in the response
 
-          productsData[id] = { id, quantity, ...fetchedProduct };
+          productsData[product] = { product, quantity, ...fetchedProduct };
         } catch (error) {
           console.error('Error fetching product data:', error);
         }
