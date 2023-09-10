@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { GetProductsByCategory } from '../../../api/getProductsByCategory';
-import { useParams } from 'react-router-dom';
-import { SkeletonProductCard } from '../../../components/loading/SkeletonProductCard';
-import { Link } from 'react-router-dom';
-import { Card, Button } from 'react-bootstrap';
+import React, { useState } from "react";
+import { GetProductsByCategory } from "../../../api/getProductsByCategory";
+import { useParams } from "react-router-dom";
+import { SkeletonProductCard } from "../../../components/loading/SkeletonProductCard";
+import { Link } from "react-router-dom";
+import { Card, Button, Container,Row } from "react-bootstrap";
+import { StoreCarousel } from "../../../components/carousel/StoreCarousel";
 
 function Category() {
   const { categoryId } = useParams();
@@ -29,7 +30,11 @@ function Category() {
   };
 
   return (
-    <div className='container'>
+    <Container>
+      <Row className="my-2">
+        <StoreCarousel />
+      </Row>
+
       <h2>Product Category</h2>
       <h3>Number of products: {products.count}</h3>
       {loading ? (
@@ -40,42 +45,39 @@ function Category() {
             <>No products to display.</>
           ) : (
             <>
-              <div className='row row-cols-1 row-cols-md-3 g-4'>
+              <div className="row row-cols-1 row-cols-md-3 g-4">
                 {productsToDisplay.map((product) => (
-                  <div
-                    key={product._id}
-                    className='col'
-                  >
+                  <div key={product._id} className="col">
                     <Link
-                      style={{ textDecoration: 'none' }}
+                      style={{ textDecoration: "none" }}
                       to={`/product/${product._id}`}
                     >
-                      <Card className='h-100 d-flex flex-column justify-content-between'>
+                      <Card className="h-100 d-flex flex-column justify-content-between">
                         <Card.Img
-                          variant='top'
+                          variant="top"
                           alt={product.title}
                           src={`http://localhost:8000/seller/product/image/${product._id}`}
-                          style={{ objectFit: 'cover', height: '200px' }}
+                          style={{ objectFit: "cover", height: "200px" }}
                         />
-                        <Card.Body className='d-flex flex-column'>
+                        <Card.Body className="d-flex flex-column">
                           <div>
-                            <div className='d-flex flex-row '>
-                              <Card.Title className='text-truncate'>
+                            <div className="d-flex flex-row ">
+                              <Card.Title className="text-truncate">
                                 {product.title}
                               </Card.Title>
                             </div>
-                            <Card.Text className='multi-line-truncate'>
-                              <span className='fw-semibold text-decoration-underline'>
+                            <Card.Text className="multi-line-truncate">
+                              <span className="fw-semibold text-decoration-underline">
                                 Description:
                               </span>
                               {product.description}
                             </Card.Text>
                           </div>
-                          <div className='mt-auto'>
-                            <Card.Text className='text-success fw-semibold'>
+                          <div className="mt-auto">
+                            <Card.Text className="text-success fw-semibold">
                               Price: ${product.price}
                             </Card.Text>
-                            <Button variant='primary'>Add to Cart</Button>
+                            <Button variant="primary">Add to Cart</Button>
                           </div>
                         </Card.Body>
                       </Card>
@@ -83,18 +85,15 @@ function Category() {
                   </div>
                 ))}
               </div>
-              <nav
-                aria-label='Page navigation'
-                className='mt-3'
-              >
-                <ul className='pagination'>
+              <nav aria-label="Page navigation" className="mt-3">
+                <ul className="pagination">
                   <li
                     className={`page-item ${
-                      currentPage === 1 ? 'disabled' : ''
+                      currentPage === 1 ? "disabled" : ""
                     }`}
                   >
                     <button
-                      className='page-link'
+                      className="page-link"
                       onClick={() => handlePageChange(currentPage - 1)}
                     >
                       Previous
@@ -104,11 +103,11 @@ function Category() {
                     <li
                       key={index}
                       className={`page-item ${
-                        currentPage === index + 1 ? 'active' : ''
+                        currentPage === index + 1 ? "active" : ""
                       }`}
                     >
                       <button
-                        className='page-link'
+                        className="page-link"
                         onClick={() => handlePageChange(index + 1)}
                       >
                         {index + 1}
@@ -117,11 +116,11 @@ function Category() {
                   ))}
                   <li
                     className={`page-item ${
-                      currentPage === totalPages ? 'disabled' : ''
+                      currentPage === totalPages ? "disabled" : ""
                     }`}
                   >
                     <button
-                      className='page-link'
+                      className="page-link"
                       onClick={() => handlePageChange(currentPage + 1)}
                     >
                       Next
@@ -134,7 +133,7 @@ function Category() {
           {/* Pagination */}
         </>
       )}
-    </div>
+    </Container>
   );
 }
 

@@ -1,9 +1,16 @@
-import ProductCard from '../../../components/landingPage/ProductCard';
+import { Container, Row } from "react-bootstrap";
+import ProductCard from "../../../components/landingPage/ProductCard";
+import { StoreCarousel } from "../../../components/carousel/StoreCarousel";
 
 export default function Home() {
   return (
-    <div>
-      <ProductCard />
-    </div>
+    <Container>
+      <Row className="my-2">
+        <StoreCarousel />
+      </Row>
+      <Row className="my-2">
+        <ProductCard />
+      </Row>
+    </Container>
   );
 }

@@ -60,11 +60,7 @@ export const routePaths = {
         },
       ],
     },
-    {
-      path: '*',
-      element: <></>,
-      children: [],
-    },
+
   ],
 
   privateCustomer: [
