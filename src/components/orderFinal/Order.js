@@ -118,15 +118,28 @@ function Order() {
                 <div className='my-3'>
                   <hr style={{ borderColor: '#000' }} />
                 </div>
-                {order.status !== 'Shipped' && (
+                {/* {order.status !== 'Shipped' && (
                   <Card.Text className='fw-semibold'>
                     Status: {order.status}
+                  </Card.Text>
+                )} */}
+                {order.status === 'Accepted' && (
+                  <Card.Text className='fw-semibold'>
+                    Status:&nbsp;
+                    <span className='text-success'>{order.status}</span>
+                  </Card.Text>
+                )}
+                {order.status === 'Rejected' && (
+                  <Card.Text className='fw-semibold text-danger-emphasis'>
+                    Status:&nbsp;
+                    <span className='text-danger'>{order.status}</span>
                   </Card.Text>
                 )}
                 {order.status === 'Shipped' && (
                   <div>
                     <Card.Text className='fw-semibold'>
-                      Status: {order.status}
+                      Status:&nbsp;
+                      <span className='text-warning'>{order.status}</span>
                       <div>
                         <Button
                           variant='success'

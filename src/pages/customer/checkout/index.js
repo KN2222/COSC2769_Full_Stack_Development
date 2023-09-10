@@ -26,7 +26,9 @@ export default function CheckOut() {
     const updatedCart = [...cart];
 
     // Find the index of the product in the cart
-    const productIndex = updatedCart.findIndex((item) => item.id === productId);
+    const productIndex = updatedCart.findIndex(
+      (item) => item.product === productId
+    );
 
     if (productIndex !== -1) {
       // Update the quantity of the product
@@ -53,7 +55,7 @@ export default function CheckOut() {
 
     // Find the index of the product with the matching productId
     const productIndex = updatedCart.findIndex(
-      (product) => product.id === productId
+      (product) => product.product === productId
     );
 
     // Check if the product exists in the cart
@@ -169,12 +171,12 @@ export default function CheckOut() {
               </thead>
               <tbody>
                 {Object.values(cartData).map((product) => (
-                  <tr key={product.id}>
+                  <tr key={product._id}>
                     <td data-th='Product'>
                       <div className='row'>
                         <div className='col-md-3 text-left'>
                           <img
-                            src={`http://localhost:8000/seller/product/image/${product.id}`}
+                            src={`http://localhost:8000/seller/product/image/${product._id}`}
                             alt={product.title}
                             className='img-thumbnail d-none d-md-block rounded mb-2 shadow'
                           />
@@ -182,18 +184,18 @@ export default function CheckOut() {
                         <div className='col-md-9 text-left mt-sm-2'>
                           <Link
                             style={{ textDecoration: 'none' }}
-                            to={`/product/${product.id}`}
+                            to={`/product/${product._id}`}
                           >
                             <h4>{product.title}</h4>
                           </Link>
-                          <p className='font-weight-light'>
+                          <div className='font-weight-light'>
                             Description: {product.description}
                             <br />
                             Color: {product.Color}
                             <br />
                             Size: {product.Size}
                             <br />
-                            <p>
+                            <div>
                               Category:&nbsp;
                               {productCategoryNames[product.id] ? (
                                 <>
@@ -215,8 +217,8 @@ export default function CheckOut() {
                               ) : (
                                 <></>
                               )}
-                            </p>
-                          </p>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </td>

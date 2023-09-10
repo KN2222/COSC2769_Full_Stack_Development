@@ -30,7 +30,6 @@ export const routePaths = {
       element: <AppLayout />,
       children: [
         {
-          // TODO fetch data
           path: '/category/:categoryId',
           element: <Category />,
         },
@@ -47,10 +46,6 @@ export const routePaths = {
           element: <CheckOut />,
         },
         {
-          path: '/profile',
-          element: <Profile />,
-        },
-        {
           path: '/',
           element: <Home />,
         },
@@ -60,7 +55,6 @@ export const routePaths = {
         },
       ],
     },
-
   ],
 
   privateCustomer: [
