@@ -1,19 +1,19 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useCategoryTree } from "../../api/getCategoryTree";
-import { Navbar, Nav, Container, NavDropdown, Button } from "react-bootstrap";
-import ButtonGroup from "react-bootstrap/ButtonGroup";
-import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
+import { Link, useNavigate } from 'react-router-dom';
+import { useCategoryTree } from '../../api/getCategoryTree';
+import { Navbar, Nav, Container, NavDropdown, Button } from 'react-bootstrap';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
 import {
   CartFill,
   PersonCircle,
   Truck,
   BoxArrowLeft,
-} from "react-bootstrap-icons";
-import React from "react";
+} from 'react-bootstrap-icons';
+import React from 'react';
 
-import { useState } from "react";
-import { useAuth } from "../../store/authContext";
+import { useState } from 'react';
+import { useAuth } from '../../store/authContext';
 
 const isObjectEmpty = (obj) => {
   return Object.keys(obj).length === 0;
@@ -47,18 +47,17 @@ export const HomeNav = () => {
   };
 
   const renderCategoryDropdown = (category, categoryName, isParent) => {
-    console.log();
     return (
       <NavDropdown
         key={category._id}
-        id="basic-nav-dropdown"
+        id='basic-nav-dropdown'
         title={categoryName}
-        className="p-0"
+        className='p-0'
         show={dropdownOpen[category._id]}
         onMouseEnter={() => handleMouseEnter(category._id)}
         onMouseLeave={() => handleMouseLeave(category._id)}
-        autoClose={"outside"}
-        drop={isParent ? "down-centered" : "end"}
+        autoClose={'outside'}
+        drop={isParent ? 'down-centered' : 'end'}
         onClick={(e) => {
           e.stopPropagation();
           navigate(`/category/${category._id}`);
@@ -78,7 +77,7 @@ export const HomeNav = () => {
       ) : (
         <NavDropdown.Item
           key={category._id}
-          eventKey="1"
+          eventKey='1'
           onClick={(e) => {
             e.stopPropagation();
             navigate(`/category/${category._id}`);
@@ -93,18 +92,28 @@ export const HomeNav = () => {
   return (
     <>
       <Navbar
-        key={"navasd"}
-        expand="lg"
-        className="m-0 pb-0 sticky-top justify-content-between navbar-light bg-white"
+        key={'navasd'}
+        expand='lg'
+        className='m-0 pb-0 sticky-top justify-content-between navbar-light bg-white'
       >
         <Container>
-          <Navbar.Brand as={Link} to="/">
+          <Navbar.Brand
+            as={Link}
+            to='/'
+          >
             {/* Home0 */}
-            <img src="/logo.png" alt="logo" width="40" />
+            <img
+              src='/logo.png'
+              alt='logo'
+              width='40'
+            />
           </Navbar.Brand>
-          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-          <Navbar.Collapse id="responsive-navbar-nav">
-            <Nav style={{ maxHeight: "100px" }} className="me-auto">
+          <Navbar.Toggle aria-controls='responsive-navbar-nav' />
+          <Navbar.Collapse id='responsive-navbar-nav'>
+            <Nav
+              style={{ maxHeight: '100px' }}
+              className='me-auto'
+            >
               {Object.entries(categoryTree).map(([categoryName, category]) => {
                 return (
                   <React.Fragment key={category._id}>
@@ -126,8 +135,11 @@ export const HomeNav = () => {
               })}
             </Nav>
             <Nav>
-              <Nav.Link as={Link} to="/checkout">
-                <Button variant="outline-dark">
+              <Nav.Link
+                as={Link}
+                to='/checkout'
+              >
+                <Button variant='outline-dark'>
                   <CartFill />
                 </Button>
               </Nav.Link>
@@ -135,10 +147,13 @@ export const HomeNav = () => {
               {isAuthenticated ? (
                 <>
                   <Nav>
-                    <DropdownButton as={ButtonGroup} title="Account">
+                    <DropdownButton
+                      as={ButtonGroup}
+                      title='Account'
+                    >
                       <Dropdown.Item
-                        eventKey="1"
-                        href="/customer/profile"
+                        eventKey='1'
+                        href='/customer/profile'
                         onClick={() => {
                           navigate(`/customer/profile`);
                         }}
@@ -146,8 +161,8 @@ export const HomeNav = () => {
                         <PersonCircle /> Profile
                       </Dropdown.Item>
                       <Dropdown.Item
-                        eventKey="2"
-                        href="/customer/product-order"
+                        eventKey='2'
+                        href='/customer/product-order'
                         onClick={() => {
                           navigate(`/customer/product-order`);
                         }}
@@ -163,11 +178,17 @@ export const HomeNav = () => {
                 </>
               ) : (
                 <>
-                  <Nav.Link as={Link} to="/login">
+                  <Nav.Link
+                    as={Link}
+                    to='/login'
+                  >
                     <Button>Login</Button>
                   </Nav.Link>
-                  <Nav.Link as={Link} to="/signup">
-                    <Button variant="outline-primary">Sign Up</Button>
+                  <Nav.Link
+                    as={Link}
+                    to='/signup'
+                  >
+                    <Button variant='outline-primary'>Sign Up</Button>
                   </Nav.Link>
                 </>
               )}

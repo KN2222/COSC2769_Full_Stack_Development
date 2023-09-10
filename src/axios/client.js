@@ -1,18 +1,18 @@
-import axios from "axios";
+import axios from 'axios';
 
 export const APIService = axios.create({
   baseURL: process.env.REACT_APP_BACKEND_ENDPOINT,
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
 });
 
 export const setUpInterceptors = (instance) => {
   instance.interceptors.request.use(
     (config) => {
-      if (instance.defaults.headers.common["Authorization"]) {
-        console.log(instance.defaults.headers.common["Authorization"]);
-        config.headers["Authorization"] = instance.defaults.headers.common["Authorization"];
+      if (instance.defaults.headers.common['Authorization']) {
+        config.headers['Authorization'] =
+          instance.defaults.headers.common['Authorization'];
       }
       return config;
     },

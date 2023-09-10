@@ -1,30 +1,30 @@
-import React, { useEffect, useReducer, useRef, useState } from "react";
-import { Modal, Button } from "react-bootstrap";
-import { useToastContext } from "../../store/toastContext";
-import { useCreateCategory } from "../../api/createCategory";
-import { CategoryAddForm } from "../form/CategoryAddForm";
+import React, { useEffect, useReducer, useRef, useState } from 'react';
+import { Modal, Button } from 'react-bootstrap';
+import { useToastContext } from '../../store/toastContext';
+import { useCreateCategory } from '../../api/createCategory';
+import { CategoryAddForm } from '../form/CategoryAddForm';
 const attributeTypeReducer = (state, action) => {
-  if (action.type === "number") {
-    return { ...state, type: "number" };
-  } else if (action.type === "string") {
-    return { ...state, type: "string" };
+  if (action.type === 'number') {
+    return { ...state, type: 'number' };
+  } else if (action.type === 'string') {
+    return { ...state, type: 'string' };
   }
-  throw Error("Invalid action type");
+  throw Error('Invalid action type');
 };
 
 function isExtraAttributeValid(attributeName) {
   if (
-    attributeName !== "name" &&
-    attributeName !== "_id" &&
-    attributeName !== "admins" &&
-    attributeName !== "subCategories" &&
-    attributeName !== "subCategoryNames" &&
-    attributeName !== "__v" &&
-    attributeName !== "title" &&
-    attributeName !== "description" &&
-    attributeName !== "seller" &&
-    attributeName !== "date" &&
-    attributeName !== "categories"
+    attributeName !== 'name' &&
+    attributeName !== '_id' &&
+    attributeName !== 'admins' &&
+    attributeName !== 'subCategories' &&
+    attributeName !== 'subCategoryNames' &&
+    attributeName !== '__v' &&
+    attributeName !== 'title' &&
+    attributeName !== 'description' &&
+    attributeName !== 'seller' &&
+    attributeName !== 'date' &&
+    attributeName !== 'categories'
   ) {
     return true;
   } else {
@@ -40,14 +40,14 @@ export const CategoryCreateModal = (props) => {
   const [extraValues, setExtraValues] = useState({});
   const [attributeType, dispatchAttributeType] = useReducer(
     attributeTypeReducer,
-    { type: "none" }
+    { type: 'none' }
   );
   const { showToast } = useToastContext();
   const form = useRef(null);
 
   useEffect(() => {
     if (isSuccess) {
-      showToast(200, "Create Category successfully");
+      showToast(200, 'Create Category successfully');
     }
   }, [isSuccess, showToast]);
 
@@ -59,22 +59,17 @@ export const CategoryCreateModal = (props) => {
     }
   }, [props.show]);
 
-  useEffect(() => {
-    console.log("extraValues", extraValues);
-  }, [extraValues]);
-
   const handleAddNewAttribute = () => {
     setIsAddNewAttribute(true);
   };
 
   const handleNewAttributeEnter = (e) => {
-    if (e.key === "Enter") {
-      console.log("e.target.value", e.target.value);
+    if (e.key === 'Enter') {
       if (
         e.target.value &&
         isExtraAttributeValid(e.target.value) &&
         e.target.value.length > 0 &&
-        attributeType.type !== "none"
+        attributeType.type !== 'none'
       ) {
         setNewAttributes((prevState) => [
           ...prevState,
@@ -86,10 +81,10 @@ export const CategoryCreateModal = (props) => {
 
         setExtraValues((prevState) => ({
           ...prevState,
-          [e.target.value]: attributeType.type === "number" ? 0 : "",
+          [e.target.value]: attributeType.type === 'number' ? 0 : '',
         }));
       } else {
-        showToast(400, "Invalid attribute name");
+        showToast(400, 'Invalid attribute name');
       }
     }
   };
@@ -110,13 +105,13 @@ export const CategoryCreateModal = (props) => {
   return (
     <Modal
       {...props}
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
-      className="w-100"
+      size='lg'
+      aria-labelledby='contained-modal-title-vcenter'
+      className='w-100'
       centered
     >
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
+        <Modal.Title id='contained-modal-title-vcenter'>
           Create new category
         </Modal.Title>
       </Modal.Header>
@@ -134,8 +129,12 @@ export const CategoryCreateModal = (props) => {
           ref={form}
         />
       </Modal.Body>
-      <Modal.Footer className="d-flex justify-content-between">
-        <Button type="submit" variant="primary" onClick={handleCreateCategory}>
+      <Modal.Footer className='d-flex justify-content-between'>
+        <Button
+          type='submit'
+          variant='primary'
+          onClick={handleCreateCategory}
+        >
           Save
         </Button>
         <Button onClick={props.onHide}>Close</Button>

@@ -1,26 +1,25 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Modal } from "react-bootstrap";
-import { Form } from "react-bootstrap";
-import { Button } from "react-bootstrap";
-import { useGetAllCategory } from "../../api/getAllCategory";
-import { useToastContext } from "../../store/toastContext";
-import { useUpdateProduct } from "../../api/updateProduct";
-import { useDeleteProduct } from "../../api/deleteProduct";
-
+import React, { useState, useRef, useEffect } from 'react';
+import { Modal } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
+import { useGetAllCategory } from '../../api/getAllCategory';
+import { useToastContext } from '../../store/toastContext';
+import { useUpdateProduct } from '../../api/updateProduct';
+import { useDeleteProduct } from '../../api/deleteProduct';
 
 export const ProductCategoryAttributeModal = (props) => {
   const { product } = props;
   const filteredAttributes = [
-    "title",
-    "description",
-    "price",
-    "stock",
-    "categories",
-    "_id",
-    "image",
-    "seller",
-    "date",
-    "__v",
+    'title',
+    'description',
+    'price',
+    'stock',
+    'categories',
+    '_id',
+    'image',
+    'seller',
+    'date',
+    '__v',
   ];
   const [title, setTitle] = useState(product.title);
   const [description, setDescription] = useState(product.description);
@@ -34,110 +33,112 @@ export const ProductCategoryAttributeModal = (props) => {
   const { categories } = useGetAllCategory();
   const form = useRef(null);
 
-//   useEffect(() => {
-//     const handleOutsideClick = (e) => {
-//         const productDiv = document.getElementById(product._id);
-//       if (!e.target.closest(`#${product._id}`)) {
-//         document.removeEventListener('click', handleOutsideClick);
-//         handleClose() // Clicked outside
-//         document.removeEventListener('click', handleOutsideClick);
-//       }
-//     };
+  //   useEffect(() => {
+  //     const handleOutsideClick = (e) => {
+  //         const productDiv = document.getElementById(product._id);
+  //       if (!e.target.closest(`#${product._id}`)) {
+  //         document.removeEventListener('click', handleOutsideClick);
+  //         handleClose() // Clicked outside
+  //         document.removeEventListener('click', handleOutsideClick);
+  //       }
+  //     };
 
-//     document.addEventListener('click', handleOutsideClick);
+  //     document.addEventListener('click', handleOutsideClick);
 
-//     return () => {
-//       document.removeEventListener('click', handleOutsideClick);
-//     };
-//   }, []);
+  //     return () => {
+  //       document.removeEventListener('click', handleOutsideClick);
+  //     };
+  //   }, []);
 
   const handleUpdateProduct = async (e) => {
     if (
       form.current.checkValidity() === false ||
       price === -1 ||
       stock === -1 ||
-      title === "" ||
-      description === ""
+      title === '' ||
+      description === ''
     ) {
       e.preventDefault();
       e.stopPropagation();
-      showToast(400, "Please fill out all the fields");
+      showToast(400, 'Please fill out all the fields');
     } else if (price <= 0) {
       e.preventDefault();
       e.stopPropagation();
-      showToast(400, "Price must be greater than or equal to 0");
+      showToast(400, 'Price must be greater than or equal to 0');
     } else if (stock < 0) {
       e.preventDefault();
       e.stopPropagation();
-      showToast(400, "Stock must be greater than 0");
+      showToast(400, 'Stock must be greater than 0');
     } else {
       try {
         const mergedAttributes = {
-          ...{title,description,price,stock,},
+          ...{ title, description, price, stock },
           ...attributeValues,
         };
-        await updateProduct(
-          props.product._id,
-          mergedAttributes,
-          file
-        );
+        await updateProduct(props.product._id, mergedAttributes, file);
         props.deleteUseState();
         props.onHide();
         props.createModalClose();
       } catch (error) {
-        console.error("Error updating product:", error);
+        console.error('Error updating product:', error);
       }
     }
   };
 
-//   const seeDetails = () => {
-//     const mergedAttributes = {
-//       ...{
-//         title,
-//         description,
-//         price,
-//         stock,
-//         // categoryId,
-//       },
-//       ...attributeValues,
-//     };
-//     console.log("mergedAttributes", mergedAttributes);
-//   };
+  //   const seeDetails = () => {
+  //     const mergedAttributes = {
+  //       ...{
+  //         title,
+  //         description,
+  //         price,
+  //         stock,
+  //         // categoryId,
+  //       },
+  //       ...attributeValues,
+  //     };
+  //   };
 
   const { deleteProduct } = useDeleteProduct();
-  const handleClose = async() => {
-    try{
-        await deleteProduct(props.product._id);
-        props.onHide();
-        // props.createModalClose();
-    }catch (error) {
-        console.error("Error deleting product:", error);
+  const handleClose = async () => {
+    try {
+      await deleteProduct(props.product._id);
+      props.onHide();
+      // props.createModalClose();
+    } catch (error) {
+      console.error('Error deleting product:', error);
     }
   };
 
-
   return (
     <Modal
-    {...props}
-    size="lg"
-    aria-labelledby="contained-modal-title-vcenter"
-    centered
-    style={{ zIndex: "9999" }}
-    backdrop="static" 
+      {...props}
+      size='lg'
+      aria-labelledby='contained-modal-title-vcenter'
+      centered
+      style={{ zIndex: '9999' }}
+      backdrop='static'
     >
-      <Modal.Header  className="d-flex flex-column justify-content-center">
-        <Modal.Title id="contained-modal-title-vcenter">
+      <Modal.Header className='d-flex flex-column justify-content-center'>
+        <Modal.Title id='contained-modal-title-vcenter'>
           Add Attribute
         </Modal.Title>
         <Modal.Body>
-          <Form noValidate ref={form}>
+          <Form
+            noValidate
+            ref={form}
+          >
             {Object.keys(product)
               .filter((attribute) => !filteredAttributes.includes(attribute))
               .map((attribute) => (
-                <Form.Group key={attribute} className="mb-3">
+                <Form.Group
+                  key={attribute}
+                  className='mb-3'
+                >
                   <Form.Label>{attribute}</Form.Label>
                   <Form.Control
-                    type={typeof product[attribute] === 'number' ? 'number' : 'text'}
+                    type={
+                      typeof product[attribute] === 'number' ? 'number' : 'text'
+                    }
                     onChange={(e) => {
                       const updatedAttributeValues = {
                         ...attributeValues,
@@ -152,8 +153,12 @@ export const ProductCategoryAttributeModal = (props) => {
           </Form>
         </Modal.Body>
 
-        <Modal.Footer className="d-flex justify-content-between">
-          <Button type="submit" variant="primary" onClick={handleUpdateProduct}>
+        <Modal.Footer className='d-flex justify-content-between'>
+          <Button
+            type='submit'
+            variant='primary'
+            onClick={handleUpdateProduct}
+          >
             Save
           </Button>
           <Button onClick={handleClose}>Back</Button>

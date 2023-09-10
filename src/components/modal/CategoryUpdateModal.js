@@ -1,33 +1,33 @@
-import React, { useEffect, useReducer, useState } from "react";
-import { Modal, Button } from "react-bootstrap";
-import { useCreateSubCategory } from "../../api/createSubCategory";
-import { useUpdateCategory } from "../../api/updateCategory";
-import { useToastContext } from "../../store/toastContext";
-import { CategoryUpdateForm } from "../form/CategoryUpdateForm";
-import { useRef } from "react";
+import React, { useEffect, useReducer, useState } from 'react';
+import { Modal, Button } from 'react-bootstrap';
+import { useCreateSubCategory } from '../../api/createSubCategory';
+import { useUpdateCategory } from '../../api/updateCategory';
+import { useToastContext } from '../../store/toastContext';
+import { CategoryUpdateForm } from '../form/CategoryUpdateForm';
+import { useRef } from 'react';
 
 const attributeTypeReducer = (state, action) => {
-  if (action.type === "number") {
-    return { ...state, type: "number" };
-  } else if (action.type === "string") {
-    return { ...state, type: "string" };
+  if (action.type === 'number') {
+    return { ...state, type: 'number' };
+  } else if (action.type === 'string') {
+    return { ...state, type: 'string' };
   }
-  throw Error("Invalid action type");
+  throw Error('Invalid action type');
 };
 
 function isExtraAttributeValid(attributeName) {
   if (
-    attributeName !== "name" &&
-    attributeName !== "_id" &&
-    attributeName !== "admins" &&
-    attributeName !== "subCategories" &&
-    attributeName !== "subCategoryNames" &&
-    attributeName !== "__v" &&
-    attributeName !== "title" &&
-    attributeName !== "description" &&
-    attributeName !== "seller" &&
-    attributeName !== "date" &&
-    attributeName !== "categories"
+    attributeName !== 'name' &&
+    attributeName !== '_id' &&
+    attributeName !== 'admins' &&
+    attributeName !== 'subCategories' &&
+    attributeName !== 'subCategoryNames' &&
+    attributeName !== '__v' &&
+    attributeName !== 'title' &&
+    attributeName !== 'description' &&
+    attributeName !== 'seller' &&
+    attributeName !== 'date' &&
+    attributeName !== 'categories'
   ) {
     return true;
   } else {
@@ -53,14 +53,14 @@ export const CategoryUpdateModal = (props) => {
   const [extraValues, setExtraValues] = useState({});
   const [attributeType, dispatchAttributeType] = useReducer(
     attributeTypeReducer,
-    { type: "none" }
+    { type: 'none' }
   );
   const { showToast } = useToastContext();
   const form = useRef(null);
 
   useEffect(() => {
     if (isUpdateSuccess || isUpdateSubSuccess) {
-      showToast(200, "Category updated successfully");
+      showToast(200, 'Category updated successfully');
     }
   }, [isUpdateSuccess, isUpdateSubSuccess, showToast]);
 
@@ -105,7 +105,7 @@ export const CategoryUpdateModal = (props) => {
   };
 
   const handleNewSubCategoryEnter = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       if (e.target.value && e.target.value.length > 0) {
         setNewSubCategories((prevState) => [...prevState, e.target.value]);
       }
@@ -114,13 +114,12 @@ export const CategoryUpdateModal = (props) => {
   };
 
   const handleNewAttributeEnter = (e) => {
-    if (e.key === "Enter") {
-      console.log("e.target.value", e.target.value);
+    if (e.key === 'Enter') {
       if (
         e.target.value &&
         isExtraAttributeValid(e.target.value) &&
         e.target.value.length > 0 &&
-        attributeType.type !== "none"
+        attributeType.type !== 'none'
       ) {
         setNewAttributes((prevState) => [
           ...prevState,
@@ -132,10 +131,10 @@ export const CategoryUpdateModal = (props) => {
 
         setExtraValues((prevState) => ({
           ...prevState,
-          [e.target.value]: attributeType.type === "number" ? 0 : "",
+          [e.target.value]: attributeType.type === 'number' ? 0 : '',
         }));
       } else {
-        showToast(400, "Invalid attribute name");
+        showToast(400, 'Invalid attribute name');
       }
     }
   };
@@ -145,26 +144,21 @@ export const CategoryUpdateModal = (props) => {
       const defaultExtraValues = extraAttributes.reduce((acc, attribute) => {
         return { ...acc, [attribute]: category[attribute] };
       }, {});
-      console.log(defaultExtraValues);
       return defaultExtraValues;
     } else {
       const defaultExtraValues = extraAttributes.reduce((acc, attribute) => {
         return { ...acc, [attribute]: category[attribute] };
       }, {});
-      console.log(defaultExtraValues);
-      
+
       return { ...defaultExtraValues, ...extraValues };
     }
   };
 
   const handleUpdateCategory = async (e) => {
-    console.log(extraValues);
-    console.log(extraAttributes);
     const extra = getExtraValues();
     console.log(extra);
 
     if (form.current.checkValidity() === false) {
-      console.log("here");
       e.preventDefault();
       e.stopPropagation();
     } else {
@@ -195,26 +189,26 @@ export const CategoryUpdateModal = (props) => {
 
   const extraAttributes = Object.keys(category).filter(
     (key) =>
-      key !== "name" &&
-      key !== "admins" &&
-      key !== "subCategories" &&
-      key !== "subCategoryNames" &&
-      key !== "adminId" &&
-      key !== "_id" &&
-      key !== "__v" &&
-      key !== "parentId"
+      key !== 'name' &&
+      key !== 'admins' &&
+      key !== 'subCategories' &&
+      key !== 'subCategoryNames' &&
+      key !== 'adminId' &&
+      key !== '_id' &&
+      key !== '__v' &&
+      key !== 'parentId'
   );
 
   return (
     <Modal
       {...props}
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
-      className="w-100"
+      size='lg'
+      aria-labelledby='contained-modal-title-vcenter'
+      className='w-100'
       centered
     >
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
+        <Modal.Title id='contained-modal-title-vcenter'>
           {`${category.name.toUpperCase()} INFORMATION`}
         </Modal.Title>
       </Modal.Header>
@@ -240,8 +234,12 @@ export const CategoryUpdateModal = (props) => {
           ref={form}
         />
       </Modal.Body>
-      <Modal.Footer className="d-flex justify-content-between">
-        <Button type="submit" variant="primary" onClick={handleUpdateCategory}>
+      <Modal.Footer className='d-flex justify-content-between'>
+        <Button
+          type='submit'
+          variant='primary'
+          onClick={handleUpdateCategory}
+        >
           Save
         </Button>
         <Button onClick={props.onHide}>Close</Button>
