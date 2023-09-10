@@ -1,18 +1,22 @@
-import { Button } from 'react-bootstrap';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import { useState, useEffect } from 'react';
-import { useAuth } from '../../../store/authContext';
-import { useNavigate, Link } from 'react-router-dom';
-import { Trash3Fill } from 'react-bootstrap-icons';
-import { GetProductsByIds } from '../../../api/getProductsByIds';
-import { CreateOrder } from '../../../api/createOrder';
-import { useGetCategoryById } from '../../../api/getCategoryById';
-import React from 'react';
+import { Button } from "react-bootstrap";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import { useState, useEffect } from "react";
+import { useAuth } from "../../../store/authContext";
+import { useNavigate, Link } from "react-router-dom";
+import { Trash3Fill } from "react-bootstrap-icons";
+import { GetProductsByIds } from "../../../api/getProductsByIds";
+import { CreateOrder } from "../../../api/createOrder";
+import { useGetCategoryById } from "../../../api/getCategoryById";
+import React from "react";
+import PutCart from "../../../api/putCart";
+import GetCart from "../../../api/getCart";
 
 export default function CheckOut() {
   const [cartData, setCartData] = useState([]);
+  const { cartData: data, isLoading } = GetCart();
+  const { updateCustomerCart } = PutCart();
   const [cart, setCart] = useState([]);
   const [total, setTotal] = useState(0);
 
@@ -21,7 +25,7 @@ export default function CheckOut() {
   const isAuthenticated = isUserAuthenticated();
   const navigate = useNavigate();
 
-  const handleQuantityChange = (productId, newQuantity) => {
+  const handleQuantityChange = async (productId, newQuantity) => {
     // Create a copy of the current cart
     const updatedCart = [...cart];
 
@@ -38,20 +42,32 @@ export default function CheckOut() {
       setCart(updatedCart);
 
       // Update the cart in local storage
-      localStorage.setItem('cart', JSON.stringify(updatedCart));
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
+      await updateCustomerCart(updatedCart);
     }
   };
 
   useEffect(() => {
-    const cartFromLocalStorage = JSON.parse(localStorage.getItem('cart')) || [];
+    const extractedCart = data.cart;
+    console.log(extractedCart);
+    if (extractedCart && extractedCart.cart) {
+      console.log(extractedCart.cart);
+      localStorage.setItem("cart", JSON.stringify(extractedCart.cart));
+      setCart(extractedCart.cart);
+    }
+
+    const cartFromLocalStorage = JSON.parse(localStorage.getItem("cart")) || [];
     setCart(cartFromLocalStorage);
-  }, []);
+  }, [isLoading, data]);
 
   const { fetchProductsByIds } = GetProductsByIds();
 
-  const handleDelete = (productId) => {
+  const handleDelete = async (productId) => {
+    console.log(productId);
+    console.log("delete");
     // Create a copy of the current cart
     const updatedCart = [...cart];
+    console.log(updatedCart);
 
     // Find the index of the product with the matching productId
     const productIndex = updatedCart.findIndex(
@@ -67,7 +83,9 @@ export default function CheckOut() {
       setCart(updatedCart);
 
       // Update the cart in local storage
-      localStorage.setItem('cart', JSON.stringify(updatedCart));
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
+      await updateCustomerCart(updatedCart);
+
       window.location.reload();
     }
   };
@@ -95,8 +113,9 @@ export default function CheckOut() {
 
   const { handleCheckout } = CreateOrder();
 
-  const handleCheckoutClick = () => {
-    handleCheckout(cartData, isAuthenticated, navigate);
+  const handleCheckoutClick = async () => {
+    console.log("cartData", cartData);
+    await handleCheckout(cartData, isAuthenticated, navigate);
   };
 
   const { fetchCategoryById } = useGetCategoryById();
@@ -115,8 +134,8 @@ export default function CheckOut() {
           fetchCategoryById(categoryId)
             .then((category) => category.name)
             .catch((error) => {
-              console.error('Error fetching category:', error);
-              return 'Category Not Found';
+              console.error("Error fetching category:", error);
+              return "Category Not Found";
             })
         );
 
@@ -124,7 +143,7 @@ export default function CheckOut() {
           [productId]: categoryNames,
         }));
       } else {
-        return { [productId]: ['Category Not Found'] };
+        return { [productId]: ["Category Not Found"] };
       }
     });
 
@@ -137,20 +156,20 @@ export default function CheckOut() {
         setProductCategoryNames(categoryNames);
       })
       .catch((error) => {
-        console.error('Error fetching category names:', error);
+        console.error("Error fetching category names:", error);
       });
   }, [fetchCategoryById, cartData]);
 
   return (
-    <section className='pt-5 pb-5'>
-      <div className='container'>
-        <div className='row w-100'>
-          <div className='col-lg-12 col-md-12 col-12'>
-            <h3 className='display-5 mb-2 text-center'>Shopping Cart</h3>
-            <p className='mb-5 text-center'>
+    <section className="pt-5 pb-5">
+      <div className="container">
+        <div className="row w-100">
+          <div className="col-lg-12 col-md-12 col-12">
+            <h3 className="display-5 mb-2 text-center">Shopping Cart</h3>
+            <p className="mb-5 text-center">
               {cart.length ? (
                 <>
-                  <i className='text-info font-weight-bold'>{cart.length} </i>
+                  <i className="text-info font-weight-bold">{cart.length} </i>
                   items in your cart
                 </>
               ) : (
@@ -158,37 +177,37 @@ export default function CheckOut() {
               )}
             </p>
             <table
-              id='shoppingCart'
-              className='table table-condensed table-responsive'
+              id="shoppingCart"
+              className="table table-condensed table-responsive"
             >
               <thead>
                 <tr>
-                  <th style={{ width: '60%' }}>Product</th>
-                  <th style={{ width: '12%' }}>Price</th>
-                  <th style={{ width: '10%' }}>Quantity</th>
-                  <th style={{ width: '16%' }}></th>
+                  <th style={{ width: "60%" }}>Product</th>
+                  <th style={{ width: "12%" }}>Price</th>
+                  <th style={{ width: "10%" }}>Quantity</th>
+                  <th style={{ width: "16%" }}></th>
                 </tr>
               </thead>
               <tbody>
                 {Object.values(cartData).map((product) => (
                   <tr key={product._id}>
-                    <td data-th='Product'>
-                      <div className='row'>
-                        <div className='col-md-3 text-left'>
+                    <td data-th="Product">
+                      <div className="row">
+                        <div className="col-md-3 text-left">
                           <img
                             src={`http://localhost:8000/seller/product/image/${product._id}`}
                             alt={product.title}
-                            className='img-thumbnail d-none d-md-block rounded mb-2 shadow'
+                            className="img-thumbnail d-none d-md-block rounded mb-2 shadow"
                           />
                         </div>
-                        <div className='col-md-9 text-left mt-sm-2'>
+                        <div className="col-md-9 text-left mt-sm-2">
                           <Link
-                            style={{ textDecoration: 'none' }}
+                            style={{ textDecoration: "none" }}
                             to={`/product/${product._id}`}
                           >
                             <h4>{product.title}</h4>
                           </Link>
-                          <div className='font-weight-light'>
+                          <div className="font-weight-light">
                             Description: {product.description}
                             <br />
                             Color: {product.Color}
@@ -205,11 +224,11 @@ export default function CheckOut() {
                                     <React.Fragment key={category}>
                                       <Link
                                         to={`/category/${product.categories[index]}`}
-                                        style={{ textDecoration: 'none' }}
+                                        style={{ textDecoration: "none" }}
                                       >
                                         {category}
                                         {index < categoriesArray.length - 1 &&
-                                          ', '}
+                                          ", "}
                                       </Link>
                                     </React.Fragment>
                                   ))}
@@ -222,26 +241,24 @@ export default function CheckOut() {
                         </div>
                       </div>
                     </td>
-                    <td data-th='Price'>${product.price}</td>
-                    <td data-th='Quantity'>
+                    <td data-th="Price">${product.price}</td>
+                    <td data-th="Quantity">
                       <input
-                        type='number'
-                        className='form-control form-control-lg text-center'
+                        type="number"
+                        className="form-control form-control-lg text-center"
                         value={product.quantity}
                         onChange={(e) =>
-                          handleQuantityChange(product.id, e.target.value)
+                          handleQuantityChange(product._id, e.target.value)
                         }
                         placeholder={product.quantity}
+                        min={1}
                       />
                     </td>
-                    <td
-                      className='actions'
-                      data-th=''
-                    >
-                      <div className='text-right'>
+                    <td className="actions" data-th="">
+                      <div className="text-right">
                         <Button
-                          variant='outline-danger'
-                          onClick={() => handleDelete(product.id)}
+                          variant="outline-danger"
+                          onClick={() => handleDelete(product._id)}
                         >
                           <Trash3Fill />
                         </Button>
@@ -255,7 +272,7 @@ export default function CheckOut() {
               <Row>
                 <Col sm={8}></Col>
                 <Col sm={4}>
-                  <div className='float-right text-right'>
+                  <div className="float-right text-right">
                     <h4>Subtotal:</h4>
                     <h1>${total}</h1>
                   </div>
@@ -264,22 +281,22 @@ export default function CheckOut() {
             </Container>
           </div>
         </div>
-        <div className='mx-auto'>
+        <div className="mx-auto">
           <Container>
             <Row>
               <Col sm={8}>
-                <div className='col-sm-6 mb-3 mb-m-1 order-md-1 text-md-left'>
-                  <Link to='/'>
-                    <i className='fas fa-arrow-left mr-2'></i> Continue Shopping
+                <div className="col-sm-6 mb-3 mb-m-1 order-md-1 text-md-left">
+                  <Link to="/">
+                    <i className="fas fa-arrow-left mr-2"></i> Continue Shopping
                   </Link>
                 </div>
               </Col>
               <Col sm={4}>
-                <div className='col-sm-6 order-md-2 text-right'>
+                <div className="col-sm-6 order-md-2 text-right">
                   <Button
-                    variant='primary'
+                    variant="primary"
                     onClick={handleCheckoutClick} // Call the checkout function
-                    className='mb-4 btn-lg pl-5 pr-5'
+                    className="mb-4 btn-lg pl-5 pr-5"
                   >
                     Checkout
                   </Button>
