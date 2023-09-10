@@ -19,8 +19,6 @@ export const SellerLayout = () => {
       userInfo.role.slice(1, -1) === "seller"
     ) {
       if (status === "Pending" || status === "Rejected") {
-        console.log("status", status);
-        console.log("location", location.pathname);
         navigate("/seller/status");
       } else {
         navigate(location.pathname);
