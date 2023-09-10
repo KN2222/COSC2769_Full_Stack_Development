@@ -13,6 +13,7 @@ export const SellerLayout = () => {
   const userInfo = getAuthenticatedUserInfo();
 
   useEffect(() => {
+    if(!userInfo) return navigate('/');
     if (
       location.pathname.includes("/seller") &&
       userInfo.role.slice(1, -1) === "seller"
