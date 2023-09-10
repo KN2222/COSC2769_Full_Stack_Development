@@ -1,31 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { useCookies } from 'react-cookie';
-import { useAuth } from '../../store/authContext';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useCookies } from "react-cookie";
+import { useAuth } from "../../store/authContext";
+import { Col, Container, Row } from "react-bootstrap";
 
 const Login = () => {
-  const [emailOrPhone, setEmailOrPhone] = useState('');
-  const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
+  const [emailOrPhone, setEmailOrPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
 
   const { accessToken, getAuthenticatedUserInfo, isUserAuthenticated } =
     useAuth(); // Use the accessToken from AuthContext
   const navigate = useNavigate();
-  const [, setCookie] = useCookies(['accessToken']);
+  const [, setCookie] = useCookies(["accessToken"]);
   const isAuthenticated = isUserAuthenticated();
 
   function LoginSuccessfull() {
     const userInfo = getAuthenticatedUserInfo();
     const userRole = userInfo.role.slice(1, -1);
-    if (userRole === 'customer') {
-      navigate('/');
-    } else if (userRole === 'seller') {
-      navigate('/seller/home');
-    } else if (userRole === 'admin') {
-      navigate('/admin/home');
+    if (userRole === "customer") {
+      navigate("/");
+    } else if (userRole === "seller") {
+      navigate("/seller/home");
+    } else if (userRole === "admin") {
+      navigate("/admin/home");
     }
   }
 
@@ -34,12 +35,12 @@ const Login = () => {
       const userInfo = getAuthenticatedUserInfo();
       const userRole = userInfo.role.slice(1, -1);
 
-      if (userRole === 'customer') {
-        navigate('/');
-      } else if (userRole === 'seller') {
-        navigate('/seller/home');
-      } else if (userRole === 'admin') {
-        navigate('/admin/home');
+      if (userRole === "customer") {
+        navigate("/");
+      } else if (userRole === "seller") {
+        navigate("/seller/home");
+      } else if (userRole === "admin") {
+        navigate("/admin/home");
       }
     }
     // }
@@ -60,37 +61,37 @@ const Login = () => {
 
       const requestData = isEmail
         ? {
-            phone: '',
+            phone: "",
             email: emailOrPhone,
             password: password,
           }
         : {
             phone: emailOrPhone,
-            email: '',
+            email: "",
             password: password,
           };
 
       const response = await axios.post(
-        'http://localhost:8000/auth/login',
+        "http://localhost:8000/auth/login",
         requestData
       );
 
       // Handle successful login
       setSuccessMessage(response.data.message);
-      setErrorMessage('');
+      setErrorMessage("");
       setShowModal(true);
 
       // Save the accessToken to local storage
-      setCookie('sb', response.data.accessToken, { path: '/' });
+      setCookie("sb", response.data.accessToken, { path: "/" });
     } catch (error) {
       // Handle login error
       console.log(error);
       if (error.response && error.response.data) {
-        setErrorMessage(error.response.data.message || 'An error occurred');
+        setErrorMessage(error.response.data.message || "An error occurred");
       } else {
-        setErrorMessage('An error occurred');
+        setErrorMessage("An error occurred");
       }
-      setSuccessMessage('');
+      setSuccessMessage("");
       setShowModal(true);
     }
   };
@@ -100,85 +101,83 @@ const Login = () => {
   };
 
   return (
-    <div>
-      <div className='container mt-5'>
+    <>
+      <Container className="d-flex justify-content-center align-items-center p-0" fluid style={{
+        backgroundImage: `url('/auth-background.jpg')`,
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center center",
+        height: "60vh",
+      }} >
         {/* Login Form */}
-        <form onSubmit={handleSubmit}>
-          <div className='mb-3'>
-            <label
-              htmlFor='emailOrPhone'
-              className='form-label'
-            >
-              Email or Phone
-            </label>
-            <input
-              type=''
-              className='form-control'
-              id='emailOrPhone'
-              value={emailOrPhone}
-              onChange={(e) => setEmailOrPhone(e.target.value)}
-              required
-              placeholder='Email or Phone'
-            />
-          </div>
-          <div className='mb-3'>
-            <label
-              htmlFor='password'
-              className='form-label'
-            >
-              Password
-            </label>
-            <input
-              type='password'
-              className='form-control'
-              id='password'
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          <button
-            type='submit'
-            className='btn btn-primary'
-          >
-            Login
-          </button>
-        </form>
+        <Row className="col-lg-5 col-md-6 col-xl-3 col-8 mx-0">
+          <Container className="bg-white p-5 rounded-3 shadow-sm">
+            <form onSubmit={handleSubmit}>
+              <div className="mb-3">
+                <label htmlFor="emailOrPhone" className="form-label">
+                  Email or Phone
+                </label>
+                <input
+                  type=""
+                  className="form-control"
+                  id="emailOrPhone"
+                  value={emailOrPhone}
+                  onChange={(e) => setEmailOrPhone(e.target.value)}
+                  required
+                  placeholder="Email or Phone"
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="password" className="form-label">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  className="form-control"
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </div>
+              <button type="submit" className="btn btn-primary w-100">
+                Login
+              </button>
+            </form>
+          </Container>
+        </Row>
 
         {/* Success/Error Modal */}
         <div
-          className={`modal fade ${showModal ? 'show' : ''}`}
-          style={{ display: showModal ? 'block' : 'none' }}
-          tabIndex='-1'
-          role='dialog'
+          className={`modal fade ${showModal ? "show" : ""}`}
+          style={{ display: showModal ? "block" : "none" }}
+          tabIndex="-1"
+          role="dialog"
         >
-          <div
-            className='modal-dialog'
-            role='document'
-          >
-            <div className='modal-content'>
-              <div className='modal-header'>
-                <h5 className='modal-title'>
-                  {successMessage ? 'Success' : 'Error'}
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">
+                  {successMessage ? "Success" : "Error"}
                 </h5>
                 <button
-                  type='button'
-                  className='close'
-                  data-dismiss='modal'
-                  aria-label='Close'
+                  type="button"
+                  className="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
                   onClick={closeModal}
                 >
-                  <span aria-hidden='true'>&times;</span>
+                  <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <div className='modal-body'>{successMessage || errorMessage}</div>
+              <div className="modal-body">{successMessage || errorMessage}</div>
               {successMessage ? (
                 <>
-                  <div className='modal-footer'>
+                  <div className="modal-footer">
                     <button
-                      type='button'
-                      className='btn btn-secondary'
-                      data-dismiss='modal'
+                      type="button"
+                      className="btn btn-secondary"
+                      data-dismiss="modal"
                       onClick={() => LoginSuccessfull()}
                     >
                       Close
@@ -187,11 +186,11 @@ const Login = () => {
                 </>
               ) : (
                 <>
-                  <div className='modal-footer'>
+                  <div className="modal-footer">
                     <button
-                      type='button'
-                      className='btn btn-secondary'
-                      data-dismiss='modal'
+                      type="button"
+                      className="btn btn-secondary"
+                      data-dismiss="modal"
                       onClick={closeModal}
                     >
                       Close
@@ -203,11 +202,11 @@ const Login = () => {
           </div>
         </div>
         <div
-          className={`modal-backdrop fade ${showModal ? 'show' : ''}`}
-          style={{ display: showModal ? 'block' : 'none' }}
+          className={`modal-backdrop fade ${showModal ? "show" : ""}`}
+          style={{ display: showModal ? "block" : "none" }}
         ></div>
-      </div>
-    </div>
+      </Container>
+    </>
   );
 };
 

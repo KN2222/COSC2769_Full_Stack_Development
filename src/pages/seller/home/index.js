@@ -141,13 +141,14 @@ export default function SellerHome() {
             Add Product
           </Button>
         </Stack>
-        <SearchBar onSearch={handleSearch} />
-          <FilterBar
-            onLetterFilter={handleLetterFilter}
-            onPriceFilter={handlePriceFilter}
-            onDateFilter={setDateFilter}
-            dateFilter={dateFilter}
-          />
+        <SearchBar
+          onSearch={handleSearch}
+          onLetterFilter={handleLetterFilter}
+          onPriceFilter={handlePriceFilter}
+          onDateFilter={setDateFilter}
+          dateFilter={dateFilter}
+        />
+
         <hr />
         <Row className="row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-3">
           {products.length > 0 && <Products products={visibleProducts} />}

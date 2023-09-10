@@ -5,6 +5,7 @@ import { Footer } from '../components/footer';
 import { Outlet } from 'react-router-dom';
 import { useAuth } from '../store/authContext';
 import { useEffect, useState } from 'react';
+import { HomeBanner } from '../components/banner/HomeBanner';
 
 export const AppLayout = () => {
   const { isUserAuthenticated, getAuthenticatedUserInfo } = useAuth();
@@ -36,7 +37,8 @@ export const AppLayout = () => {
   }, []);
 
   return (
-    <div className='vw-100'>
+    <div className='vw-100 mt-0'>
+      <HomeBanner/>
       {navbarComponent}
       <Outlet />
       <Footer />

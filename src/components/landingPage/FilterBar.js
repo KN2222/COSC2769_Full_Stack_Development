@@ -21,32 +21,37 @@ export default function FilterBar({
   };
 
   return (
-    <div className="mb-3">
-      <Dropdown>
-        <Dropdown.Toggle variant="secondary" id="filterDropdown">
-          Filter
-        </Dropdown.Toggle>
-        <Dropdown.Menu>
-          <Dropdown.Item onClick={() => handleSortChange("asc")}>
-            A <ArrowRight /> Z
-          </Dropdown.Item>
-          <Dropdown.Item onClick={() => handleSortChange("desc")}>
-            Z <ArrowRight /> A
-          </Dropdown.Item>
-          <Dropdown.Item onClick={() => handlePriceFilter("asc")}>
-            Price <ArrowUp />
-          </Dropdown.Item>
-          <Dropdown.Item onClick={() => handlePriceFilter("desc")}>
-            Price <ArrowDown />
-          </Dropdown.Item>
-          <Dropdown.Item onClick={() => handleDateFilter("newest")}>
-            Newest
-          </Dropdown.Item>
-          <Dropdown.Item onClick={() => handleDateFilter("oldest")}>
-            Oldest
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
-    </div>
+    // <div className="mb-3">
+    <Dropdown>
+      <Dropdown.Toggle
+        variant="secondary"
+        id="filterDropdown"
+        as={"button"}
+        className="btn btn-primary filter-btn"
+      >
+        Filter
+      </Dropdown.Toggle>
+      <Dropdown.Menu>
+        <Dropdown.Item onClick={() => handleSortChange("asc")}>
+          A <ArrowRight /> Z
+        </Dropdown.Item>
+        <Dropdown.Item onClick={() => handleSortChange("desc")}>
+          Z <ArrowRight /> A
+        </Dropdown.Item>
+        <Dropdown.Item onClick={() => handlePriceFilter("asc")}>
+          Price <ArrowUp />
+        </Dropdown.Item>
+        <Dropdown.Item onClick={() => handlePriceFilter("desc")}>
+          Price <ArrowDown />
+        </Dropdown.Item>
+        <Dropdown.Item onClick={() => handleDateFilter("newest")}>
+          Newest
+        </Dropdown.Item>
+        <Dropdown.Item onClick={() => handleDateFilter("oldest")}>
+          Oldest
+        </Dropdown.Item>
+      </Dropdown.Menu>
+    </Dropdown>
+    // </div>
   );
 }
