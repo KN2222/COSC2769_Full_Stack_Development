@@ -117,33 +117,6 @@ function ProductCardSeller({ product }) {
                 </Card.Text>
               ))}
           </div>
-
-          {/* <div className="mt-auto d-flex justify-content-center">
-            <Button
-              variant="primary"
-              size="md"
-              className="ms-auto"
-              onClick={() => {
-                openModalGlobal();
-                openUpdateModal();
-              }}
-            >
-              <PencilSquare size={15} />
-            </Button>
-
-            <Button
-              variant="primary"
-              size="md"
-              className="ms-auto"
-              onClick={() => {
-                openModalGlobal();
-                openDeleteModal();
-              }}
-            >
-              <TrashFill size={15} />
-            </Button>
-
-          </div> */}
         </Card.Body>
       </Card>
       <ProductDeleteModal
