@@ -9,7 +9,7 @@ import { SaleBanner } from "../banner/SaleBanner";
 
 export default function ProductCard() {
   const { data: products, loading } = useGetProducts();
-  const productsPerPage = 9;
+  const productsPerPage = 18;
   const [activePage, setActivePage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterLetter, setFilterLetter] = useState(null);
