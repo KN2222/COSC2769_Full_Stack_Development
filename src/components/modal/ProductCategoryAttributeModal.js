@@ -117,13 +117,12 @@ export const ProductCategoryAttributeModal = (props) => {
 
   return (
     <Modal
-      {...props}
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
-      className="w-100"
-      centered
-      style={{ zIndex: "9999" }}
-      id={product._id}
+    {...props}
+    size="lg"
+    aria-labelledby="contained-modal-title-vcenter"
+    centered
+    style={{ zIndex: "9999" }}
+    backdrop="static" 
     >
       <Modal.Header  className="d-flex flex-column justify-content-center">
         <Modal.Title id="contained-modal-title-vcenter">
