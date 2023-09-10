@@ -1,19 +1,53 @@
 import React, { useState } from 'react';
-import { Card, Button } from 'react-bootstrap';
+import { Card, Button, Row, Col } from 'react-bootstrap';
 import { CaretDownFill, CaretUpFill } from 'react-bootstrap-icons';
 import { Link } from 'react-router-dom';
 import { PatchOrderActions } from '../../api/patchOrderActions';
 
-function Order({ order }) {
+import { APIService } from '../../axios/client';
+import { useEffect } from 'react';
+import { useCallback } from 'react';
+
+function Order() {
   const [isExpanded, setIsExpanded] = useState(false);
   const { rejectOrder, acceptOrder } = PatchOrderActions();
+
+  const handlleReject = (orderID) => {
+    rejectOrder(orderID);
+    getOrder();
+  };
+  const handlleAccept = (orderID) => {
+    acceptOrder(orderID);
+    getOrder();
+  };
+
+  const [orders, setOrders] = useState([]);
+
+  const getOrder = useCallback(async () => {
+    try {
+      const response = await APIService.get('/customer/order');
+      if (response.data && response.data.productOrderOfCustomer) {
+        setOrders(response.data.productOrderOfCustomer);
+      } else {
+        // Handle the case where the response doesn't contain the expected data
+        console.error('Unexpected response format:', response);
+      }
+    } catch (error) {
+      // Handle errors here, e.g., show an error message to the user
+      console.error('Error fetching order:', error);
+    }
+  }, []);
+
+  useEffect(() => {
+    getOrder(); // Call it once when the component mounts
+  }, [getOrder]);
 
   const toggleExpansion = () => {
     setIsExpanded(!isExpanded);
   };
   const ordersToDisplay = isExpanded
-    ? [...order].reverse()
-    : [...order].reverse().slice(0, 2);
+    ? [...orders].reverse()
+    : [...orders].reverse().slice(0, 6);
 
   function extractFilenameWithoutExtension(filePath) {
     // Split the string by backslashes (\\) to get an array of path components
@@ -30,7 +64,7 @@ function Order({ order }) {
       className='mb-4 p-4 w-75 mx-auto'
       key='unique-key'
     >
-      <div className='row row-cols-1 row-cols-md-2 g-4'>
+      <div className='row row-cols-1 row-cols-md-3 g-4'>
         {ordersToDisplay.map((order) => (
           <div
             key={order.id}
@@ -60,15 +94,18 @@ function Order({ order }) {
                       to={`/product/${extractFilenameWithoutExtension(
                         order.image
                       )}`}
-                    >
-                      {order.title}
-                    </Link>
+                    ></Link>
                   </Card.Title>
                   <Card.Text className='one-line-truncate'>
                     <span className='fw-semibold text-decoration-underline'>
                       Description:
                     </span>
                     {order.description}
+                    <br />
+                    <span className='fw-semibold text-decoration-underline'>
+                      ID:
+                    </span>
+                    {order.order}
                   </Card.Text>
                 </div>
                 <div className=''>
@@ -87,31 +124,31 @@ function Order({ order }) {
                   </Card.Text>
                 )}
                 {order.status === 'Shipped' && (
-                  <div className='d-flex flex-row justify-content-between'>
+                  <div>
                     <Card.Text className='fw-semibold'>
                       Status: {order.status}
+                      <div>
+                        <Button
+                          variant='success'
+                          className='me-2'
+                          onClick={() => {
+                            handlleAccept(order._id);
+                            getOrder();
+                          }}
+                        >
+                          Accept
+                        </Button>
+                        <Button
+                          variant='danger'
+                          onClick={() => {
+                            handlleReject(order._id);
+                            getOrder();
+                          }}
+                        >
+                          Reject
+                        </Button>
+                      </div>
                     </Card.Text>
-                    <div>
-                      <Button
-                        variant='success'
-                        className='me-2'
-                        onClick={() => {
-                          acceptOrder(order._id);
-                          window.location.reload();
-                        }}
-                      >
-                        Accept
-                      </Button>
-                      <Button
-                        variant='danger'
-                        onClick={() => {
-                          rejectOrder(order._id);
-                          window.location.reload();
-                        }}
-                      >
-                        Reject
-                      </Button>
-                    </div>
                   </div>
                 )}
               </Card.Body>
@@ -119,7 +156,7 @@ function Order({ order }) {
           </div>
         ))}
       </div>
-      {order.length > 2 && (
+      {orders.length > 6 && (
         <div className='d-flex justify-content-center text-center mt-4 '>
           <Button
             variant=''
