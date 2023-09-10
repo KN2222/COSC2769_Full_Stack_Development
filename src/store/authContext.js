@@ -101,6 +101,7 @@ export const AuthProvider = ({ children }) => {
 
   const { cartData, isLoading } = GetCart();
 
+
   useEffect(() => {
     if (!isLoading) {
       const extractedCart = cartData.cart;
@@ -108,7 +109,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('cart', JSON.stringify(extractedCart.cart));
       }
     }
-  });
+  }, [cartData, isLoading]);
 
   const setToken = useCallback(
     (token) => {

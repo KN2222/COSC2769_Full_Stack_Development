@@ -52,7 +52,7 @@ const Login = () => {
           password: password,
         };
     const data = await login(requestData);
-    if (data.accessToken) {
+    if (data && data.accessToken) {
       setCookie("sb", data.accessToken, { path: "/" });
     }
   };

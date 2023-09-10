@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
-import { APIService } from '../axios/client';
+import { useEffect, useState } from "react";
+import { APIService } from "../axios/client";
+import { useAuth } from "../store/authContext";
 
 const GetCart = () => {
   const [cartData, setCartData] = useState([]);
@@ -7,7 +8,7 @@ const GetCart = () => {
 
   const fetchCartData = async () => {
     try {
-      const response = await APIService.get('/customer/cart');
+      const response = await APIService.get("/customer/cart");
       if (response.data) {
         // Assuming your API response has a data field containing cart data
         setCartData(response.data);
@@ -20,11 +21,12 @@ const GetCart = () => {
     }
   };
 
+
   useEffect(() => {
     fetchCartData();
   }, []); // Empty dependency array to run this effect once when the component mounts
 
-  return { cartData, isLoading };
+  return { cartData, isLoading, fetchCartData };
 };
 
 export default GetCart;

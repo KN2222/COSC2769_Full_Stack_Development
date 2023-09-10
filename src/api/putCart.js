@@ -2,6 +2,7 @@ import { APIService } from '../axios/client';
 
 function PutCart() {
   const updateCustomerCart = async (cartData) => {
+    console.log('Updating cart');
     try {
       const response = await APIService.put('/customer/cart', {
         cart: cartData,
