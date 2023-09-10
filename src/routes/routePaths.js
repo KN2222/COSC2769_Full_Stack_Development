@@ -21,7 +21,8 @@ import SellerHome from '../pages/seller/home';
 import SellerOrder from '../pages/seller/order';
 import { SellerStatistic } from '../pages/seller/statistic';
 import Category from '../pages/customer/category';
-import NotFoundPage from '../pages/errors/404';
+import NotFoundPageSeller from '../pages/errors/404Seller';
+import NotFoundPageAdmin from '../pages/errors/404Admin';
 
 export const routePaths = {
   public: [
@@ -97,7 +98,7 @@ export const routePaths = {
         },
         {
           path: '*',
-          element: <NotFoundPage />,
+          element: <NotFoundPageAdmin />,
           children: [],
         },
       ],
@@ -128,6 +129,11 @@ export const routePaths = {
         {
           path: '/seller/statistic',
           element: <SellerStatistic />,
+        },
+        {
+          path: '*',
+          element: <NotFoundPageSeller />,
+          children: [],
         },
       ],
     },

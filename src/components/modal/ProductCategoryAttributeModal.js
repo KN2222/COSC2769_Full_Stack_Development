@@ -76,6 +76,7 @@ export const ProductCategoryAttributeModal = (props) => {
           ...attributeValues,
         };
         await updateProduct(props.product._id, mergedAttributes, file);
+        props.deleteUseState();
         props.onHide();
         props.createModalClose();
       } catch (error) {

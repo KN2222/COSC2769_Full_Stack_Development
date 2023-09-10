@@ -23,11 +23,8 @@ export const SellerNavbar = () => {
         className='bg-body-tertiary sticky-top'
       >
         <Container>
-          <Navbar.Brand
-            as={Link}
-            to='/'
-          >
-            App
+        <Navbar.Brand >
+            <img src="/logo.png" alt="logo" width="40" />
           </Navbar.Brand>
           <Navbar.Brand
             as={Link}
