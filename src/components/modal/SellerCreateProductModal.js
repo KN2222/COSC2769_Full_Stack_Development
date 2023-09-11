@@ -38,20 +38,29 @@ export const CreateProductModal = (props) => {
   const filteredAttributes = ['title', 'description', 'price', 'stock', 'categories', '_id', 'image', 'seller', 'date', '__v'];
 
   const handleCreateProduct = async(e) => {
-    if (form.current.checkValidity() === false || price === -1 || stock === -1 || title === "" || description === "" || category === "" || file === null) {
+    if(Number(price) <= 0 ){
       e.preventDefault();
       e.stopPropagation();
-      showToast(400, "Please fill out all the fields");
-    }else if(price <= 0 ){
+      showToast(400, "Price must be greater than 0");
+    }else if (price.toString().split(".")[1]?.length > 2) {
       e.preventDefault();
       e.stopPropagation();
-      showToast(400, "Price must be greater than or equal to 0");
-    }else if(stock < 0){
+      showToast(400, "Price should have at most two decimal places");
+    }else if(Number(stock) <= 0){
       e.preventDefault();
       e.stopPropagation();
       showToast(400, "Stock must be greater than 0");
+    } else if (title === "" || description === "" || category === "" || file === null) {
+      e.preventDefault();
+      e.stopPropagation();
+      showToast(400, "Please fill out all the fields");
+    } else if(form.current.checkValidity() === false ){
+      e.preventDefault();
+      e.stopPropagation();
+      showToast(400, "Stock shoud be a whole number");
     } else {
       try {
+        console.log(stock, typeof stock);
         const response = await createProduct(title, description, price, stock, category, file);
         const filteredLength = await Object.keys(response.product).filter((key) => !filteredAttributes.includes(key)).length;
         if(filteredLength > 0){
@@ -126,6 +135,7 @@ export const CreateProductModal = (props) => {
               <Form.Label>Price($)</Form.Label>
               <Form.Control
                 type="number"
+                step="0.01"
                 onChange={(e) => {
                   if (e.target.value >= 0) {
                     setPrice(e.target.value);
@@ -138,6 +148,7 @@ export const CreateProductModal = (props) => {
               <Form.Label>Stock</Form.Label>
               <Form.Control
                 type="number"
+                step="1"
                 onChange={(e) => {
                   if (e.target.value >= 0) {
                     setStock(e.target.value);
