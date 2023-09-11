@@ -21,7 +21,6 @@ export function CreateOrder() {
             quantity: product.quantity || 0,
             price: product.price,
           }));
-          console.log("productOrders:", productOrders);
 
           // Create the request body with the correct property name
           const requestBody = {
@@ -43,7 +42,6 @@ export function CreateOrder() {
           );
 
           // Handle success
-          console.log("Checkout response:", response.data);
           showToast(200, response.data.message);
 
           if (response.data.message === "Create order successfully") {

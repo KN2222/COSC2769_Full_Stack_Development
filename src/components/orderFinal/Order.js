@@ -108,15 +108,9 @@ function Order() {
                   </Card.Text>
                 </div>
 
-                {/* no link */}
                 <div className="my-3">
                   <hr style={{ borderColor: "#000" }} />
                 </div>
-                {/* {order.status !== 'Shipped' && (
-                  <Card.Text className='fw-semibold'>
-                    Status: {order.status}
-                  </Card.Text>
-                )} */}
                 {order.status === "New" &&(
                   <Card.Text className="fw-semibold">
                     Status:&nbsp;

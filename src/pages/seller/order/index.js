@@ -63,10 +63,7 @@ export const SellerOrder = () => {
     <div>
       <Container>
         <h1>As a seller you can choose to Ship or Cancel the order</h1>
-        <Button
-          variant="primary"
-          onClick={handleRefresh}
-        >
+        <Button variant="primary" onClick={handleRefresh}>
           Refresh
         </Button>
         <Table striped bordered hover>
@@ -74,8 +71,6 @@ export const SellerOrder = () => {
             <tr>
               <th className="text-center">Title</th>
               <th className="text-center">Quantity</th>
-              {/* <th className="text-center">Price</th> */}
-              {/* <th className="text-center">Status</th> */}
               <th className="text-center">Action</th>
             </tr>
           </thead>
@@ -88,20 +83,6 @@ export const SellerOrder = () => {
                   <tr key={productOrder._id}>
                     <td className="text-center">{productOrder.title}</td>
                     <td className="text-center">{productOrder.quantity}</td>
-
-                    {/* <td
-                      className="text-center"
-                      style={{
-                        color:
-                          productOrder.status === "Canceled"
-                            ? "red"
-                            : productOrder.status === "Shipped"
-                            ? "green"
-                            : "black",
-                      }}
-                    >
-                      {productOrder.status}
-                    </td> */}
                     <td className="d-flex justify-content-center gap-3">
                       <Button
                         variant="primary"

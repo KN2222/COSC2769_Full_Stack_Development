@@ -41,14 +41,12 @@ export default function SearchBar({
             >
               Search
             </button>
-            {/* <button className="btn btn-primary filter-btn" onClick={handleSearch}> */}
             <FilterBar
               onLetterFilter={onLetterFilter}
               onPriceFilter={onPriceFilter}
               onDateFilter={onDateFilter}
               dateFilter={dateFilter}
             />
-            {/* </button> */}
           </div>
         </div>
       </div>

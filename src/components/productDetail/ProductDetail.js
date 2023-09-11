@@ -104,7 +104,6 @@ export default function ProductDetail() {
                 }
                 onMouseOut={(e) => (e.target.style.textDecoration = 'none')}
               >
-                {/* {product.category} */}
               </Link>
             </ol>
           </nav>
