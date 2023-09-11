@@ -1,5 +1,5 @@
 import { Container, Row } from 'react-bootstrap';
-import ProductCard from '../../../components/landingPage/productCard';
+import ProductCard from '../../../components/landingPage/ProductCard';
 import { StoreCarousel } from '../../../components/carousel/StoreCarousel';
 
 export default function Home() {

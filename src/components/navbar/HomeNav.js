@@ -101,7 +101,6 @@ export const HomeNav = () => {
             as={Link}
             to='/'
           >
-            {/* Home0 */}
             <img
               src='/logo.png'
               alt='logo'
