@@ -73,6 +73,19 @@ export default function ProductDetail() {
     updateCustomerCart(cart);
   };
 
+  const filteredAttributes = [
+    'title',
+    'description',
+    'price',
+    'stock',
+    'categories',
+    '_id',
+    'image',
+    'seller',
+    'date',
+    '__v',
+  ];
+
   return (
     <div className='container mt-4 w-50'>
       {loading ? (
@@ -122,8 +135,16 @@ export default function ProductDetail() {
                 <p className='fs-6 fw-normal'>
                   Description: {product.description}
                 </p>
-                <p className='fs-6 fw-normal'>Color: {product.Color}</p>
-                <p className='fs-6 fw-normal'>Size: {product.Size}</p>
+                {/* <p className='fs-6 fw-normal'>Color: {product.Color}</p>
+                <p className='fs-6 fw-normal'>Size: {product.Size}</p> */}
+                {Object.keys(product)
+              .filter((attribute) => !filteredAttributes.includes(attribute))
+              .map((attribute) => (
+                <p key={attribute}>
+                  {attribute}: {product[attribute]}
+                </p>
+              ))}
+
                 <p className='fs-6 fw-normal'>
                   Category:&nbsp;
                   {categories ? (
