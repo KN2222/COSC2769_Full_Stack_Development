@@ -73,19 +73,19 @@ export const ProductUpdateModal = (props) => {
     }
   };
 
-  const seeDetails = () => {
-    const mergedAttributes = {
-      ...{
-        title,
-        description,
-        price,
-        stock,
-        // categoryId,
-      },
-      ...attributeValues,
-    };
-    console.log('mergedAttributes', mergedAttributes);
-  };
+  // const seeDetails = () => {
+  //   const mergedAttributes = {
+  //     ...{
+  //       title,
+  //       description,
+  //       price,
+  //       stock,
+  //       // categoryId,
+  //     },
+  //     ...attributeValues,
+  //   };
+  //   console.log('mergedAttributes', mergedAttributes);
+  // };
 
   useEffect(() => {
     setTitle(product.title);
@@ -188,28 +188,6 @@ export const ProductUpdateModal = (props) => {
                 </Form.Group>
               ))}
 
-            {/* <Form.Group>
-              <Form.Label>Select new category if needed:</Form.Label>
-              <Form.Select
-                defaultValue=""
-                onChange={(e) => {
-                  setCategory(String(e.target.value));
-                }}
-                custom="true"
-              >
-                <option value="" disabled>
-                  Choose...
-                </option>
-
-                {categories.map((category) => {
-                  return (
-                    <option key={category._id} value={category._id}>
-                      {category.name}
-                    </option>
-                  );
-                })}
-              </Form.Select>
-            </Form.Group> */}
             <br />
             <Form.Group
               controlId='formFile'
@@ -233,7 +211,7 @@ export const ProductUpdateModal = (props) => {
             Save
           </Button>
           <Button onClick={props.onHide}>Close</Button>
-          <Button onClick={seeDetails}>Detail</Button>
+          {/* <Button onClick={seeDetails}>Detail</Button> */}
         </Modal.Footer>
       </Modal.Header>
     </Modal>
