@@ -30,7 +30,7 @@ export default function SellerHome() {
     openModal: openCreateModal,
     closeModal: closeCreateModal,
   } = useModal();
-  const productsPerPage = 9;
+  const productsPerPage = 12;
 
   const [profile, setProfile] = useState("");
   const [activePage, setActivePage] = useState(1);
