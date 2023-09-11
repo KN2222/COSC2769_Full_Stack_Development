@@ -33,23 +33,6 @@ export const ProductCategoryAttributeModal = (props) => {
   const { categories } = useGetAllCategory();
   const form = useRef(null);
 
-  //   useEffect(() => {
-  //     const handleOutsideClick = (e) => {
-  //         const productDiv = document.getElementById(product._id);
-  //       if (!e.target.closest(`#${product._id}`)) {
-  //         document.removeEventListener('click', handleOutsideClick);
-  //         handleClose() // Clicked outside
-  //         document.removeEventListener('click', handleOutsideClick);
-  //       }
-  //     };
-
-  //     document.addEventListener('click', handleOutsideClick);
-
-  //     return () => {
-  //       document.removeEventListener('click', handleOutsideClick);
-  //     };
-  //   }, []);
-
   const handleUpdateProduct = async (e) => {
     if (
       form.current.checkValidity() === false ||
@@ -84,19 +67,6 @@ export const ProductCategoryAttributeModal = (props) => {
       }
     }
   };
-
-  //   const seeDetails = () => {
-  //     const mergedAttributes = {
-  //       ...{
-  //         title,
-  //         description,
-  //         price,
-  //         stock,
-  //         // categoryId,
-  //       },
-  //       ...attributeValues,
-  //     };
-  //   };
 
   const { deleteProduct } = useDeleteProduct();
   const handleClose = async () => {
@@ -136,6 +106,7 @@ export const ProductCategoryAttributeModal = (props) => {
                 >
                   <Form.Label>{attribute}</Form.Label>
                   <Form.Control
+                    defaultValue={product[attribute]}
                     type={
                       typeof product[attribute] === 'number' ? 'number' : 'text'
                     }
@@ -162,7 +133,6 @@ export const ProductCategoryAttributeModal = (props) => {
             Save
           </Button>
           <Button onClick={handleClose}>Back</Button>
-          {/* <Button onClick={seeDetails}>Detail</Button> */}
         </Modal.Footer>
       </Modal.Header>
     </Modal>

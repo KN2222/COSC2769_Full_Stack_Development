@@ -24,16 +24,16 @@ export const ProductUpdateModal = (props) => {
   const [description, setDescription] = useState(product.description);
   const [price, setPrice] = useState(product.price);
   const [stock, setStock] = useState(product.stock);
-  // const [categoryId, setCategory] = useState(product.categories[0]);
   const [file, setFile] = useState();
+  //store the additional attributes
   const [attributeValues, setAttributeValues] = useState();
 
   const { updateProduct } = useUpdateProduct();
   const { showToast } = useToastContext();
-  const { categories } = useGetAllCategory();
   const form = useRef(null);
 
   const handleUpdateProduct = async (e) => {
+    //validating the form
     if (price <= 0) {
       e.preventDefault();
       e.stopPropagation();
@@ -73,26 +73,11 @@ export const ProductUpdateModal = (props) => {
     }
   };
 
-  // const seeDetails = () => {
-  //   const mergedAttributes = {
-  //     ...{
-  //       title,
-  //       description,
-  //       price,
-  //       stock,
-  //       // categoryId,
-  //     },
-  //     ...attributeValues,
-  //   };
-  //   console.log('mergedAttributes', mergedAttributes);
-  // };
-
   useEffect(() => {
     setTitle(product.title);
     setDescription(product.description);
     setPrice(product.price);
     setStock(product.stock);
-    // setCategory( product.categories[0]);
     setAttributeValues({});
   }, [product]);
 
@@ -211,7 +196,6 @@ export const ProductUpdateModal = (props) => {
             Save
           </Button>
           <Button onClick={props.onHide}>Close</Button>
-          {/* <Button onClick={seeDetails}>Detail</Button> */}
         </Modal.Footer>
       </Modal.Header>
     </Modal>

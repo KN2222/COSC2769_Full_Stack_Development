@@ -60,7 +60,6 @@ export const CreateProductModal = (props) => {
       showToast(400, "Stock shoud be a whole number");
     } else {
       try {
-        console.log(stock, typeof stock);
         const response = await createProduct(title, description, price, stock, category, file);
         const filteredLength = await Object.keys(response.product).filter((key) => !filteredAttributes.includes(key)).length;
         if(filteredLength > 0){
