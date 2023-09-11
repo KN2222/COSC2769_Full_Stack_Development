@@ -96,8 +96,8 @@ function Order() {
                     </span>
                     {order.description}
                     <br />
-                    <span className="fw-semibold text-decoration-underline">
-                      ID:
+                    <span className='fw-semibold text-decoration-underline'>
+                      OrderID:
                     </span>
                     {order.order}
                   </Card.Text>

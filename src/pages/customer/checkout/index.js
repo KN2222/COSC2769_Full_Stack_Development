@@ -209,34 +209,6 @@ export default function CheckOut() {
                           </Link>
                           <div className="font-weight-light">
                             Description: {product.description}
-                            <br />
-                            Color: {product.Color}
-                            <br />
-                            Size: {product.Size}
-                            <br />
-                            <div>
-                              Category:&nbsp;
-                              {productCategoryNames[product.id] ? (
-                                <>
-                                  {Object.values(
-                                    productCategoryNames[product.id]
-                                  ).map((category, index, categoriesArray) => (
-                                    <React.Fragment key={category}>
-                                      <Link
-                                        to={`/category/${product.categories[index]}`}
-                                        style={{ textDecoration: "none" }}
-                                      >
-                                        {category}
-                                        {index < categoriesArray.length - 1 &&
-                                          ", "}
-                                      </Link>
-                                    </React.Fragment>
-                                  ))}
-                                </>
-                              ) : (
-                                <></>
-                              )}
-                            </div>
                           </div>
                         </div>
                       </div>
